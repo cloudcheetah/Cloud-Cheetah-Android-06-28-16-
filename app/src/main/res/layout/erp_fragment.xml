@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/projects"
+                android:padding="5dp"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:background="@drawable/menu_selector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@mipmap/ic_projects"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="15dp"/>
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:text="Project Plans and Budgeting"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:src="@drawable/ic_divider"
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:id="@+id/task_progress"
+                android:background="@drawable/menu_selector"
+                android:padding="5dp"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@mipmap/ic_task_progress"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="15dp"/>
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:text="Task-in-Progress and Reporting"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:src="@drawable/ic_divider"
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:id="@+id/accounting_banking"
+                android:background="@drawable/menu_selector"
+                android:padding="5dp"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@mipmap/ic_accounting"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="15dp"/>
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:text="Accounting and Banking"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:src="@drawable/ic_divider"
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:id="@+id/payees"
+                android:background="@drawable/menu_selector"
+                android:padding="5dp"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@mipmap/ic_store"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="15dp"/>
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:text="Vendors and Procurement"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:src="@drawable/ic_divider"
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:id="@+id/labor"
+                android:background="@drawable/menu_selector"
+                android:padding="5dp"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@mipmap/ic_employee"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="15dp"/>
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:text="Employees and Human Resources"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:src="@drawable/ic_divider"
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:id="@+id/resources"
+                android:background="@drawable/menu_selector"
+                android:padding="5dp"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@mipmap/ic_supplies"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="15dp"/>
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:text="Supplies and Inventory"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:src="@drawable/ic_divider"
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:id="@+id/payers"
+                android:background="@drawable/menu_selector"
+                android:padding="5dp"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@mipmap/ic_customer_sales"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="15dp"/>
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:text="Customer and Sales"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:src="@drawable/ic_divider"
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:id="@+id/reports"
+                android:background="@drawable/menu_selector"
+                android:padding="5dp"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@mipmap/ic_reports"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="15dp"/>
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:text="Reports"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:src="@drawable/ic_divider"
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

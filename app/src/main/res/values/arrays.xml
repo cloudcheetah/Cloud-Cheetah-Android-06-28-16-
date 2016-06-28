@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="icon_imgs">
+        <item>@mipmap/ic_home</item>
+        <item>@mipmap/ic_contacts</item>
+        <item>@mipmap/ic_chat</item>
+        <item>@mipmap/ic_erp</item>
+        <item>@mipmap/ic_profile</item>
+    </string-array>
+
+    <string-array name="selected_icon_imgs">
+        <item>@mipmap/ic_home_white</item>
+        <item>@mipmap/ic_contacts_white</item>
+        <item>@mipmap/ic_chat_white</item>
+        <item>@mipmap/ic_erp_white</item>
+        <item>@mipmap/ic_profile_white</item>
+    </string-array>
+
+</resources>

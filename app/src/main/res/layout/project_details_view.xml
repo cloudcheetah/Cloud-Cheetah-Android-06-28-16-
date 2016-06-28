@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/tab_background"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+                <TextView
+                    android:text="Project Name: "
+                    android:textSize="20sp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/project_name"
+                    android:textSize="15dp"
+                    android:layout_weight="1"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/edittext_height"
+                    android:enabled="false"
+                    android:background="@drawable/rectangular_edittext"/>
+
+
+                <TextView
+                    android:text="Project Start Date: "
+                    android:textSize="20sp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/project_start_date"
+                    android:textSize="15dp"
+                    android:layout_weight="1"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/edittext_height"
+                    android:enabled="false"
+                    android:background="@drawable/rectangular_edittext"/>
+
+
+                <TextView
+                    android:text="Project End Date: "
+                    android:textSize="20sp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/project_end_date"
+                    android:textSize="15dp"
+                    android:layout_weight="1"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/edittext_height"
+                    android:enabled="false"
+                    android:background="@drawable/rectangular_edittext"/>
+
+
+                <TextView
+                    android:text="Estimated Cost: "
+                    android:textSize="20sp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/budget"
+                    android:textSize="15dp"
+                    android:layout_weight="1"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/edittext_height"
+                    android:enabled="false"
+                    android:background="@drawable/rectangular_edittext"/>
+
+
+                <TextView
+                    android:text="Project Details: "
+                    android:textSize="20sp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/project_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lines="5"
+                    android:gravity="top|left"
+                    android:layout_margin="10dp"
+                    android:inputType="textMultiLine"
+                    android:enabled="false"
+                    android:background="@drawable/rectangular_edittext"/>
+
+
+
+                <TextView
+                    android:text="Project Objectives: "
+                    android:textSize="20sp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/project_objectives"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lines="5"
+                    android:gravity="top|left"
+                    android:layout_margin="10dp"
+                    android:inputType="textMultiLine"
+                    android:enabled="false"
+                    android:background="@drawable/rectangular_edittext"/>
+
+
+
+                <TextView
+                    android:text="Project Sponsor: "
+                    android:textSize="20sp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/project_sponsor"
+                    android:textSize="15dp"
+                    android:layout_weight="1"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/edittext_height"
+                    android:enabled="false"
+                    android:background="@drawable/rectangular_edittext"/>
+
+
+                <TextView
+                    android:text="Project Manager: "
+                    android:textSize="20sp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/project_manager"
+                    android:textSize="15dp"
+                    android:layout_weight="1"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/edittext_height"
+                    android:enabled="false"
+                    android:background="@drawable/rectangular_edittext"/>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

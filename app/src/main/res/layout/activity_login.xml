@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/tab_background"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_marginTop="70dp"
+        android:layout_gravity="center_horizontal"
+        android:textSize="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mobile ERP"
+        />
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="90dp"
+        android:textSize="20dp"
+        android:hint="Username"
+        android:background="@drawable/search_edittext_design"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:inputType="textPassword"
+        android:textSize="20dp"
+        android:hint="Password"
+        android:background="@drawable/search_edittext_design"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+    <Button
+        android:id="@+id/login"
+        android:text="Login"
+        android:textColor="@color/colorText"
+        android:background="@color/colorPrimary"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+</LinearLayout>

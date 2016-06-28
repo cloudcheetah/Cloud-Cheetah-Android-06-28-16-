@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer"
+    android:layout_gravity="end"
+    android:layout_marginTop="50dp"
+    android:background="@color/colorPrimaryDark"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+        <LinearLayout
+            android:id="@+id/project_details"
+            android:paddingLeft="20dp"
+            android:paddingBottom="10dp"
+            android:clickable="true"
+            android:background="@drawable/project_menu_selector"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@mipmap/ic_info_white_24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                />
+            <TextView
+                android:padding="10dp"
+                android:layout_gravity="center_vertical"
+                android:text="@string/project_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorText"
+                android:textSize="20dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/project_members"
+            android:paddingLeft="20dp"
+            android:paddingBottom="10dp"
+            android:clickable="true"
+            android:background="@drawable/project_menu_selector"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@mipmap/ic_people_white_24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                />
+            <TextView
+                android:padding="10dp"
+                android:layout_gravity="center_vertical"
+                android:text="@string/project_members"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorText"
+                android:textSize="20dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/project_tasks"
+            android:paddingLeft="20dp"
+            android:paddingBottom="10dp"
+            android:clickable="true"
+            android:background="@drawable/project_menu_selector"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@mipmap/ic_watch_later_white_24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                />
+            <TextView
+                android:padding="10dp"
+                android:layout_gravity="center_vertical"
+                android:text="@string/project_tasks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorText"
+                android:textSize="20dp"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/project_resources"
+            android:paddingLeft="20dp"
+            android:paddingBottom="10dp"
+            android:clickable="true"
+            android:background="@drawable/project_menu_selector"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@mipmap/ic_business_center_white_24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                />
+            <TextView
+                android:padding="10dp"
+                android:id="@+id/delete_chat"
+                android:layout_gravity="center_vertical"
+                android:text="@string/project_resources"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorText"
+                android:textSize="20dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/delete_project"
+            android:paddingLeft="20dp"
+            android:paddingBottom="10dp"
+            android:clickable="true"
+            android:background="@drawable/project_menu_selector"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@mipmap/ic_delete_white_24dp"
+                android:layout_width="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_height="40dp"
+                />
+            <TextView
+                android:padding="10dp"
+                android:id="@+id/change_owner"
+                android:layout_gravity="center_vertical"
+                android:text="@string/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorText"
+                android:textSize="20dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

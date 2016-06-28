@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.forateq.cloudcheetah.MainActivity">
+
+    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_gravity="top"
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:theme="@style/ToolbarCustomIconColor"
+        app:popupTheme="@style/AppTheme">
+
+        <TextView
+            android:text="@string/app_name"
+            android:layout_marginLeft="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorText"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <com.forateq.cloudcheetah.utils.CustomViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+    <com.forateq.cloudcheetah.utils.SlidingTabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"/>
+
+</LinearLayout>

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Cloud Cheetah</string>
+    <string name="project_details">Project Details</string>
+    <string name="project_members">Project Members</string>
+    <string name="project_tasks">Project Tasks</string>
+    <string name="project_resources">Project Resources</string>
+    <string name="delete">Delete</string>
+    <string name="task_details">Task Details</string>
+    <string name="task_resources">Task Resources</string>
+    <string name="subtasks">Sub-Tasks</string>
+    <string name="progress_reports">Progress Reports</string>
+    <string name="cash_in_out">Cash-In/Cash-Out</string>
+</resources>

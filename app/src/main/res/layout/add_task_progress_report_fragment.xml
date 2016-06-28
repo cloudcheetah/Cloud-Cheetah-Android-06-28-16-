@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/tab_background"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_gravity="top"
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:theme="@style/ToolbarCustomIconColor"
+        app:popupTheme="@style/AppTheme">
+
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:id="@+id/ripple_back"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp">
+
+            <ImageView
+                android:layout_gravity="start|center_vertical"
+                android:id="@+id/back"
+                android:clickable="true"
+                android:src="@mipmap/ic_arrow_back_white_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+        <TextView
+            android:text="Add Progress Report"
+            android:layout_weight="1.5"
+            android:layout_marginLeft="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorText"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="Task Name: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/task_name"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:enabled="false"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:background="@drawable/rectangular_edittext"/>
+
+            <TextView
+                android:text="Task Status: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/task_status"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:background="@drawable/rectangular_edittext"/>
+
+
+            <TextView
+                android:text="Report Date: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/report_date"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:focusable="false"
+                android:clickable="true"
+                android:background="@drawable/rectangular_edittext"/>
+
+
+            <TextView
+                android:text="Number Labor Hours Worked: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/hours_work"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:background="@drawable/rectangular_edittext"/>
+
+
+            <TextView
+                android:text="Percentage Completion: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/percent_completion"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:background="@drawable/rectangular_edittext"/>
+
+
+            <TextView
+                android:text="Resources Used: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:weightSum="5"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorPrimary"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Resource"
+                    android:textSize="18sp"
+                    android:textColor="@color/colorText"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"/>
+
+                <TextView
+                    android:text="Quantity"
+                    android:textSize="18sp"
+                    android:textColor="@color/colorText"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"/>
+
+                <ImageView
+                    android:id="@+id/add_resource"
+                    android:src="@mipmap/ic_add_white_24dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/resource_container"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@color/colorPrimary"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </LinearLayout>
+
+            <TextView
+                android:text="Action: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Spinner
+                android:id="@+id/task_action"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:background="@drawable/rectangular_edittext"/>
+
+            <TextView
+                android:text="Notes: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/task_notes"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="5"
+                android:gravity="top|left"
+                android:layout_margin="10dp"
+                android:inputType="textMultiLine"
+                android:background="@drawable/rectangular_edittext"/>
+
+            <TextView
+                android:text="Concerns/Issues: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/task_issues"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="5"
+                android:gravity="top|left"
+                android:layout_margin="10dp"
+                android:inputType="textMultiLine"
+                android:background="@drawable/rectangular_edittext"/>
+
+            <TextView
+                android:text="Change/Request: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/change_request"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="5"
+                android:gravity="top|left"
+                android:layout_margin="10dp"
+                android:inputType="textMultiLine"
+                android:background="@drawable/rectangular_edittext"/>
+
+            <Button
+                android:id="@+id/add_progress_report"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/colorPrimary"
+                android:text="Add Report"
+                android:textSize="20sp"
+                android:layout_margin="10dp"
+                android:textColor="@color/colorText"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

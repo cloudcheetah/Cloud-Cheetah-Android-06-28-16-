@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.forateq.cloudcheetah.utils.CustomDrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/progress_drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:res-auto="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/toolbar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@color/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme"
+            app:theme="@style/ToolbarCustomIconColor">
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/ripple_back"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp">
+
+                <ImageView
+                    android:id="@+id/back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:clickable="true"
+                    android:src="@mipmap/ic_arrow_back_white_24dp" />
+
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_weight="1.5"
+                android:text="Progress Reports"
+                android:textColor="@color/colorText" />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/ripple_drawer"
+                android:layout_width="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginRight="10dp"
+                android:layout_height="40dp">
+
+                <ImageView
+                    android:layout_gravity="start|center_vertical"
+                    android:id="@+id/drawer"
+                    android:clickable="true"
+                    android:src="@mipmap/ic_menu_white_24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+        <LinearLayout
+            android:id="@+id/task_progress_reports_container"
+            android:layout_below="@+id/toolbar"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </LinearLayout>
+
+    </RelativeLayout>
+    <include layout="@layout/progress_report_drawer" />
+</com.forateq.cloudcheetah.utils.CustomDrawerLayout>

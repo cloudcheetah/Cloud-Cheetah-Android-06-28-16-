@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- button selected -->
+    <item
+        android:state_selected="true"
+        android:drawable="@drawable/project_menu_pressed"/>
+
+    <!-- button unselected -->
+    <item
+        android:state_selected="false"
+        android:drawable="@drawable/project_menu_unpressed"/>
+
+</selector>
