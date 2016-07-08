@@ -4,6 +4,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.activeandroid.util.SQLiteUtils;
 
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class ProjectResources extends Model {
     int resource_id;
     @Column(name = "quantity")
     int quantity;
+    @Column(name = "resource_name")
+    String resource_name;
 
     public int getProject_id() {
         return project_id;
@@ -54,6 +57,14 @@ public class ProjectResources extends Model {
         this.project_offline_id = project_offline_id;
     }
 
+    public String getResource_name() {
+        return resource_name;
+    }
+
+    public void setResource_name(String resource_name) {
+        this.resource_name = resource_name;
+    }
+
     /**
      * This method is used to get all the resources of a specific project
      * @param project_id
@@ -71,6 +82,24 @@ public class ProjectResources extends Model {
 
     public static List<ProjectResources> getResourcesOffline(long project_offline_id){
         return new Select().from(ProjectResources.class).where("project_offline_id = ?", project_offline_id).execute();
+    }
+
+    public static List<ProjectResources> getSearchProjectResourcesOffline(String name, long project_offline_id){
+        String [] selectionArgs = new String[] {"%" + name + "%", ""+project_offline_id};
+        List<ProjectResources> searchItems =
+                SQLiteUtils.rawQuery(ProjectResources.class,
+                        "SELECT * FROM ProjectResources WHERE resource_name  LIKE ? AND project_offline_id = ?",
+                        selectionArgs);
+        return searchItems;
+    }
+
+    public static List<ProjectResources> getSearchProjectResourcesOnline(String name, int project_id){
+        String [] selectionArgs = new String[] {"%" + name + "%", ""+project_id};
+        List<ProjectResources> searchItems =
+                SQLiteUtils.rawQuery(ProjectResources.class,
+                        "SELECT * FROM ProjectResources WHERE resource_name  LIKE ? AND project_id = ?",
+                        selectionArgs);
+        return searchItems;
     }
 
 

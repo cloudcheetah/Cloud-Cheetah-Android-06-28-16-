@@ -42,6 +42,8 @@ public class Tasks extends Model {
     long parent_offline_id;
     @Column(name = "task_person_responsible_id")
     int person_responsible_id;
+    @Column(name = "task_parent_name")
+    String task_parent_name;
 
     public int getTask_id() {
         return task_id;
@@ -147,6 +149,14 @@ public class Tasks extends Model {
         this.project_offline_id = project_offline_id;
     }
 
+    public String getTask_parent_name() {
+        return task_parent_name;
+    }
+
+    public void setTask_parent_name(String task_parent_name) {
+        this.task_parent_name = task_parent_name;
+    }
+
     public long getParent_offline_id() {
         return parent_offline_id;
     }
@@ -176,16 +186,33 @@ public class Tasks extends Model {
     }
 
     /**
+     * This method is used to get all the tasks of a specific project during offlne mode
+     * @param project_offline_id
+     * @return List of Tasks
+     */
+    public static List<Tasks> getTasksByOfflineId(long project_offline_id){
+        return new Select().from(Tasks.class).where("project_offline_id = ?", project_offline_id).execute();
+    }
+
+    /**
      * This method is used to search all the tasks of a specific project
      * @param search
      * @param project_id
      * @param parent_id
      * @return List of tasks similar to search string
      */
-    public static List<Tasks> getSearchTasks(String search, int project_id, int parent_id){
+    public static List<Tasks> getSearchOnlineTasks(String search, int project_id, int parent_id){
         String [] selectionArgs = new String[] {"%" + search + "%", ""+project_id, ""+parent_id };
-        List<Tasks> searchTasks = SQLiteUtils.rawQuery(Projects.class,
-                "SELECT * FROM Projects WHERE project_name  LIKE ? AND project_id = ? AND parent_id = ?",
+        List<Tasks> searchTasks = SQLiteUtils.rawQuery(Tasks.class,
+                "SELECT * FROM Tasks WHERE task_name  LIKE ? AND project_id = ? AND task_parent_id = ?",
+                selectionArgs);
+        return searchTasks;
+    }
+
+    public static List<Tasks> getSearchOfflineTasks(String search, long project_offline_id, long parent_offline_id){
+        String [] selectionArgs = new String[] {"%" + search + "%", ""+project_offline_id, ""+parent_offline_id };
+        List<Tasks> searchTasks = SQLiteUtils.rawQuery(Tasks.class,
+                "SELECT * FROM Tasks WHERE task_name  LIKE ? AND project_offline_id = ? AND parent_offline_id = ?",
                 selectionArgs);
         return searchTasks;
     }
@@ -215,6 +242,11 @@ public class Tasks extends Model {
      */
     public static List<Tasks> getTasksByPersonResponsibleId(int person_responsible_id){
         return new Select().from(Tasks.class).where("task_person_responsible_id = ?", person_responsible_id).execute();
+    }
+
+    public static String getParentTaskName(long parent_task_offline_id){
+        Tasks tasks = Tasks.getTaskByOfflineId(parent_task_offline_id);
+        return tasks.getName();
     }
 
 }

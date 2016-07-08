@@ -4,6 +4,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.activeandroid.util.SQLiteUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.Map;
  *
  * Created by Vallejos Family on 5/25/2016.
  */
-@Table(name = "ProjectMembers")
+@Table(name = "ProjectJsonMembers")
 public class ProjectMembers extends Model {
 
     @Column(name = "project_id")
@@ -22,6 +23,8 @@ public class ProjectMembers extends Model {
     int user_id;
     @Column(name = "project_offline_id")
     long project_offline_id;
+    @Column(name = "project_member_name")
+    String project_member_name;
 
     public int getProject_id() {
         return project_id;
@@ -47,6 +50,14 @@ public class ProjectMembers extends Model {
         this.project_offline_id = project_offline_id;
     }
 
+    public String getProject_member_name() {
+        return project_member_name;
+    }
+
+    public void setProject_member_name(String project_member_name) {
+        this.project_member_name = project_member_name;
+    }
+
     /**
      * This method is used to get all the members of a specific project
      * @param project_id
@@ -63,6 +74,24 @@ public class ProjectMembers extends Model {
      */
     public static List<ProjectMembers> getProjectOfflineMembers(long project_offline_id){
         return new Select().from(ProjectMembers.class).where("project_offline_id = ?", project_offline_id).execute();
+    }
+
+    public static List<ProjectMembers> getSearchProjectMembersOffline(String name, long project_offline_id){
+        String [] selectionArgs = new String[] {"%" + name + "%", ""+project_offline_id};
+        List<ProjectMembers> searchItems =
+                SQLiteUtils.rawQuery(ProjectMembers.class,
+                        "SELECT * FROM ProjectJsonMembers WHERE project_member_name  LIKE ? AND project_offline_id = ?",
+                        selectionArgs);
+        return searchItems;
+    }
+
+    public static List<ProjectMembers> getSearchProjectMembersOnline(String name, int project_id){
+        String [] selectionArgs = new String[] {"%" + name + "%", ""+project_id};
+        List<ProjectMembers> searchItems =
+                SQLiteUtils.rawQuery(ProjectMembers.class,
+                        "SELECT * FROM ProjectJsonMembers WHERE project_member_name  LIKE ? AND project_id = ?",
+                        selectionArgs);
+        return searchItems;
     }
 
     /**

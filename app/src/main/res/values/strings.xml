@@ -5,9 +5,13 @@
     <string name="project_tasks">Project Tasks</string>
     <string name="project_resources">Project Resources</string>
     <string name="delete">Delete</string>
+    <string name="update">Update Project</string>
+    <string name="submit">Submit Project</string>
     <string name="task_details">Task Details</string>
     <string name="task_resources">Task Resources</string>
     <string name="subtasks">Sub-Tasks</string>
     <string name="progress_reports">Progress Reports</string>
     <string name="cash_in_out">Cash-In/Cash-Out</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
 </resources>

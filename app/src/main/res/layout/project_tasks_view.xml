@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_margin="10dp"
         android:layout_height="40dp"
+        android:textColor="@android:color/black"
         android:background="@drawable/search_edittext_design"
         android:drawableLeft="@mipmap/ic_search_black_24dp"
         />

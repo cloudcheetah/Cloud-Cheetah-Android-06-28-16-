@@ -14,10 +14,14 @@ import android.widget.RelativeLayout;
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.adapters.ProjectMembersAdapter;
+import com.forateq.cloudcheetah.authenticate.AccountGeneral;
 import com.forateq.cloudcheetah.fragments.AddProjectmemberFragment;
 import com.forateq.cloudcheetah.models.ProjectMembers;
+import com.forateq.cloudcheetah.models.Projects;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
 import com.melnykov.fab.FloatingActionButton;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -61,7 +65,17 @@ public class ProjectMembersView extends RelativeLayout {
         inflate(getContext(), R.layout.project_members_view, this);
         ButterKnife.bind(this);
         mLinearLayoutManager = new LinearLayoutManager(ApplicationContext.get());
-        projectMembersAdapter = new ProjectMembersAdapter(ProjectMembers.getProjectOfflineMembers(project_offline_id), ApplicationContext.get());
+        if(!Projects.getProjectStatus(project_offline_id).equals(AccountGeneral.STATUS_SYNC)){
+            projectMembersAdapter = new ProjectMembersAdapter(ProjectMembers.getProjectOfflineMembers(project_offline_id), ApplicationContext.get());
+        }
+        else{
+            List<ProjectMembers> projectMembersList = ProjectMembers.getProjectMembers(project_id);
+            for(ProjectMembers projectMembers : projectMembersList){
+                projectMembers.setProject_offline_id(project_offline_id);
+                projectMembers.save();
+            }
+            projectMembersAdapter = new ProjectMembersAdapter(projectMembersList, ApplicationContext.get());
+        }
         listMembers.setLayoutManager(mLinearLayoutManager);
         listMembers.setAdapter(projectMembersAdapter);
         listMembers.setItemAnimator(new DefaultItemAnimator());
@@ -84,6 +98,17 @@ public class ProjectMembersView extends RelativeLayout {
             @Override
             public void afterTextChanged(Editable s) {
                 String searchString = searchEditText.getText().toString();
+                projectMembersAdapter.clearItems();
+                if(!Projects.getProjectStatus(project_offline_id).equals(AccountGeneral.STATUS_SYNC)){
+                    for(ProjectMembers projectMembers : ProjectMembers.getSearchProjectMembersOffline(searchString, project_offline_id)){
+                       projectMembersAdapter.addItem(projectMembers);
+                    }
+                }
+                else{
+                    for(ProjectMembers projectMembers : ProjectMembers.getSearchProjectMembersOnline(searchString, project_id)){
+                        projectMembersAdapter.addItem(projectMembers);
+                    }
+                }
             }
         });
     }

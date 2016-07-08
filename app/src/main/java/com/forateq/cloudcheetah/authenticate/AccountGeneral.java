@@ -52,4 +52,12 @@ public class AccountGeneral {
     public static final String STATUS_SYNC = "sync";
 
     public static final String STATUS_UNSYNC = "unsync";
+
+    public static final String PROJECT_TIMESTAMP = "Project Timestamp";
+
+    public static final String METHOD_PUT = "put";
+
+    public static final String METHOD_DELETE = "delete";
+
+    public static final int SUCCESS_CODE = 1007;
 }

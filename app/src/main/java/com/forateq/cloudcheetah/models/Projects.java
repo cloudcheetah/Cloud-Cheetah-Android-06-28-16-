@@ -38,6 +38,8 @@ public class Projects extends Model {
     String project_sponsor;
     @Column(name = "project_manager")
     String project_manager;
+    @Column(name = "project_tasks_timestamp")
+    String project_tasks_timestamp;
 
     public int getProject_id() {
         return project_id;
@@ -119,6 +121,14 @@ public class Projects extends Model {
         this.status = status;
     }
 
+    public String getProject_tasks_timestamp() {
+        return project_tasks_timestamp;
+    }
+
+    public void setProject_tasks_timestamp(String project_tasks_timestamp) {
+        this.project_tasks_timestamp = project_tasks_timestamp;
+    }
+
     /**
      * This method is used to get all the projects of the current user of the app
      * @return List of Projects
@@ -173,5 +183,10 @@ public class Projects extends Model {
      */
     public static Projects getProjectsOfflineMode(long id){
         return new Select().from(Projects.class).where("id = ?", id).executeSingle();
+    }
+
+    public static String getProjectStatus(long id){
+        Projects projects = Projects.getProjectsOfflineMode(id);
+        return projects.getStatus();
     }
 }

@@ -9,12 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.adapters.SubTaskAdapter;
+import com.forateq.cloudcheetah.authenticate.AccountGeneral;
 import com.forateq.cloudcheetah.fragments.AddTaskFragment;
+import com.forateq.cloudcheetah.models.Projects;
 import com.forateq.cloudcheetah.models.Tasks;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
 import com.melnykov.fab.FloatingActionButton;
@@ -65,7 +68,15 @@ public class TaskSubTasksView extends CardView {
         inflate(getContext(), R.layout.task_subtask_view, this);
         ButterKnife.bind(this);
         mLinearLayoutManager = new LinearLayoutManager(ApplicationContext.get());
-        subTaskAdapter = new SubTaskAdapter(Tasks.getTasksOffline(project_offline_id, task_offline_id), ApplicationContext.get());
+        if(!Projects.getProjectStatus(project_offline_id).equals(AccountGeneral.STATUS_SYNC)){
+            subTaskAdapter = new SubTaskAdapter(Tasks.getTasksOffline(project_offline_id, task_offline_id), ApplicationContext.get());
+        }
+        else{
+            for(Tasks tasks :  Tasks.getTasks(project_id, parent_id)){
+                Log.e("Subtasks", tasks.getName());
+            }
+            subTaskAdapter = new SubTaskAdapter(Tasks.getTasks(project_id, parent_id), ApplicationContext.get());
+        }
         listSubTasks.setAdapter(subTaskAdapter);
         listSubTasks.setLayoutManager(mLinearLayoutManager);
         listSubTasks.setItemAnimator(new DefaultItemAnimator());
@@ -87,7 +98,13 @@ public class TaskSubTasksView extends CardView {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                String searchString = searchEditText.getText().toString();
+                subTaskAdapter.clearItems();
+                if(!Projects.getProjectStatus(project_offline_id).equals(AccountGeneral.STATUS_SYNC)){
+                    for(Tasks tasks : Tasks.getSearchOfflineTasks(searchString, project_offline_id, task_offline_id)){
+                        subTaskAdapter.addItem(tasks);
+                    }
+                }
             }
         });
     }
@@ -99,6 +116,7 @@ public class TaskSubTasksView extends CardView {
         bundle.putString("parent_task_id", ""+parent_id);
         bundle.putString("project_offline_id", ""+project_offline_id);
         bundle.putString("parent_task_offline_id", ""+task_offline_id);
+        bundle.putString("parent_task_name", ""+Tasks.getParentTaskName(task_offline_id));
         AddTaskFragment addTaskFragment = new AddTaskFragment();
         addTaskFragment.setArguments(bundle);
         MainActivity.replaceFragment(addTaskFragment, TAG);

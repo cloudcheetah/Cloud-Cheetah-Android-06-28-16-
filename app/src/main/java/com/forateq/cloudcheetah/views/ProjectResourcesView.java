@@ -14,10 +14,14 @@ import android.widget.RelativeLayout;
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.adapters.ProjectResourcesAdapter;
+import com.forateq.cloudcheetah.authenticate.AccountGeneral;
 import com.forateq.cloudcheetah.fragments.AddResourceFragment;
 import com.forateq.cloudcheetah.models.ProjectResources;
+import com.forateq.cloudcheetah.models.Projects;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
 import com.melnykov.fab.FloatingActionButton;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -62,7 +66,17 @@ public class ProjectResourcesView extends RelativeLayout{
         inflate(getContext(), R.layout.project_resources_view, this);
         ButterKnife.bind(this);
         mLinearLayoutManager = new LinearLayoutManager(ApplicationContext.get());
-        projectResourcesAdapter = new ProjectResourcesAdapter(ProjectResources.getResourcesOffline(project_offline_id), ApplicationContext.get());
+        if(!Projects.getProjectStatus(project_offline_id).equals(AccountGeneral.STATUS_SYNC)){
+            projectResourcesAdapter = new ProjectResourcesAdapter(ProjectResources.getResourcesOffline(project_offline_id), ApplicationContext.get());
+        }
+        else{
+            List<ProjectResources> projectResourcesList = ProjectResources.getResources(project_id);
+            for(ProjectResources projectResources : projectResourcesList){
+                projectResources.setProject_offline_id(project_offline_id);
+                projectResources.save();
+            }
+            projectResourcesAdapter = new ProjectResourcesAdapter(projectResourcesList, ApplicationContext.get());
+        }
         listResources.setAdapter(projectResourcesAdapter);
         listResources.setLayoutManager(mLinearLayoutManager);
         listResources.setItemAnimator(new DefaultItemAnimator());
@@ -85,6 +99,17 @@ public class ProjectResourcesView extends RelativeLayout{
             @Override
             public void afterTextChanged(Editable s) {
                 String searchString = searchEditText.getText().toString();
+                projectResourcesAdapter.clearItems();
+                if(!Projects.getProjectStatus(project_offline_id).equals(AccountGeneral.STATUS_SYNC)){
+                    for(ProjectResources projectResources : ProjectResources.getSearchProjectResourcesOffline(searchString, project_offline_id)){
+                        projectResourcesAdapter.addItem(projectResources);
+                    }
+                }
+                else{
+                    for(ProjectResources projectResources : ProjectResources.getSearchProjectResourcesOnline(searchString, project_id)){
+                        projectResourcesAdapter.addItem(projectResources);
+                    }
+                }
             }
         });
     }

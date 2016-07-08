@@ -2,15 +2,19 @@ package com.forateq.cloudcheetah.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.models.ProjectResources;
 import com.forateq.cloudcheetah.models.Resources;
+import com.forateq.cloudcheetah.utils.ApplicationContext;
+import com.forateq.cloudcheetah.views.ActionView;
 
 import java.util.List;
 
@@ -101,7 +105,31 @@ public class ProjectResourcesAdapter extends RecyclerView.Adapter<ProjectResourc
             rippleLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.e("Clicked", "Clicked");
+                    final ActionView actionView = new ActionView(ApplicationContext.get());
+                    actionView.getActionDeleteIV().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.e("edit", "Edit");
+                        }
+                    });
+                    actionView.getActionEditIV().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.e("delete", "Delete");
+                        }
+                    });
+                    final MaterialDialog.Builder createNoteDialog = new MaterialDialog.Builder(ApplicationContext.get())
+                            .title("Select an action:")
+                            .titleColorRes(R.color.colorText)
+                            .backgroundColorRes(R.color.colorPrimary)
+                            .widgetColorRes(R.color.colorText)
+                            .customView(actionView, true)
+                            .positiveColorRes(R.color.colorText)
+                            .negativeColorRes(R.color.colorText);
 
+                    final MaterialDialog addNoteDialog = createNoteDialog.build();
+                    addNoteDialog.show();
                 }
             });
         }

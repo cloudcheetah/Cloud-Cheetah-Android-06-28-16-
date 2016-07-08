@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ import com.forateq.cloudcheetah.pojo.ResourceData;
 import com.forateq.cloudcheetah.pojo.ResourceListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.UserData;
 import com.forateq.cloudcheetah.pojo.UsersListResponseWrapper;
+import com.forateq.cloudcheetah.utils.ApplicationContext;
 import com.onesignal.OneSignal;
 
 import org.json.JSONException;
@@ -142,11 +144,13 @@ public class AuthenticatorActivity extends AppCompatActivity{
                                     data.putString(AccountManager.KEY_ACCOUNT_NAME, userName);
                                     data.putString(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
                                     data.putString(AccountManager.KEY_AUTHTOKEN, authtoken);
-                                    SharedPreferences sharedPreferences = AuthenticatorActivity.this.getSharedPreferences(AccountGeneral.ACCOUNT_NAME, Context.MODE_PRIVATE);
+                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
+                                   // SharedPreferences sharedPreferences = AuthenticatorActivity.this.getSharedPreferences(AccountGeneral.ACCOUNT_NAME, Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = sharedPreferences.edit();
                                     editor.putString(AccountGeneral.ACCOUNT_USERNAME, userName);
                                     editor.putString(AccountGeneral.SESSION_KEY, authtoken);
                                     editor.putString(AccountGeneral.NOTIFICATION_ID, notification_id);
+                                    editor.putString(AccountGeneral.PROJECT_TIMESTAMP, "");
                                     editor.putString(AccountGeneral.USER_ID, ""+loginWrapper.getLogin().getId());
                                     editor.commit();
                                     data.putString(PARAM_USER_PASS, userPass);
@@ -155,19 +159,12 @@ public class AuthenticatorActivity extends AppCompatActivity{
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-                                    if(mProgressDialog.isShowing())
-                                        mProgressDialog.dismiss();
                                 }
                                 else{
                                     Toast.makeText(AuthenticatorActivity.this, "Username and password does not match", Toast.LENGTH_LONG).show();
-                                    if(mProgressDialog.isShowing())
-                                        mProgressDialog.dismiss();
                                 }
                                 new Delete().from(Users.class).execute();
-                                saveUsers(userName, AccountGeneral.DEVICE_ID, authtoken);
-                                Intent res = new Intent();
-                                res.putExtras(data);
-                                finishLogin(res);
+                                saveUsers(userName, AccountGeneral.DEVICE_ID, authtoken, mProgressDialog, data);
                             }
                         });
 
@@ -195,7 +192,7 @@ public class AuthenticatorActivity extends AppCompatActivity{
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public void saveUsers(final String userid, final String deviceid, final String key){
+    public void saveUsers(final String userid, final String deviceid, final String key, final ProgressDialog progressDialog, final Bundle data){
         Observable<UsersListResponseWrapper> observable = cloudCheetahAPIService.getAllUsers(userid, deviceid, key);
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -213,6 +210,7 @@ public class AuthenticatorActivity extends AppCompatActivity{
 
                     @Override
                     public void onNext(UsersListResponseWrapper usersListResponseWrapper) {
+                        Log.e("User Size:", ""+usersListResponseWrapper.getData().size());
                         for(UserData userData : usersListResponseWrapper.getData()){
                             Users users = new Users();
                             users.setUser_id(userData.getId());
@@ -225,12 +223,12 @@ public class AuthenticatorActivity extends AppCompatActivity{
                             users.setLast_name(userData.getLast_name());
                             users.save();
                         }
-                        saveResources(userid, deviceid, key);
+                        saveResources(userid, deviceid, key, progressDialog, data);
                     }
                 });
     }
 
-    public void saveResources(String userid, String deviceid, String key){
+    public void saveResources(String userid, String deviceid, String key, final ProgressDialog progressDialog, final Bundle data){
 
 
         Observable<ResourceListResponseWrapper> observable = cloudCheetahAPIService.getAllResources(userid, deviceid, key);
@@ -240,7 +238,9 @@ public class AuthenticatorActivity extends AppCompatActivity{
                 .subscribe(new Subscriber<ResourceListResponseWrapper>() {
                     @Override
                     public void onCompleted() {
-
+                        Intent res = new Intent();
+                        res.putExtras(data);
+                        finishLogin(res);
                     }
 
                     @Override
@@ -250,6 +250,7 @@ public class AuthenticatorActivity extends AppCompatActivity{
 
                     @Override
                     public void onNext(ResourceListResponseWrapper resourceListResponseWrapper) {
+                        Log.e("Resource Size:", ""+resourceListResponseWrapper.getData().size());
                         for(ResourceData resourceData : resourceListResponseWrapper.getData()){
                             Resources resources = new Resources();
                             resources.setResource_id(resourceData.getId());
@@ -263,6 +264,9 @@ public class AuthenticatorActivity extends AppCompatActivity{
                             resources.setReorder_point(resourceData.getReorder_point());
                             resources.setVendor_id(resourceData.getVendor_id());
                             resources.save();
+                        }
+                        if(progressDialog.isShowing()){
+                            progressDialog.dismiss();
                         }
                     }
                 });

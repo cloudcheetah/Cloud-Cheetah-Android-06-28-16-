@@ -1,14 +1,12 @@
 package com.forateq.cloudcheetah.pojo;
 
-import java.util.List;
-
 /**
- * Created by Vallejos Family on 5/18/2016.
+ * Created by Vallejos Family on 7/6/2016.
  */
 public class ProjectMembers {
 
     int project_id;
-    List<String> project_members;
+    int member_id;
 
     public int getProject_id() {
         return project_id;
@@ -18,11 +16,11 @@ public class ProjectMembers {
         this.project_id = project_id;
     }
 
-    public List<String> getProject_members() {
-        return project_members;
+    public int getMember_id() {
+        return member_id;
     }
 
-    public void setProject_members(List<String> project_members) {
-        this.project_members = project_members;
+    public void setMember_id(int member_id) {
+        this.member_id = member_id;
     }
 }

@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.forateq.cloudcheetah.R;
+import com.forateq.cloudcheetah.authenticate.AccountGeneral;
 import com.forateq.cloudcheetah.models.ProjectMembers;
+import com.forateq.cloudcheetah.models.Projects;
 import com.forateq.cloudcheetah.models.Users;
 
 import java.util.HashMap;
@@ -50,7 +52,12 @@ public class AddProjectMemberAdapter extends RecyclerView.Adapter<AddProjectMemb
         this.mContext = context;
         this.project_id = project_id;
         this.project_offline_id = project_offline_id;
-        memberIdMap = ProjectMembers.getProjectMemberOfflineIdList(project_offline_id);
+        if(!Projects.getProjectStatus(project_offline_id).equals(AccountGeneral.STATUS_SYNC)){
+            memberIdMap = ProjectMembers.getProjectMemberOfflineIdList(project_offline_id);
+        }
+        else{
+            memberIdMap = ProjectMembers.getProjectMemberIdList(project_id);
+        }
         membersMap = new HashMap<>();
     }
 
