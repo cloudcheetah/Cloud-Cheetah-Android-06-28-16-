@@ -23,8 +23,12 @@ import com.forateq.cloudcheetah.CloudCheetahAPIService;
 import com.forateq.cloudcheetah.CloudCheetahApp;
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
+import com.forateq.cloudcheetah.models.Accounts;
+import com.forateq.cloudcheetah.models.Customers;
 import com.forateq.cloudcheetah.models.Resources;
 import com.forateq.cloudcheetah.models.Users;
+import com.forateq.cloudcheetah.pojo.AccountListResponseWrapper;
+import com.forateq.cloudcheetah.pojo.CustomerListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.LoginWrapper;
 import com.forateq.cloudcheetah.pojo.ResourceData;
 import com.forateq.cloudcheetah.pojo.ResourceListResponseWrapper;
@@ -228,7 +232,7 @@ public class AuthenticatorActivity extends AppCompatActivity{
                 });
     }
 
-    public void saveResources(String userid, String deviceid, String key, final ProgressDialog progressDialog, final Bundle data){
+    public void saveResources(final String userid, final String deviceid, final String key, final ProgressDialog progressDialog, final Bundle data){
 
 
         Observable<ResourceListResponseWrapper> observable = cloudCheetahAPIService.getAllResources(userid, deviceid, key);
@@ -238,9 +242,7 @@ public class AuthenticatorActivity extends AppCompatActivity{
                 .subscribe(new Subscriber<ResourceListResponseWrapper>() {
                     @Override
                     public void onCompleted() {
-                        Intent res = new Intent();
-                        res.putExtras(data);
-                        finishLogin(res);
+
                     }
 
                     @Override
@@ -265,12 +267,68 @@ public class AuthenticatorActivity extends AppCompatActivity{
                             resources.setVendor_id(resourceData.getVendor_id());
                             resources.save();
                         }
+                        saveAccounts(userid, deviceid, key, progressDialog, data);
+                    }
+                });
+
+    }
+
+    public void saveAccounts(final String userid, final String deviceid, final String key, final ProgressDialog progressDialog, final Bundle data){
+        Observable<AccountListResponseWrapper> observable = cloudCheetahAPIService.getAllAccounts(userid, deviceid, key);
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<AccountListResponseWrapper>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(AccountListResponseWrapper accountListResponseWrapper) {
+                        for(Accounts accounts : accountListResponseWrapper.getData()){
+                            Log.e("Account Id", ""+accounts.getAccountId());
+                            accounts.save();
+                        }
+                        saveCustomers(userid, deviceid, key, progressDialog, data);
+                    }
+                });
+    }
+
+    public void saveCustomers(String userid, String deviceid, String key, final ProgressDialog progressDialog, final Bundle data){
+        Observable<CustomerListResponseWrapper> observable = cloudCheetahAPIService.getAllCustomers(userid, deviceid, key);
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<CustomerListResponseWrapper>() {
+                    @Override
+                    public void onCompleted() {
+                        Intent res = new Intent();
+                        res.putExtras(data);
+                        finishLogin(res);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(CustomerListResponseWrapper customerListResponseWrapper) {
+                        for(Customers customers : customerListResponseWrapper.getData()){
+                            Log.e("Customer Id", ""+customers.getCustomerId());
+                            customers.save();
+                        }
                         if(progressDialog.isShowing()){
                             progressDialog.dismiss();
                         }
                     }
                 });
-
     }
 
     /**

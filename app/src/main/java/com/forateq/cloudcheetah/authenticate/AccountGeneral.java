@@ -60,4 +60,8 @@ public class AccountGeneral {
     public static final String METHOD_DELETE = "delete";
 
     public static final int SUCCESS_CODE = 1007;
+
+    public static final int CASH_IN = 1;
+
+    public static final int CASH_OUT = 2;
 }

@@ -1,5 +1,7 @@
 package com.forateq.cloudcheetah;
 
+import com.forateq.cloudcheetah.pojo.AccountListResponseWrapper;
+import com.forateq.cloudcheetah.pojo.CustomerListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.LoginWrapper;
 import com.forateq.cloudcheetah.pojo.ProjectListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ProjectResponseWrapper;
@@ -33,6 +35,12 @@ public interface CloudCheetahAPIService {
 
     @GET("api_resources/")
     Observable<ResourceListResponseWrapper> getAllResources(@Query("user") String user, @Query("deviceid") String deviceid, @Query("key") String key);
+
+    @GET("api_accounts/")
+    Observable<AccountListResponseWrapper> getAllAccounts(@Query("user") String user, @Query("deviceid") String deviceid, @Query("key") String key);
+
+    @GET("api_customers/")
+    Observable<CustomerListResponseWrapper> getAllCustomers(@Query("user") String user, @Query("deviceid") String deviceid, @Query("key") String key);
 
     @GET("api_projects")
     Observable<ProjectListResponseWrapper> getAllProjects(@Query("user") String user, @Query("deviceid") String deviceid, @Query("key") String key, @Query("timestamp") String timestamp);
