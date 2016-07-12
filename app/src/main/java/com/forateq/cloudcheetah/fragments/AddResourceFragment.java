@@ -135,6 +135,7 @@ public class AddResourceFragment extends Fragment {
                                 projectResources.setQuantity(Integer.parseInt(quantityET.getText().toString()));
                                 projectResources.setResource_name(resourceNameSP.getSelectedItem().toString());
                                 projectResources.setResource_id(Resources.getAllResourceId(resourceNameSP.getSelectedItem().toString()));
+                                projectResources.setProject_resource_id(responseWrapper.getId());
                                 projectResources.save();
                                 ProjectResourcesView.projectResourcesAdapter.addItem(projectResources);
                                 Toast.makeText(ApplicationContext.get(), "Resource successfully added.", Toast.LENGTH_SHORT).show();

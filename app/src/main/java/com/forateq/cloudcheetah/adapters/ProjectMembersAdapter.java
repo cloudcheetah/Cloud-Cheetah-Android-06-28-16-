@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
@@ -86,6 +87,7 @@ public class ProjectMembersAdapter extends RecyclerView.Adapter<ProjectMembersAd
         TextView contactNameTV;
         TextView contactUsernameTV;
         TextView contactUserIdTV;
+        ImageView removeMemberIV;
         MaterialRippleLayout rippleLayout;
 
         public ViewHolder(View itemView) {
@@ -93,6 +95,13 @@ public class ProjectMembersAdapter extends RecyclerView.Adapter<ProjectMembersAd
             contactNameTV = (TextView) itemView.findViewById(R.id.contact_name);
             contactUsernameTV = (TextView) itemView.findViewById(R.id.contact_username);
             contactUserIdTV = (TextView) itemView.findViewById(R.id.user_id);
+            removeMemberIV = (ImageView) itemView.findViewById(R.id.remove_member);
+            removeMemberIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e("Clicked", "Clicked");
+                }
+            });
             rippleLayout = (MaterialRippleLayout) itemView.findViewById(R.id.ripple);
             rippleLayout.setOnClickListener(new View.OnClickListener() {
                 @Override

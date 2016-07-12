@@ -9,6 +9,8 @@ public class ResponseWrapper {
 
     int project_id;
 
+    int id;
+
     public Response getResponse() {
         return response;
     }
@@ -23,5 +25,13 @@ public class ResponseWrapper {
 
     public void setProject_id(int project_id) {
         this.project_id = project_id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

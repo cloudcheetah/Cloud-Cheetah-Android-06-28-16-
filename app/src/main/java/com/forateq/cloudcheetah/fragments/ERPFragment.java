@@ -150,6 +150,7 @@ public class ERPFragment extends Fragment {
                                             newProjectResources.setResource_id(projectResources.getResource_id());
                                             newProjectResources.setProject_id(projectResources.getProject_id());
                                             newProjectResources.setQuantity(projectResources.getQty());
+                                            newProjectResources.setProject_resource_id(projectResources.getId());
                                             newProjectResources.setResource_name(Resources.getResource(projectResources.getResource_id()).getName());
                                             newProjectResources.save();
                                         }
@@ -182,6 +183,7 @@ public class ERPFragment extends Fragment {
                                             newProjectResources.setResource_id(projectResources.getResource_id());
                                             newProjectResources.setProject_id(projectResources.getProject_id());
                                             newProjectResources.setQuantity(projectResources.getQty());
+                                            newProjectResources.setProject_resource_id(projectResources.getId());
                                             newProjectResources.setResource_name(Resources.getResource(projectResources.getResource_id()).getName());
                                             newProjectResources.save();
                                         }

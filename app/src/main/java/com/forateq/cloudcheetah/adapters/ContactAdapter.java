@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
@@ -69,6 +70,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         public TextView contactName;
         public TextView userId;
         public TextView userName;
+        public ImageView deleteIV;
         public MaterialRippleLayout rippleLayout;
 
         public ViewHolder(View itemView) {
@@ -76,6 +78,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             contactName = (TextView) itemView.findViewById(R.id.contact_name);
             userId = (TextView) itemView.findViewById(R.id.user_id);
             userName = (TextView) itemView.findViewById(R.id.contact_username);
+            deleteIV = (ImageView) itemView.findViewById(R.id.remove_member);
+            deleteIV.setVisibility(View.GONE);
             rippleLayout = (MaterialRippleLayout) itemView.findViewById(R.id.ripple);
             rippleLayout.setOnClickListener(new View.OnClickListener() {
                 @Override

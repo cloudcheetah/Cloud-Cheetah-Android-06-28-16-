@@ -24,6 +24,8 @@ public class ProjectResources extends Model {
     int quantity;
     @Column(name = "resource_name")
     String resource_name;
+    @Column(name = "project_resource_id")
+    int project_resource_id;
 
     public int getProject_id() {
         return project_id;
@@ -63,6 +65,14 @@ public class ProjectResources extends Model {
 
     public void setResource_name(String resource_name) {
         this.resource_name = resource_name;
+    }
+
+    public int getProject_resource_id() {
+        return project_resource_id;
+    }
+
+    public void setProject_resource_id(int project_resource_id) {
+        this.project_resource_id = project_resource_id;
     }
 
     /**

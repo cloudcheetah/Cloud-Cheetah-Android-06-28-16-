@@ -8,6 +8,7 @@ public class ProjectResources {
     int project_id;
     int resource_id;
     int qty;
+    int id;
 
     public int getProject_id() {
         return project_id;
@@ -31,5 +32,13 @@ public class ProjectResources {
 
     public void setQty(int qty) {
         this.qty = qty;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
