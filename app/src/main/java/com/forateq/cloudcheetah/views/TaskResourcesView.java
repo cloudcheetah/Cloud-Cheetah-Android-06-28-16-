@@ -9,11 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.adapters.TaskResourceAdapter;
+import com.forateq.cloudcheetah.authenticate.AccountGeneral;
 import com.forateq.cloudcheetah.fragments.AddTaskResourceFragment;
 import com.forateq.cloudcheetah.models.TaskResources;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
@@ -38,12 +40,14 @@ public class TaskResourcesView extends CardView {
     public static TaskResourceAdapter taskResourceAdapter;
     int task_id;
     long task_offline_id;
+    String project_status;
     public static final String TAG = "TaskResourcesView";
 
-    public TaskResourcesView(Context context, int task_id, long task_offline_id) {
+    public TaskResourcesView(Context context, int task_id, long task_offline_id, String project_status) {
         super(context);
         this.task_id = task_id;
         this.task_offline_id = task_offline_id;
+        this.project_status = project_status;
         init();
     }
 
@@ -61,7 +65,15 @@ public class TaskResourcesView extends CardView {
         inflate(getContext(), R.layout.task_resource_view, this);
         ButterKnife.bind(this);
         mLinearLayoutManager = new LinearLayoutManager(ApplicationContext.get());
-        taskResourceAdapter = new TaskResourceAdapter(TaskResources.getTaskResourcesOffline(task_offline_id), ApplicationContext.get());
+        if(!project_status.equals(AccountGeneral.STATUS_SYNC)){
+            Log.e("UnSync", ""+TaskResources.getTaskResourcesOffline(task_offline_id).size());
+            taskResourceAdapter = new TaskResourceAdapter(TaskResources.getTaskResourcesOffline(task_offline_id), ApplicationContext.get());
+        }
+        else{
+            Log.e("Task Id View", ""+task_id);
+            Log.e("Sync", ""+TaskResources.getTaskResourcesOnline(task_id).size());
+            taskResourceAdapter = new TaskResourceAdapter(TaskResources.getTaskResourcesOnline(task_id), ApplicationContext.get());
+        }
         listTaskResources.setAdapter(taskResourceAdapter);
         listTaskResources.setLayoutManager(mLinearLayoutManager);
         listTaskResources.setItemAnimator(new DefaultItemAnimator());
@@ -91,8 +103,9 @@ public class TaskResourcesView extends CardView {
     @OnClick(R.id.fab)
     public void addTaskResources(){
         Bundle bundle = new Bundle();
-        bundle.putString("task_id", ""+0);
+        bundle.putString("task_id", ""+task_id);
         bundle.putString("task_offline_id", ""+task_offline_id);
+        bundle.putString("project_status", project_status);
         AddTaskResourceFragment addTaskResourceFragment = new AddTaskResourceFragment();
         addTaskResourceFragment.setArguments(bundle);
         MainActivity.replaceFragment(addTaskResourceFragment, TAG);

@@ -25,15 +25,19 @@
             android:background="@color/colorText"
             android:clickable="true"
             android:orientation="horizontal"
+            android:weightSum="5"
             android:padding="5dp">
 
             <ImageView
-                android:layout_width="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:src="@mipmap/ic_task_progress" />
 
             <LinearLayout
+                android:layout_weight="3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -47,6 +51,14 @@
                     android:text="01/01/2015"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/task_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="01/01/2015"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/task_progress_offline_id"
@@ -70,6 +82,14 @@
 
             </LinearLayout>
 
+            <ImageView
+                android:id="@+id/submit_report"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:src="@mipmap/ic_file_upload_black_24dp" />
 
         </LinearLayout>
 

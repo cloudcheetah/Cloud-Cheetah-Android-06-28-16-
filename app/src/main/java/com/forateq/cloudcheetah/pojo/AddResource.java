@@ -6,6 +6,7 @@ package com.forateq.cloudcheetah.pojo;
 public class AddResource{
     String resourceName;
     int resourceQuantity;
+    int id;
 
     public String getResourceName() {
         return resourceName;
@@ -21,5 +22,13 @@ public class AddResource{
 
     public void setResourceQuantity(int resourceQuantity) {
         this.resourceQuantity = resourceQuantity;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

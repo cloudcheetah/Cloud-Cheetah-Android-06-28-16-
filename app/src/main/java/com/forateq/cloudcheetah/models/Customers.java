@@ -5,6 +5,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,5 +58,26 @@ public class Customers extends Model{
 
     public static List<Customers> getCustomers(){
         return new Select().from(Customers.class).execute();
+    }
+
+    public static List<String> getCustomersName(){
+
+        List<Customers> customersList = Customers.getCustomers();
+        List<String> customerNames = new ArrayList<>();
+        for(Customers customers : customersList){
+            customerNames.add(customers.getName());
+        }
+
+        return  customerNames;
+    }
+
+    public static int getCustomerId(String name){
+        Customers customers = new Select().from(Customers.class).where("name = ?", name).executeSingle();
+        return customers.getCustomerId();
+    }
+
+    public static String getCustomerName(int id){
+        Customers customers = new Select().from(Customers.class).where("customer_id = ?", id).executeSingle();
+        return  customers.getName();
     }
 }

@@ -122,6 +122,7 @@
                 android:layout_weight="1"
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
+                android:inputType="number"
                 android:layout_height="@dimen/edittext_height"
                 android:background="@drawable/rectangular_edittext"/>
 

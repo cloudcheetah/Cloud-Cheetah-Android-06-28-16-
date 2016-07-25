@@ -15,6 +15,7 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.forateq.cloudcheetah.CloudCheetahApp;
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
+import com.forateq.cloudcheetah.models.Projects;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
 import com.forateq.cloudcheetah.views.TaskDetailsView;
 import com.forateq.cloudcheetah.views.TaskResourcesView;
@@ -70,7 +71,7 @@ public class TasksComponentsContainerFragment extends Fragment {
         taskComponentMap.put(COMPONENT_SUB_TASKS, taskSubTasksView);
         TaskDetailsView taskDetailsView = new TaskDetailsView(ApplicationContext.get(), task_id, task_offline_id);
         taskComponentMap.put(COMPONENT_TASK_DETAILS, taskDetailsView);
-        TaskResourcesView taskResourcesView = new TaskResourcesView(ApplicationContext.get(), task_id, task_offline_id);
+        TaskResourcesView taskResourcesView = new TaskResourcesView(ApplicationContext.get(), task_id, task_offline_id, Projects.getProjectStatus(project_offline_id));
         taskComponentMap.put(COMPONENT_TASK_RESOURCES, taskResourcesView);
         if(!CloudCheetahApp.currentTaskComponent.equals("")){
             changeComponentView(taskComponentMap.get(CloudCheetahApp.currentTaskComponent));

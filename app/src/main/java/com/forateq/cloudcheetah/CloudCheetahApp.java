@@ -17,6 +17,7 @@ public class CloudCheetahApp extends Application {
     private NetworkComponent networkComponent;
     public static String currentProjectComponent = "";
     public static String currentTaskComponent = "";
+    public static String currentReportComponent = "";
     @Override
     public void onCreate() {
         super.onCreate();

@@ -5,6 +5,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -87,5 +88,26 @@ public class Accounts extends Model {
 
     public static List<Accounts> getAccounts(){
         return new Select().from(Accounts.class).execute();
+    }
+
+    public static List<String> getAccountsName(){
+        List<Accounts> accountsList = Accounts.getAccounts();
+        List<String> accountNames = new ArrayList<>();
+        for(Accounts accounts : accountsList){
+
+            accountNames.add(accounts.getAccount_name());
+
+        }
+        return  accountNames;
+    }
+
+    public static int getAccountId(String account_name){
+        Accounts accounts = new Select().from(Accounts.class).where("account_name = ?", account_name).executeSingle();
+        return accounts.getAccountId();
+    }
+
+    public static String getAccountName(int id){
+        Accounts accounts = new Select().from(Accounts.class).where("account_id = ?", id).executeSingle();
+        return  accounts.getAccount_name();
     }
 }

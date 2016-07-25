@@ -70,6 +70,24 @@
                     android:layout_height="wrap_content"
                     android:textSize="20dp"/>
 
+                <TextView
+                    android:id="@+id/project_resource_id"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/project_id"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/project_offline_id"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:layout_height="match_parent" />
+
             </LinearLayout>
 
             <ImageView

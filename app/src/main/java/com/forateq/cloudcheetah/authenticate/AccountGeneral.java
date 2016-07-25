@@ -55,6 +55,8 @@ public class AccountGeneral {
 
     public static final String PROJECT_TIMESTAMP = "Project Timestamp";
 
+    public static final String MY_TASKS_TIMESTAMP = "My Tasks Timestamp";
+
     public static final String METHOD_PUT = "put";
 
     public static final String METHOD_DELETE = "delete";

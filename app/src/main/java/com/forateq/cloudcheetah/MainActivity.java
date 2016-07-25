@@ -6,7 +6,12 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -31,12 +36,17 @@ import java.util.List;
 /**
  * this class is the main activity of the class, this is the entry point of the application
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends CameraActivity {
 
     private static FragmentManager fragmentManager;
     private AccountManager accountManager;
     private Account[] accounts;
     private Account account;
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +68,12 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
         ApplicationContext.getInstance().init(getApplicationContext());
+        if(isStoragePermissionGranted()){
+            Log.e("Granted", "Granted");
+        }
+        else{
+            Log.e("Not Granted", "Not Granted");
+        }
     }
 
 
@@ -169,4 +185,35 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
+    public  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.e("MainActivity","Permission is granted");
+                return true;
+            } else {
+
+                Log.e("MainActivity","Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.e("MainActivity","Permission is granted");
+            return true;
+        }
+
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
+            Log.e("MainActivity","Permission: "+permissions[0]+ "was "+grantResults[0]);
+            //resume tasks needing this permission
+        }
+    }
+
 }

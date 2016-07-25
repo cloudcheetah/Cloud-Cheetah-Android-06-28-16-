@@ -75,6 +75,10 @@ public class TaskResources extends Model {
         return new Select().from(TaskResources.class).where("task_offline_id = ?", task_offline_id).execute();
     }
 
+    public static List<TaskResources> getTaskResourcesOnline(int task_id){
+        return new Select().from(TaskResources.class).where("task_id = ?", task_id).execute();
+    }
+
     /**
      * This method is used to get all the resource name of a specific task during offline mode
      * @param task_offline_id
@@ -88,5 +92,20 @@ public class TaskResources extends Model {
             resourcesNameList.add(resources.getName());
         }
         return resourcesNameList;
+    }
+
+    public static List<String> getTaskResourceOnline(int task_id){
+        List<String> resourcesNameList = new ArrayList<>();
+        List<TaskResources> taskResourcesList = new Select().from(TaskResources.class).where("task_id = ?", task_id).execute();
+        for(TaskResources taskResources : taskResourcesList){
+            Resources resources = Resources.getResource(taskResources.getResource_id());
+            resourcesNameList.add(resources.getName());
+        }
+        return resourcesNameList;
+    }
+
+
+    public static TaskResources getTaskResourceById(int task_resource_id){
+        return new Select().from(TaskResources.class).where("task_resource_id = ?", task_resource_id).executeSingle();
     }
 }

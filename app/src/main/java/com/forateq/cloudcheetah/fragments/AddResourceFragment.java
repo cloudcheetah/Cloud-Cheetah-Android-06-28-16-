@@ -77,72 +77,11 @@ public class AddResourceFragment extends Fragment {
 
     @OnClick(R.id.ripple_add)
     public void addResource(){
-        if(!Projects.getProjectStatus(project_offline_id).equals(AccountGeneral.STATUS_SYNC)){
-            ProjectResources projectResources = new ProjectResources();
-            projectResources.setProject_id(project_id);
-            projectResources.setProject_offline_id(project_offline_id);
-            projectResources.setQuantity(Integer.parseInt(quantityET.getText().toString()));
-            projectResources.setResource_id(Resources.getAllResourceId(resourceNameSP.getSelectedItem().toString()));
-            projectResources.setResource_name(resourceNameSP.getSelectedItem().toString());
-            projectResources.save();
-            ProjectResourcesView.projectResourcesAdapter.addItem(projectResources);
-            Toast.makeText(ApplicationContext.get(), "Resource successfully added.", Toast.LENGTH_SHORT).show();
-            MainActivity.popFragment();
+        if(Resources.getResource(Resources.getAllResourceId(resourceNameSP.getSelectedItem().toString())).getOn_hand_qty() < Integer.parseInt(quantityET.getText().toString())){
+            Toast.makeText(ApplicationContext.get(), "Insufficient quantity for item "+ resourceNameSP.getSelectedItem().toString() + "on-hand quantity is "+Resources.getResource(Resources.getAllResourceId(resourceNameSP.getSelectedItem().toString())).getOn_hand_qty(), Toast.LENGTH_SHORT).show();
         }
         else{
-            if(isNetworkAvailable()){
-                com.forateq.cloudcheetah.pojo.ProjectResources projectResources = new com.forateq.cloudcheetah.pojo.ProjectResources();
-                projectResources.setProject_id(project_id);
-                projectResources.setResource_id(Resources.getAllResourceId(resourceNameSP.getSelectedItem().toString()));
-                projectResources.setQty(Integer.parseInt(quantityET.getText().toString()));
-                Gson gson = new Gson();
-                String json = gson.toJson(projectResources);
-                Log.e("Json", json);
-                final ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
-                mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setMessage("Adding project resources...");
-                mProgressDialog.show();
-                final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
-                String sessionKey = sharedPreferences.getString(AccountGeneral.SESSION_KEY, "");
-                String userName = sharedPreferences.getString(AccountGeneral.ACCOUNT_USERNAME, "");
-                Observable<ResponseWrapper> observable = cloudCheetahAPIService.addProjectResource(userName, Settings.Secure.getString(ApplicationContext.get().getContentResolver(),
-                        Settings.Secure.ANDROID_ID), sessionKey, json);
-                observable.subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .unsubscribeOn(Schedulers.io())
-                        .subscribe(new Subscriber<ResponseWrapper>() {
-                            @Override
-                            public void onCompleted() {
-                                if(mProgressDialog.isShowing()){
-                                    mProgressDialog.dismiss();
-                                }
-                                MainActivity.popFragment();
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                Log.e("AddProjectResources", e.getMessage(), e);
-                                if(mProgressDialog.isShowing()){
-                                    mProgressDialog.dismiss();
-                                }
-                            }
-
-                            @Override
-                            public void onNext(ResponseWrapper responseWrapper) {
-                                ProjectResources projectResources = new ProjectResources();
-                                projectResources.setProject_id(project_id);
-                                projectResources.setProject_offline_id(project_offline_id);
-                                projectResources.setQuantity(Integer.parseInt(quantityET.getText().toString()));
-                                projectResources.setResource_name(resourceNameSP.getSelectedItem().toString());
-                                projectResources.setResource_id(Resources.getAllResourceId(resourceNameSP.getSelectedItem().toString()));
-                                projectResources.setProject_resource_id(responseWrapper.getId());
-                                projectResources.save();
-                                ProjectResourcesView.projectResourcesAdapter.addItem(projectResources);
-                                Toast.makeText(ApplicationContext.get(), "Resource successfully added.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
-            else{
+            if(!Projects.getProjectStatus(project_offline_id).equals(AccountGeneral.STATUS_SYNC)){
                 ProjectResources projectResources = new ProjectResources();
                 projectResources.setProject_id(project_id);
                 projectResources.setProject_offline_id(project_offline_id);
@@ -150,11 +89,86 @@ public class AddResourceFragment extends Fragment {
                 projectResources.setResource_id(Resources.getAllResourceId(resourceNameSP.getSelectedItem().toString()));
                 projectResources.setResource_name(resourceNameSP.getSelectedItem().toString());
                 projectResources.save();
-                Projects projects = Projects.getProjectsOfflineMode(project_offline_id);
-                projects.setStatus(AccountGeneral.STATUS_UNSYNC);
-                projects.save();
-                Toast.makeText(ApplicationContext.get(), "You currently don't have a network connection all changes is saved in the device. Kindly sync the project manually once the network is connected.", Toast.LENGTH_SHORT).show();
+                Resources resources = Resources.getResource(Resources.getAllResourceId(resourceNameSP.getSelectedItem().toString()));
+                resources.setOn_hand_qty(resources.getOn_hand_qty() - Integer.parseInt(quantityET.getText().toString()));
+                resources.save();
+                ProjectResourcesView.projectResourcesAdapter.addItem(projectResources);
+                Toast.makeText(ApplicationContext.get(), "Resource successfully added.", Toast.LENGTH_SHORT).show();
                 MainActivity.popFragment();
+            }
+            else{
+                if(isNetworkAvailable()){
+                    com.forateq.cloudcheetah.pojo.ProjectResources projectResources = new com.forateq.cloudcheetah.pojo.ProjectResources();
+                    projectResources.setProject_id(project_id);
+                    projectResources.setResource_id(Resources.getAllResourceId(resourceNameSP.getSelectedItem().toString()));
+                    projectResources.setQty(Integer.parseInt(quantityET.getText().toString()));
+                    Gson gson = new Gson();
+                    String json = gson.toJson(projectResources);
+                    Log.e("Json", json);
+                    final ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
+                    mProgressDialog.setIndeterminate(true);
+                    mProgressDialog.setMessage("Adding project resources...");
+                    mProgressDialog.show();
+                    final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
+                    String sessionKey = sharedPreferences.getString(AccountGeneral.SESSION_KEY, "");
+                    String userName = sharedPreferences.getString(AccountGeneral.ACCOUNT_USERNAME, "");
+                    Observable<ResponseWrapper> observable = cloudCheetahAPIService.addProjectResource(userName, Settings.Secure.getString(ApplicationContext.get().getContentResolver(),
+                            Settings.Secure.ANDROID_ID), sessionKey, json);
+                    observable.subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .unsubscribeOn(Schedulers.io())
+                            .subscribe(new Subscriber<ResponseWrapper>() {
+                                @Override
+                                public void onCompleted() {
+                                    if(mProgressDialog.isShowing()){
+                                        mProgressDialog.dismiss();
+                                    }
+                                    MainActivity.popFragment();
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    Log.e("AddProjectResources", e.getMessage(), e);
+                                    if(mProgressDialog.isShowing()){
+                                        mProgressDialog.dismiss();
+                                    }
+                                }
+
+                                @Override
+                                public void onNext(ResponseWrapper responseWrapper) {
+                                    ProjectResources projectResources = new ProjectResources();
+                                    projectResources.setProject_id(project_id);
+                                    projectResources.setProject_offline_id(project_offline_id);
+                                    projectResources.setQuantity(Integer.parseInt(quantityET.getText().toString()));
+                                    projectResources.setResource_name(resourceNameSP.getSelectedItem().toString());
+                                    projectResources.setResource_id(Resources.getAllResourceId(resourceNameSP.getSelectedItem().toString()));
+                                    projectResources.setProject_resource_id(responseWrapper.getId());
+                                    projectResources.save();
+                                    Resources resources = Resources.getResource(Resources.getAllResourceId(resourceNameSP.getSelectedItem().toString()));
+                                    resources.setOn_hand_qty(resources.getOn_hand_qty() - Integer.parseInt(quantityET.getText().toString()));
+                                    resources.save();
+                                    ProjectResourcesView.projectResourcesAdapter.addItem(projectResources);
+                                    Toast.makeText(ApplicationContext.get(), "Resource successfully added.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+                else{
+                    ProjectResources projectResources = new ProjectResources();
+                    projectResources.setProject_id(project_id);
+                    projectResources.setProject_offline_id(project_offline_id);
+                    projectResources.setQuantity(Integer.parseInt(quantityET.getText().toString()));
+                    projectResources.setResource_id(Resources.getAllResourceId(resourceNameSP.getSelectedItem().toString()));
+                    projectResources.setResource_name(resourceNameSP.getSelectedItem().toString());
+                    projectResources.save();
+                    Projects projects = Projects.getProjectsOfflineMode(project_offline_id);
+                    projects.setStatus(AccountGeneral.STATUS_UNSYNC);
+                    projects.save();
+                    Resources resources = Resources.getResource(Resources.getAllResourceId(resourceNameSP.getSelectedItem().toString()));
+                    resources.setOn_hand_qty(resources.getOn_hand_qty() - Integer.parseInt(quantityET.getText().toString()));
+                    resources.save();
+                    Toast.makeText(ApplicationContext.get(), "You currently don't have a network connection all changes is saved in the device. Kindly sync the project manually once the network is connected.", Toast.LENGTH_SHORT).show();
+                    MainActivity.popFragment();
+                }
             }
         }
     }

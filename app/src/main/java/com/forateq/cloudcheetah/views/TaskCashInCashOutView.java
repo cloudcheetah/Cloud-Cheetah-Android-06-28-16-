@@ -1,17 +1,22 @@
 package com.forateq.cloudcheetah.views;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.adapters.CashInOutAdapter;
+import com.forateq.cloudcheetah.fragments.AddCashFlowFragment;
+import com.forateq.cloudcheetah.models.CashInOut;
 import com.forateq.cloudcheetah.models.TaskCashInCashOut;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
 import com.melnykov.fab.FloatingActionButton;
@@ -59,7 +64,8 @@ public class TaskCashInCashOutView extends RelativeLayout {
     public void init(){
         inflate(getContext(), R.layout.task_cash_in_out_view, this);
         ButterKnife.bind(this);
-        cashInOutAdapter = new CashInOutAdapter(TaskCashInCashOut.getOfflineCashInOut(task_offline_id), ApplicationContext.get());
+        Log.e("Count", ""+CashInOut.getCashInOuts(task_offline_id).size());
+        cashInOutAdapter = new CashInOutAdapter(CashInOut.getCashInOuts(task_offline_id), ApplicationContext.get(), taskName);
         mLinearLayoutManager = new LinearLayoutManager(ApplicationContext.get());
         listCashInOut.setAdapter(cashInOutAdapter);
         listCashInOut.setLayoutManager(mLinearLayoutManager);
@@ -88,6 +94,12 @@ public class TaskCashInCashOutView extends RelativeLayout {
 
     @OnClick(R.id.fab)
     public void addCashInOut(){
-
+        Bundle bundle = new Bundle();
+        bundle.putString("task_id", ""+task_id);
+        bundle.putString("task_offline_id", ""+task_offline_id);
+        bundle.putString("task_name", taskName);
+        AddCashFlowFragment addCashFlowFragment = new AddCashFlowFragment();
+        addCashFlowFragment.setArguments(bundle);
+        MainActivity.replaceFragment(addCashFlowFragment, TAG);
     }
 }

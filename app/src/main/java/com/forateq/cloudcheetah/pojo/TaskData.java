@@ -1,5 +1,7 @@
 package com.forateq.cloudcheetah.pojo;
 
+import java.util.List;
+
 /**
  * Created by Vallejos Family on 7/1/2016.
  */
@@ -17,7 +19,8 @@ public class TaskData {
     double longitude;
     int parent_id;
     int person_responsible_id;
-
+    List<TaskResources> resources;
+    List<SubTasks> subtasks;
 
     public int getId() {
         return id;
@@ -113,5 +116,21 @@ public class TaskData {
 
     public void setPerson_responsible_id(int person_responsible_id) {
         this.person_responsible_id = person_responsible_id;
+    }
+
+    public List<TaskResources> getResources() {
+        return resources;
+    }
+
+    public void setResources(List<TaskResources> resources) {
+        this.resources = resources;
+    }
+
+    public List<SubTasks> getSubtasks() {
+        return subtasks;
+    }
+
+    public void setSubtasks(List<SubTasks> subtasks) {
+        this.subtasks = subtasks;
     }
 }

@@ -2,7 +2,9 @@ package com.forateq.cloudcheetah.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +13,10 @@ import android.widget.TextView;
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
+import com.forateq.cloudcheetah.authenticate.AccountGeneral;
 import com.forateq.cloudcheetah.fragments.TaskProgressReportsFragment;
+import com.forateq.cloudcheetah.models.MyTasks;
+import com.forateq.cloudcheetah.models.Projects;
 import com.forateq.cloudcheetah.models.Tasks;
 
 import java.util.List;
@@ -23,7 +28,7 @@ import java.util.List;
  */
 public class MyTasksAdapter extends RecyclerView.Adapter<MyTasksAdapter.ViewHolder>{
 
-    private List<Tasks> listTasks;
+    private List<MyTasks> listTasks;
     private Context mContext;
     public static final String TAG = "MyTaskAdapter";
 
@@ -32,7 +37,7 @@ public class MyTasksAdapter extends RecyclerView.Adapter<MyTasksAdapter.ViewHold
      * @param listTasks
      * @param context
      */
-    public MyTasksAdapter(List<Tasks> listTasks, Context context) {
+    public MyTasksAdapter(List<MyTasks> listTasks, Context context) {
         this.listTasks = listTasks;
         this.mContext = context;
     }
@@ -45,36 +50,24 @@ public class MyTasksAdapter extends RecyclerView.Adapter<MyTasksAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        final Tasks tasks = listTasks.get(i);
-        viewHolder.taskName.setText(tasks.getName());
-        viewHolder.projectId.setText(""+tasks.getProject_id());
-        viewHolder.parentTaskId.setText(""+tasks.getParent_id());
-        viewHolder.taskId.setText(""+tasks.getTask_id());
-        viewHolder.projectOfflineId.setText(""+tasks.getProject_offline_id());
-        viewHolder.taskOfflineId.setText(""+tasks.getId());
+        final MyTasks myTasks = listTasks.get(i);
+        viewHolder.taskName.setText(myTasks.getName());
+        viewHolder.projectId.setText(""+myTasks.getProject_id());
+        viewHolder.parentTaskId.setText(""+myTasks.getParent_id());
+        viewHolder.taskId.setText(""+myTasks.getTaskId());
+        viewHolder.taskOfflineId.setText(""+myTasks.getId());
     }
 
     /**
      * This method is used to add new item in the arraylist of tasks
-     * @param tasks
+     * @param myTasks
      */
-    public void addItem(Tasks tasks){
-        listTasks.add(tasks);
+    public void addItem(MyTasks myTasks){
+        listTasks.add(myTasks);
         notifyDataSetChanged();
     }
 
-    /**
-     * This method us used to remove a specific task in the arrylist of tasks
-     * @param task_id
-     */
-    public void removeItem(int task_id){
-        for(Tasks tasks:listTasks){
-            if(tasks.getProject_id() == task_id){
-                listTasks.remove(tasks);
-                notifyDataSetChanged();
-            }
-        }
-    }
+
 
     /**
      * This method is used to clear the items in the arraylist of tasks
@@ -97,7 +90,6 @@ public class MyTasksAdapter extends RecyclerView.Adapter<MyTasksAdapter.ViewHold
         public TextView projectOfflineId;
         public TextView taskOfflineId;
         public MaterialRippleLayout rippleLayout;
-
         public ViewHolder(View itemView) {
             super(itemView);
             taskName = (TextView) itemView.findViewById(R.id.task_name);

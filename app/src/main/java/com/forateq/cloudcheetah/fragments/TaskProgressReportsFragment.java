@@ -11,10 +11,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.balysv.materialripple.MaterialRippleLayout;
+import com.forateq.cloudcheetah.CloudCheetahApp;
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.views.TaskCashInCashOutView;
 import com.forateq.cloudcheetah.views.TaskProgressReportsView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -25,9 +29,9 @@ import butterknife.OnClick;
  */
 public class TaskProgressReportsFragment extends Fragment {
 
-    @Bind(R.id.ripple_back)
+    @Bind(R.id.progress_ripple_back)
     MaterialRippleLayout backRipple;
-    @Bind(R.id.ripple_drawer)
+    @Bind(R.id.material_progress_drawer)
     MaterialRippleLayout rippleDrawer;
     @Bind(R.id.progress_drawer_layout)
     DrawerLayout progressDrawerLayout;
@@ -41,6 +45,9 @@ public class TaskProgressReportsFragment extends Fragment {
     long task_offline_id;
     int task_id;
     String taskName;
+    public static final String PROGRESS_REPORTS_COMPONENT = "progress_reports";
+    public static final String CASH_FLOW_COMPONENT = "cash_flow";
+    Map<String, View> reportsComponentMap;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,6 +55,7 @@ public class TaskProgressReportsFragment extends Fragment {
         task_offline_id = Long.parseLong(getArguments().getString("task_offline_id"));
         task_id = Integer.parseInt(getArguments().getString("task_id"));
         taskName = getArguments().getString("task_name");
+        reportsComponentMap = new HashMap<>();
         return v;
     }
 
@@ -59,15 +67,25 @@ public class TaskProgressReportsFragment extends Fragment {
     }
 
     public void init(){
-        showProgressReports();
+        TaskProgressReportsView taskProgressReportsView = new TaskProgressReportsView(getActivity(), task_offline_id, task_id, taskName);
+        reportsComponentMap.put(PROGRESS_REPORTS_COMPONENT, taskProgressReportsView);
+        TaskCashInCashOutView taskCashInCashOutView = new TaskCashInCashOutView(getActivity(), task_offline_id, task_id, taskName);
+        reportsComponentMap.put(CASH_FLOW_COMPONENT, taskCashInCashOutView);
+        if(CloudCheetahApp.currentReportComponent.equals("")){
+            changeComponentView(taskProgressReportsView);
+        }
+        else{
+            changeComponentView(reportsComponentMap.get(CloudCheetahApp.currentReportComponent));
+        }
+
     }
 
-    @OnClick(R.id.ripple_back)
+    @OnClick(R.id.progress_ripple_back)
     public void back(){
         MainActivity.popFragment();
     }
 
-    @OnClick(R.id.ripple_drawer)
+    @OnClick(R.id.material_progress_drawer)
     public void openDrawer(){
         progressDrawerLayout.openDrawer(GravityCompat.END);
     }
@@ -80,6 +98,7 @@ public class TaskProgressReportsFragment extends Fragment {
         progressReportsLayout.setSelected(true);
         cashInOutLayout.setSelected(false);
         progressDrawerLayout.closeDrawer(GravityCompat.END);
+        CloudCheetahApp.currentReportComponent = PROGRESS_REPORTS_COMPONENT;
     }
 
     @OnClick(R.id.cash_in_out)
@@ -90,6 +109,12 @@ public class TaskProgressReportsFragment extends Fragment {
         progressReportsLayout.setSelected(false);
         cashInOutLayout.setSelected(true);
         progressDrawerLayout.closeDrawer(GravityCompat.END);
+        CloudCheetahApp.currentReportComponent = CASH_FLOW_COMPONENT;
+    }
+
+    void changeComponentView(View view){
+        taskProgressReportsContainer.removeAllViews();
+        taskProgressReportsContainer.addView(view);
     }
 
 }

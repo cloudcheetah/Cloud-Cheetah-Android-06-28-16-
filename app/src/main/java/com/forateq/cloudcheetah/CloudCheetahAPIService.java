@@ -1,20 +1,34 @@
 package com.forateq.cloudcheetah;
 
+import com.forateq.cloudcheetah.fragments.AddInventoryItemFragment;
 import com.forateq.cloudcheetah.pojo.AccountListResponseWrapper;
+import com.forateq.cloudcheetah.pojo.AddInventoryItemResponseWrapper;
 import com.forateq.cloudcheetah.pojo.CustomerListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.LoginWrapper;
+import com.forateq.cloudcheetah.pojo.MyTasksResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ProjectListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ProjectResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ResourceListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ResponseWrapper;
+import com.forateq.cloudcheetah.pojo.SingleTaskResponseWrapper;
+import com.forateq.cloudcheetah.pojo.SubmitProgressReportResponseWrapper;
 import com.forateq.cloudcheetah.pojo.TaskListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.TaskResponseWrapper;
+import com.forateq.cloudcheetah.pojo.UnitsResponseWrapper;
 import com.forateq.cloudcheetah.pojo.UsersListResponseWrapper;
+import com.forateq.cloudcheetah.pojo.VendorsResponseWrapper;
+import com.squareup.okhttp.RequestBody;
 
+
+import java.util.List;
+
+import retrofit.http.Body;
+import retrofit.http.DELETE;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
 import rx.Observable;
@@ -39,8 +53,14 @@ public interface CloudCheetahAPIService {
     @GET("api_accounts/")
     Observable<AccountListResponseWrapper> getAllAccounts(@Query("user") String user, @Query("deviceid") String deviceid, @Query("key") String key);
 
+    @GET("api_vendors/")
+    Observable<VendorsResponseWrapper> getAllVendors(@Query("user") String user, @Query("deviceid") String deviceid, @Query("key") String key);
+
     @GET("api_customers/")
     Observable<CustomerListResponseWrapper> getAllCustomers(@Query("user") String user, @Query("deviceid") String deviceid, @Query("key") String key);
+
+    @GET("api_units/")
+    Observable<UnitsResponseWrapper> getAllUnits(@Query("user") String user, @Query("deviceid") String deviceid, @Query("key") String key);
 
     @GET("api_projects")
     Observable<ProjectListResponseWrapper> getAllProjects(@Query("user") String user, @Query("deviceid") String deviceid, @Query("key") String key, @Query("timestamp") String timestamp);
@@ -67,5 +87,89 @@ public interface CloudCheetahAPIService {
 
     @GET("api/assign_project_resources")
     Observable<ResponseWrapper> addProjectResource(@Query("user") String user, @Query("deviceid") String deviceid, @Query("key") String key, @Query("json") String json);
+
+    @POST("api/report_task_updates")
+    Observable<SubmitProgressReportResponseWrapper> addProgressReport(@Query("user") String user,
+                                                                      @Query("deviceid") String deviceid,
+                                                                      @Query("key") String key,
+                                                                      @Query("task_id") String task_id,
+                                                                      @Query("report_date") String report_date,
+                                                                      @Query("percentage_completion") String percentage_completion,
+                                                                      @Query("task_status") String task_status,
+                                                                      @Query("hours_worked") String hours_worked,
+                                                                      @Query("resources_used") String resources_used,
+                                                                      @Query("action") String action,
+                                                                      @Query("notes") String notes,
+                                                                      @Query("concerns") String concerns,
+                                                                      @Query("requests") String requests,
+                                                                      @Body RequestBody requestBody);
+
+
+
+    @POST("api/add_cash_flow")
+    Observable<SubmitProgressReportResponseWrapper> addCashFlow(@Query("user") String user,
+                                                                @Query("deviceid") String deviceid,
+                                                                @Query("key") String key,
+                                                                @Query("json") String json,
+                                                                @Body RequestBody requestBody);
+
+    @GET("api/assign_task_resources")
+    Observable<ResponseWrapper> addTaskResource(@Query("user") String user, @Query("deviceid") String deviceid, @Query("key") String key, @Query("json") String json);
+
+    @GET("api_tasks/{id}")
+    Observable<SingleTaskResponseWrapper> getSubTasks(@Path("id") int task_id, @Query("user") String user, @Query("deviceid") String deviceid, @Query("key") String key);
+
+    @POST("api_resources/create")
+    Observable<AddInventoryItemResponseWrapper> addInventoryItem(@Query("resource[name]") String resourceName,
+                                                                 @Query("resource[flag_id]") int flag_id,
+                                                                 @Query("resource[description]") String description,
+                                                                 @Query("resource[parent_id]") int parent_id,
+                                                                 @Query("resource[account_id]") int account_id,
+                                                                 @Query("resource[type_id]") int type_id,
+                                                                 @Query("resource[unit_id]") int unit_id,
+                                                                 @Query("resource[unit_cost]") double unit_cost,
+                                                                 @Query("resource[sales_price]") double sales_price,
+                                                                 @Query("resource[reorder_point]") int reorder_point,
+                                                                 @Query("resource[vendor_id]") int vendor_id,
+                                                                 @Query("resource[notes]") String resource_note,
+                                                                 @Body RequestBody requestBody,
+                                                                 @Query("user") String user,
+                                                                 @Query("deviceid") String deviceid,
+                                                                 @Query("key") String key);
+
+    @PUT("api_resources/{id}")
+    Observable<AddInventoryItemResponseWrapper> updateInventoryItem(@Path("id") int resource_id, @Query("resource[name]") String resourceName,
+                                                                 @Query("resource[flag_id]") int flag_id,
+                                                                 @Query("resource[description]") String description,
+                                                                 @Query("resource[parent_id]") int parent_id,
+                                                                 @Query("resource[account_id]") int account_id,
+                                                                 @Query("resource[type_id]") int type_id,
+                                                                 @Query("resource[unit_id]") int unit_id,
+                                                                 @Query("resource[unit_cost]") double unit_cost,
+                                                                 @Query("resource[sales_price]") double sales_price,
+                                                                 @Query("resource[reorder_point]") int reorder_point,
+                                                                 @Query("resource[vendor_id]") int vendor_id,
+                                                                 @Query("resource[notes]") String resource_note,
+                                                                 @Body RequestBody requestBody,
+                                                                 @Query("user") String user,
+                                                                 @Query("deviceid") String deviceid,
+                                                                 @Query("key") String key,
+                                                                 @Query("_method") String method);
+
+    @DELETE("api_resources/{id}")
+    Observable<ResponseWrapper> deleteInventoryItem(@Path("id") int resource_id,
+                                                    @Query("user") String user,
+                                                    @Query("deviceid") String deviceid,
+                                                    @Query("key") String key,
+                                                    @Query("_method") String method);
+
+
+    @GET("api/get_my_tasks")
+    Observable<MyTasksResponseWrapper> getMyTasks(@Query("user") String user,
+                                                  @Query("deviceid") String deviceid,
+                                                  @Query("key") String key,
+                                                  @Query("timestamp") String timestamp);
+
+
 
 }

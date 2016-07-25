@@ -121,6 +121,7 @@
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edittext_height"
+                android:inputType="number"
                 android:background="@drawable/rectangular_edittext"/>
 
 
@@ -139,6 +140,7 @@
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edittext_height"
+                android:inputType="number"
                 android:background="@drawable/rectangular_edittext"/>
 
 
@@ -270,6 +272,110 @@
                 android:layout_margin="10dp"
                 android:inputType="textMultiLine"
                 android:background="@drawable/rectangular_edittext"/>
+
+            <TextView
+                android:text="Attachments: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="3">
+
+                    <TextView
+                        android:layout_weight="2"
+                        android:layout_marginLeft="5dp"
+                        android:id="@+id/attachment_one"
+                        android:text="Attachment"
+                        android:layout_width="0dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_height="wrap_content"/>
+
+                    <Button
+                        android:layout_weight="1"
+                        android:id="@+id/add_attachment_1"
+                        android:layout_width="0dp"
+                        android:layout_height="25dp"
+                        android:background="@color/colorPrimary"
+                        android:text="Add"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorText"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="3">
+
+                    <TextView
+                        android:layout_weight="2"
+                        android:layout_marginLeft="5dp"
+                        android:id="@+id/attachment_two"
+                        android:text="Attachment"
+                        android:layout_width="0dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_height="wrap_content"/>
+
+                    <Button
+                        android:layout_weight="1"
+                        android:id="@+id/add_attachment_2"
+                        android:layout_width="0dp"
+                        android:layout_height="25dp"
+                        android:background="@color/colorPrimary"
+                        android:text="Add"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorText"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="3">
+
+                    <TextView
+                        android:layout_weight="2"
+                        android:layout_marginLeft="5dp"
+                        android:id="@+id/attachment_three"
+                        android:text="Attachment"
+                        android:layout_width="0dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_height="wrap_content"/>
+
+                    <Button
+                        android:layout_weight="1"
+                        android:id="@+id/add_attachment_3"
+                        android:layout_width="0dp"
+                        android:layout_height="25dp"
+                        android:background="@color/colorPrimary"
+                        android:text="Add"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorText"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/add_progress_report"

@@ -26,14 +26,18 @@ import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.models.Accounts;
 import com.forateq.cloudcheetah.models.Customers;
 import com.forateq.cloudcheetah.models.Resources;
+import com.forateq.cloudcheetah.models.Units;
 import com.forateq.cloudcheetah.models.Users;
+import com.forateq.cloudcheetah.models.Vendors;
 import com.forateq.cloudcheetah.pojo.AccountListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.CustomerListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.LoginWrapper;
 import com.forateq.cloudcheetah.pojo.ResourceData;
 import com.forateq.cloudcheetah.pojo.ResourceListResponseWrapper;
+import com.forateq.cloudcheetah.pojo.UnitsResponseWrapper;
 import com.forateq.cloudcheetah.pojo.UserData;
 import com.forateq.cloudcheetah.pojo.UsersListResponseWrapper;
+import com.forateq.cloudcheetah.pojo.VendorsResponseWrapper;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
 import com.onesignal.OneSignal;
 
@@ -260,11 +264,15 @@ public class AuthenticatorActivity extends AppCompatActivity{
                             resources.setParent_id(resourceData.getParent_id());
                             resources.setAccount_id(resourceData.getAccount_id());
                             resources.setType_id(resourceData.getType_id());
-                            resources.setUnit_of_measurement(resourceData.getUnit_of_measurement());
+                            resources.setUnit_id(resourceData.getUnit_id());
                             resources.setUnit_cost(resourceData.getUnit_cost());
                             resources.setSales_price(resourceData.getSales_price());
                             resources.setReorder_point(resourceData.getReorder_point());
                             resources.setVendor_id(resourceData.getVendor_id());
+                            resources.setOn_hand_qty(resourceData.getOn_hand_qty());
+                            resources.setReserved_qty(resourceData.getReserved_qty());
+                            resources.setIn_transit_qty(resourceData.getIn_transit_qty());
+                            resources.setImage(resourceData.getImage());
                             resources.save();
                         }
                         saveAccounts(userid, deviceid, key, progressDialog, data);
@@ -300,7 +308,7 @@ public class AuthenticatorActivity extends AppCompatActivity{
                 });
     }
 
-    public void saveCustomers(String userid, String deviceid, String key, final ProgressDialog progressDialog, final Bundle data){
+    public void saveCustomers(final String userid, final String deviceid, final String key, final ProgressDialog progressDialog, final Bundle data){
         Observable<CustomerListResponseWrapper> observable = cloudCheetahAPIService.getAllCustomers(userid, deviceid, key);
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -308,9 +316,7 @@ public class AuthenticatorActivity extends AppCompatActivity{
                 .subscribe(new Subscriber<CustomerListResponseWrapper>() {
                     @Override
                     public void onCompleted() {
-                        Intent res = new Intent();
-                        res.putExtras(data);
-                        finishLogin(res);
+
                     }
 
                     @Override
@@ -323,6 +329,66 @@ public class AuthenticatorActivity extends AppCompatActivity{
                         for(Customers customers : customerListResponseWrapper.getData()){
                             Log.e("Customer Id", ""+customers.getCustomerId());
                             customers.save();
+                        }
+                        saveVendors(userid, deviceid, key, progressDialog, data);
+                    }
+                });
+    }
+
+    public void saveVendors(final String userid, final String deviceid, final String key, final ProgressDialog progressDialog, final Bundle data){
+        Observable<VendorsResponseWrapper> observable = cloudCheetahAPIService.getAllVendors(userid, deviceid, key);
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<VendorsResponseWrapper>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("Vendors", e.getMessage(), e);
+                        if(progressDialog.isShowing()){
+                            progressDialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onNext(VendorsResponseWrapper vendorsResponseWrapper) {
+                        for(Vendors vendors : vendorsResponseWrapper.getData()){
+                            vendors.save();
+                        }
+                        saveUnits(userid, deviceid, key, progressDialog, data);
+                    }
+                });
+    }
+
+    public void saveUnits(String userid, String deviceid, String key, final ProgressDialog progressDialog, final Bundle data){
+        Observable<UnitsResponseWrapper> observable = cloudCheetahAPIService.getAllUnits(userid, deviceid, key);
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<UnitsResponseWrapper>() {
+                    @Override
+                    public void onCompleted() {
+                        Intent res = new Intent();
+                        res.putExtras(data);
+                        finishLogin(res);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("Vendors", e.getMessage(), e);
+                        if(progressDialog.isShowing()){
+                            progressDialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onNext(UnitsResponseWrapper unitsResponseWrapper) {
+                        for(Units units : unitsResponseWrapper.getData()){
+                            units.save();
                         }
                         if(progressDialog.isShowing()){
                             progressDialog.dismiss();

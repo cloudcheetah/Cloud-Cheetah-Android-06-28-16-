@@ -278,6 +278,83 @@
                 android:inputType="textMultiLine"
                 android:background="@drawable/rectangular_edittext"/>
 
+            <TextView
+                android:text="Attachments: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:id="@+id/attachment_one"
+                        android:text="Attachment"
+                        android:layout_width="0dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_height="wrap_content"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:id="@+id/attachment_two"
+                        android:text="Attachment"
+                        android:layout_width="0dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_height="wrap_content"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:id="@+id/attachment_three"
+                        android:text="Attachment"
+                        android:layout_width="0dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_height="wrap_content"/>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
             <Button
                 android:id="@+id/add_progress_report"
                 android:layout_width="match_parent"

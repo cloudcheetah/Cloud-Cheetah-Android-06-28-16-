@@ -39,6 +39,14 @@ public class TaskProgressReports extends Model {
     String concerns_issues;
     @Column(name="change_request")
     String change_request;
+    @Column(name = "is_submitted")
+    boolean is_submitted;
+    @Column(name = "attachment_1")
+    String attachment_1;
+    @Column(name = "attachment_2")
+    String attachment_2;
+    @Column(name = "attachment_3")
+    String attachment_3;
 
     public int getTask_id() {
         return task_id;
@@ -144,6 +152,38 @@ public class TaskProgressReports extends Model {
         this.task_progress_id = task_progress_id;
     }
 
+    public boolean is_submitted() {
+        return is_submitted;
+    }
+
+    public void setIs_submitted(boolean is_submitted) {
+        this.is_submitted = is_submitted;
+    }
+
+    public String getAttachment_1() {
+        return attachment_1;
+    }
+
+    public void setAttachment_1(String attachment_1) {
+        this.attachment_1 = attachment_1;
+    }
+
+    public String getAttachment_2() {
+        return attachment_2;
+    }
+
+    public void setAttachment_2(String attachment_2) {
+        this.attachment_2 = attachment_2;
+    }
+
+    public String getAttachment_3() {
+        return attachment_3;
+    }
+
+    public void setAttachment_3(String attachment_3) {
+        this.attachment_3 = attachment_3;
+    }
+
     /**
      * This method is used to get all the progress reports of a specific task during offline mode
      * @param task_offline_id
@@ -161,4 +201,6 @@ public class TaskProgressReports extends Model {
     public static TaskProgressReports getProgressOfflineReportById(long task_progress_offline_id){
         return new Select().from(TaskProgressReports.class).where("id = ?", task_progress_offline_id).executeSingle();
     }
+
+
 }

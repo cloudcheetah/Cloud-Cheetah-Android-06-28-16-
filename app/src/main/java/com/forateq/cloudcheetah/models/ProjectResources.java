@@ -112,5 +112,9 @@ public class ProjectResources extends Model {
         return searchItems;
     }
 
+    public static ProjectResources getProjectResource(int project_resource_id){
+        return new Select().from(ProjectResources.class).where("project_resource_id = ?", project_resource_id).executeSingle();
+    }
+
 
 }

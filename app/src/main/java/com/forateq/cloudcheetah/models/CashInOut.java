@@ -3,6 +3,9 @@ package com.forateq.cloudcheetah.models;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
+
+import java.util.List;
 
 /**
  * Created by PC1 on 7/11/2016.
@@ -51,6 +54,18 @@ public class CashInOut extends Model {
 
     @Column(name = "description")
     String description;
+
+    @Column(name = "attachment_1")
+    String attachment_1;
+
+    @Column(name = "attachment_2")
+    String attachment_2;
+
+    @Column(name = "attachment_3")
+    String attachment_3;
+
+    @Column(name = "is_submitted")
+    boolean is_submitted;
 
 
     public int getCashInOutId() {
@@ -164,4 +179,45 @@ public class CashInOut extends Model {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getAttachment_1() {
+        return attachment_1;
+    }
+
+    public void setAttachment_1(String attachment_1) {
+        this.attachment_1 = attachment_1;
+    }
+
+    public String getAttachment_2() {
+        return attachment_2;
+    }
+
+    public void setAttachment_2(String attachment_2) {
+        this.attachment_2 = attachment_2;
+    }
+
+    public String getAttachment_3() {
+        return attachment_3;
+    }
+
+    public void setAttachment_3(String attachment_3) {
+        this.attachment_3 = attachment_3;
+    }
+
+    public boolean is_submitted() {
+        return is_submitted;
+    }
+
+    public void setIs_submitted(boolean is_submitted) {
+        this.is_submitted = is_submitted;
+    }
+
+    public static CashInOut getCashInOut(long cash_flow_offline_id){
+        return new Select().from(CashInOut.class).where("id = ?", cash_flow_offline_id).executeSingle();
+    }
+
+    public static List<CashInOut> getCashInOuts(long task_offline_id){
+        return new Select().from(CashInOut.class).where("task_offline_id = ?", task_offline_id).execute();
+    }
+
 }

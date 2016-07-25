@@ -38,6 +38,7 @@ import com.forateq.cloudcheetah.pojo.ProjectBatchMembers;
 import com.forateq.cloudcheetah.pojo.ProjectBatchProcess;
 import com.forateq.cloudcheetah.pojo.ProjectBatchResources;
 import com.forateq.cloudcheetah.pojo.ResponseWrapper;
+import com.forateq.cloudcheetah.pojo.SubTasks;
 import com.forateq.cloudcheetah.pojo.TaskBatchProcess;
 import com.forateq.cloudcheetah.pojo.TaskBatchResources;
 import com.forateq.cloudcheetah.pojo.TaskData;
@@ -222,6 +223,7 @@ public class ProjectsComponentsContainerFragment extends Fragment {
             mProgressDialog.setIndeterminate(true);
             mProgressDialog.setMessage("Getting tasks...");
             mProgressDialog.show();
+            Log.e("Project Id", ""+project_id);
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
             String sessionKey = sharedPreferences.getString(AccountGeneral.SESSION_KEY, "");
             String userName = sharedPreferences.getString(AccountGeneral.ACCOUNT_USERNAME, "");
@@ -271,6 +273,7 @@ public class ProjectsComponentsContainerFragment extends Fragment {
                                         Log.e("Task Name", taskData.getName());
                                         Log.e("Parent Task Id", ""+taskData.getParent_id());
                                         tasks.setName(taskData.getName());
+                                        tasks.setProject_offline_id(project_offline_id);
                                         tasks.setStart_date(taskData.getStart_date());
                                         tasks.setEnd_date(taskData.getEnd_date());
                                         tasks.setBudget(taskData.getBudget());
@@ -282,6 +285,60 @@ public class ProjectsComponentsContainerFragment extends Fragment {
                                         tasks.setPerson_responsible_id(taskData.getPerson_responsible_id());
                                         tasks.setParent_id(taskData.getParent_id());
                                         tasks.save();
+                                        for(SubTasks subtasks : taskData.getSubtasks()){
+                                            Tasks subT = Tasks.getTaskById(subtasks.getId());
+                                            if(subT != null){
+                                                subT.setName(subtasks.getName());
+                                                subT.setTask_id(subtasks.getId());
+                                                subT.setStart_date(subtasks.getStart_date());
+                                                subT.setEnd_date(subtasks.getEnd_date());
+                                                subT.setBudget(subtasks.getBudget());
+                                                subT.setDescription(subtasks.getDescription());
+                                                subT.setLatitude(subtasks.getLatitude());
+                                                subT.setLongitide(subtasks.getLongitude());
+                                                subT.setDuration(subtasks.getDuration());
+                                                subT.setProject_id(subtasks.getProject_id());
+                                                subT.setProject_offline_id(project_offline_id);
+                                                subT.setPerson_responsible_id(subtasks.getPerson_responsible_id());
+                                                subT.setParent_id(subtasks.getParent_id());
+                                                subT.save();
+                                            }
+                                            else{
+                                                Tasks newSubT = new Tasks();
+                                                newSubT.setTask_id(subtasks.getId());
+                                                newSubT.setName(subtasks.getName());
+                                                newSubT.setStart_date(subtasks.getStart_date());
+                                                newSubT.setEnd_date(subtasks.getEnd_date());
+                                                newSubT.setBudget(subtasks.getBudget());
+                                                newSubT.setDescription(subtasks.getDescription());
+                                                newSubT.setLatitude(subtasks.getLatitude());
+                                                newSubT.setLongitide(subtasks.getLongitude());
+                                                newSubT.setDuration(subtasks.getDuration());
+                                                newSubT.setProject_id(subtasks.getProject_id());
+                                                newSubT.setProject_offline_id(project_offline_id);
+                                                newSubT.setPerson_responsible_id(subtasks.getPerson_responsible_id());
+                                                newSubT.setParent_id(subtasks.getParent_id());
+                                                newSubT.save();
+                                            }
+                                        }
+                                        for(com.forateq.cloudcheetah.pojo.TaskResources taskResources : taskData.getResources()){
+                                            TaskResources taskResourcesModel = TaskResources.getTaskResourceById(taskResources.getId());
+                                            if(taskResourcesModel != null){
+                                                taskResourcesModel.setQuantity(taskResources.getQty());
+                                                taskResourcesModel.setResource_id(taskResources.getResource_id());
+                                                taskResourcesModel.setTask_id(taskResources.getTask_id());
+                                                taskResourcesModel.setTask_resource_id(taskResources.getId());
+                                                taskResourcesModel.save();
+                                            }
+                                            else{
+                                                TaskResources newTaskResourcesModel = new TaskResources();
+                                                newTaskResourcesModel.setQuantity(taskResources.getQty());
+                                                newTaskResourcesModel.setResource_id(taskResources.getResource_id());
+                                                newTaskResourcesModel.setTask_id(taskResources.getTask_id());
+                                                newTaskResourcesModel.setTask_resource_id(taskResources.getId());
+                                                newTaskResourcesModel.save();
+                                            }
+                                        }
                                     }
                                     else{
                                         Log.e("New Task Name", taskData.getName());
@@ -301,6 +358,60 @@ public class ProjectsComponentsContainerFragment extends Fragment {
                                         newTasks.setParent_id(taskData.getParent_id());
                                         newTasks.setTask_id(taskData.getId());
                                         newTasks.save();
+                                        for(SubTasks subtasks : taskData.getSubtasks()){
+                                            Tasks subT = Tasks.getTaskById(subtasks.getId());
+                                            if(subT != null){
+                                                subT.setTask_id(subtasks.getId());
+                                                subT.setName(subtasks.getName());
+                                                subT.setStart_date(subtasks.getStart_date());
+                                                subT.setEnd_date(subtasks.getEnd_date());
+                                                subT.setBudget(subtasks.getBudget());
+                                                subT.setDescription(subtasks.getDescription());
+                                                subT.setLatitude(subtasks.getLatitude());
+                                                subT.setLongitide(subtasks.getLongitude());
+                                                subT.setDuration(subtasks.getDuration());
+                                                subT.setProject_id(subtasks.getProject_id());
+                                                subT.setProject_offline_id(project_offline_id);
+                                                subT.setPerson_responsible_id(subtasks.getPerson_responsible_id());
+                                                subT.setParent_id(subtasks.getParent_id());
+                                                subT.save();
+                                            }
+                                            else{
+                                                Tasks newSubT = new Tasks();
+                                                newSubT.setTask_id(subtasks.getId());
+                                                newSubT.setName(subtasks.getName());
+                                                newSubT.setStart_date(subtasks.getStart_date());
+                                                newSubT.setEnd_date(subtasks.getEnd_date());
+                                                newSubT.setBudget(subtasks.getBudget());
+                                                newSubT.setDescription(subtasks.getDescription());
+                                                newSubT.setLatitude(subtasks.getLatitude());
+                                                newSubT.setLongitide(subtasks.getLongitude());
+                                                newSubT.setDuration(subtasks.getDuration());
+                                                newSubT.setProject_id(subtasks.getProject_id());
+                                                newSubT.setProject_offline_id(project_offline_id);
+                                                newSubT.setPerson_responsible_id(subtasks.getPerson_responsible_id());
+                                                newSubT.setParent_id(subtasks.getParent_id());
+                                                newSubT.save();
+                                            }
+                                        }
+                                        for(com.forateq.cloudcheetah.pojo.TaskResources taskResources : taskData.getResources()){
+                                            TaskResources taskResourcesModel = TaskResources.getTaskResourceById(taskResources.getId());
+                                            if(taskResourcesModel != null){
+                                                taskResourcesModel.setQuantity(taskResources.getQty());
+                                                taskResourcesModel.setResource_id(taskResources.getResource_id());
+                                                taskResourcesModel.setTask_id(taskResources.getTask_id());
+                                                taskResourcesModel.setTask_resource_id(taskResources.getId());
+                                                taskResourcesModel.save();
+                                            }
+                                            else{
+                                                TaskResources newTaskResourcesModel = new TaskResources();
+                                                newTaskResourcesModel.setQuantity(taskResources.getQty());
+                                                newTaskResourcesModel.setResource_id(taskResources.getResource_id());
+                                                newTaskResourcesModel.setTask_id(taskResources.getTask_id());
+                                                newTaskResourcesModel.setTask_resource_id(taskResources.getId());
+                                                newTaskResourcesModel.save();
+                                            }
+                                        }
                                     }
                                     Projects projects = Projects.getProjectById(project_id);
                                     projects.setProject_tasks_timestamp(taskListResponseWrapper.getTimestamp());

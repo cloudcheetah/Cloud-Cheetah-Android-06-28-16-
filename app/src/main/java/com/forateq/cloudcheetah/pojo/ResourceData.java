@@ -11,12 +11,17 @@ public class ResourceData {
     int parent_id;
     int account_id;
     int type_id;
-    String unit_of_measurement;
+    int unit_id;
     double unit_cost;
     double sales_price;
-    String reorder_point;
+    int reorder_point;
     int vendor_id;
     String notes;
+    int on_hand_qty;
+    int reserved_qty;
+    int in_transit_qty;
+    String image;
+
 
     public int getId() {
         return id;
@@ -66,12 +71,12 @@ public class ResourceData {
         this.type_id = type_id;
     }
 
-    public String getUnit_of_measurement() {
-        return unit_of_measurement;
+    public int getUnit_id() {
+        return unit_id;
     }
 
-    public void setUnit_of_measurement(String unit_of_measurement) {
-        this.unit_of_measurement = unit_of_measurement;
+    public void setUnit_id(int unit_id) {
+        this.unit_id = unit_id;
     }
 
     public double getUnit_cost() {
@@ -90,11 +95,11 @@ public class ResourceData {
         this.sales_price = sales_price;
     }
 
-    public String getReorder_point() {
+    public int getReorder_point() {
         return reorder_point;
     }
 
-    public void setReorder_point(String reorder_point) {
+    public void setReorder_point(int reorder_point) {
         this.reorder_point = reorder_point;
     }
 
@@ -112,5 +117,37 @@ public class ResourceData {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public int getOn_hand_qty() {
+        return on_hand_qty;
+    }
+
+    public void setOn_hand_qty(int on_hand_qty) {
+        this.on_hand_qty = on_hand_qty;
+    }
+
+    public int getReserved_qty() {
+        return reserved_qty;
+    }
+
+    public void setReserved_qty(int reserved_qty) {
+        this.reserved_qty = reserved_qty;
+    }
+
+    public int getIn_transit_qty() {
+        return in_transit_qty;
+    }
+
+    public void setIn_transit_qty(int in_transit_qty) {
+        this.in_transit_qty = in_transit_qty;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

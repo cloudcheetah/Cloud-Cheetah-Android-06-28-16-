@@ -172,8 +172,21 @@ public class AddTaskFragment extends Fragment {
                 final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
                 String sessionKey = sharedPreferences.getString(AccountGeneral.SESSION_KEY, "");
                 String userName = sharedPreferences.getString(AccountGeneral.ACCOUNT_USERNAME, "");
-                Observable<TaskResponseWrapper> observable = cloudCheetahAPIService.createTask(taskNameET.getText().toString(), startDateET.getText().toString(), endDateET.getText().toString(), budgetET.getText().toString(), taskDetailsET.getText().toString(), "0.0", "0.0", durationET.getText().toString(), Users.getUserId(personResponsibleSP.getSelectedItem().toString()), project_id, 0, userName, Settings.Secure.getString(ApplicationContext.get().getContentResolver(),
-                        Settings.Secure.ANDROID_ID), sessionKey);
+                Observable<TaskResponseWrapper> observable = cloudCheetahAPIService.createTask(taskNameET.getText().toString(),
+                        startDateET.getText().toString(),
+                        endDateET.getText().toString(),
+                        budgetET.getText().toString(),
+                        taskDetailsET.getText().toString(),
+                        "0.0",
+                        "0.0",
+                        durationET.getText().toString(),
+                        Users.getUserId(personResponsibleSP.getSelectedItem().toString()),
+                        project_id,
+                        parent_task_id,
+                        userName,
+                        Settings.Secure.getString(ApplicationContext.get().getContentResolver(),
+                        Settings.Secure.ANDROID_ID),
+                        sessionKey);
                 observable.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .unsubscribeOn(Schedulers.io())

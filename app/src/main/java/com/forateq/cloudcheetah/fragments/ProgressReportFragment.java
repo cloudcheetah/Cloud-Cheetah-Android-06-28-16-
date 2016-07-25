@@ -4,12 +4,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.adapters.MyTasksAdapter;
 import com.forateq.cloudcheetah.authenticate.AccountGeneral;
+import com.forateq.cloudcheetah.models.MyTasks;
 import com.forateq.cloudcheetah.models.Tasks;
 import com.forateq.cloudcheetah.models.Users;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
@@ -58,8 +61,7 @@ public class ProgressReportFragment extends Fragment {
     }
 
     public void init(){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
-        myTasksAdapter = new MyTasksAdapter(Tasks.getTasksByPersonResponsibleId(Users.getUserByUserId(sharedPreferences.getString(AccountGeneral.ACCOUNT_USERNAME, ""))), ApplicationContext.get());
+        myTasksAdapter = new MyTasksAdapter(MyTasks.getMyTasks(), ApplicationContext.get());
         mLinearLayoutManager = new LinearLayoutManager(ApplicationContext.get());
         listTasks.setLayoutManager(mLinearLayoutManager);
         listTasks.setAdapter(myTasksAdapter);
@@ -90,5 +92,6 @@ public class ProgressReportFragment extends Fragment {
     public void back(){
         MainActivity.popFragment();
     }
+
 
 }

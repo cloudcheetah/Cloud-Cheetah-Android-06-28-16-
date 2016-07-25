@@ -40,6 +40,7 @@
             android:layout_height="@dimen/edittext_height"
             android:layout_margin="10dp"
             android:layout_weight="1"
+            android:inputType="number"
             android:background="@drawable/rectangular_edittext"
             android:textSize="20sp" />
 

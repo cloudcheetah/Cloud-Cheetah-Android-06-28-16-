@@ -45,7 +45,7 @@ public class AddResourceView extends ScrollView {
     public void init(){
         inflate(getContext(), R.layout.add_resource_view, this);
         ButterKnife.bind(this);
-        ArrayAdapter<String> nameAdapter = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, TaskResources.getTaskResourcesOfflineProgress(task_offline_id));
+        ArrayAdapter<String> nameAdapter = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, TaskResources.getTaskResourceOnline(task_id));
         nameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         resourceNameSP.setAdapter(nameAdapter);
     }

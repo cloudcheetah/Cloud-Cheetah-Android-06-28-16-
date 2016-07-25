@@ -1,6 +1,7 @@
 package com.forateq.cloudcheetah.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
+import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
+import com.forateq.cloudcheetah.fragments.EditResourceFragment;
 import com.forateq.cloudcheetah.models.ProjectResources;
 import com.forateq.cloudcheetah.models.Resources;
 
@@ -49,6 +52,9 @@ public class ProjectResourcesAdapter extends RecyclerView.Adapter<ProjectResourc
         viewHolder.resourceNameTV.setText(resources.getName());
         viewHolder.resourceQuantityTV.setText(""+projectResources.getQuantity()+" pcs.");
         viewHolder.resourcetIdTV.setText(""+projectResources.getResource_id());
+        viewHolder.projectResourceIdTV.setText(""+projectResources.getProject_resource_id());
+        viewHolder.projectOfflineIdTV.setText(""+projectResources.getProject_offline_id());
+        viewHolder.projectIdTV.setText(""+projectResources.getProject_id());
 
     }
 
@@ -92,6 +98,9 @@ public class ProjectResourcesAdapter extends RecyclerView.Adapter<ProjectResourc
         TextView resourceNameTV;
         TextView resourceQuantityTV;
         TextView resourcetIdTV;
+        TextView projectResourceIdTV;
+        TextView projectIdTV;
+        TextView projectOfflineIdTV;
         ImageView editResourceIV;
         ImageView deleteResourceIV;
         MaterialRippleLayout rippleLayout;
@@ -101,11 +110,21 @@ public class ProjectResourcesAdapter extends RecyclerView.Adapter<ProjectResourc
             resourceNameTV = (TextView) itemView.findViewById(R.id.resource_name);
             resourceQuantityTV = (TextView) itemView.findViewById(R.id.resource_quantity);
             resourcetIdTV = (TextView) itemView.findViewById(R.id.resource_id);
+            projectResourceIdTV = (TextView) itemView.findViewById(R.id.project_resource_id);
+            projectIdTV = (TextView) itemView.findViewById(R.id.project_id);
+            projectOfflineIdTV = (TextView) itemView.findViewById(R.id.project_offline_id);
             editResourceIV = (ImageView) itemView.findViewById(R.id.edit_resource);
             editResourceIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e("Clicked", "Clicked");
+                    Bundle bundle = new Bundle();
+                    bundle.putString("project_id", projectIdTV.getText().toString());
+                    bundle.putString("project_offline_id", projectOfflineIdTV.getText().toString());
+                    bundle.putString("project_resource_id", projectResourceIdTV.getText().toString());
+                    bundle.putString("resource_id", resourcetIdTV.getText().toString());
+                    EditResourceFragment editResourceFragment = new EditResourceFragment();
+                    editResourceFragment.setArguments(bundle);
+                    MainActivity.replaceFragment(editResourceFragment, TAG);
                 }
             });
             deleteResourceIV = (ImageView) itemView.findViewById(R.id.delete_resource);

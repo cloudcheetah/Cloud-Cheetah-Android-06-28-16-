@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/tab_background"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_gravity="top"
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:theme="@style/ToolbarCustomIconColor"
+        app:popupTheme="@style/AppTheme">
+
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:id="@+id/ripple_back"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp">
+
+            <ImageView
+                android:layout_gravity="start|center_vertical"
+                android:id="@+id/back"
+                android:clickable="true"
+                android:src="@mipmap/ic_arrow_back_white_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+        <TextView
+            android:id="@+id/item_label"
+            android:text="Inventory Item"
+            android:layout_weight="1.5"
+            android:layout_marginLeft="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorText"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
+
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:id="@+id/ripple_delete"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp">
+
+            <ImageView
+                android:clickable="true"
+                android:src="@mipmap/ic_delete_white_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:id="@+id/ripple_update"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp">
+
+            <ImageView
+                android:id="@+id/update_delete"
+                android:clickable="true"
+                android:src="@mipmap/ic_mode_edit_white_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="Item Name: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/resource_name"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:background="@drawable/rectangular_edittext"/>
+
+
+            <TextView
+                android:text="Item Type: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Spinner
+                android:id="@+id/item_type"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:background="@drawable/rectangular_edittext"/>
+
+            <TextView
+                android:text="Description: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/description"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:background="@drawable/rectangular_edittext"/>
+
+
+            <TextView
+                android:text="Account: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Spinner
+                android:id="@+id/account"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:background="@drawable/rectangular_edittext"/>
+
+
+            <TextView
+                android:text="Unit: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Spinner
+                android:id="@+id/unit_type"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:background="@drawable/rectangular_edittext"/>
+
+
+
+            <TextView
+                android:text="Unit Cost: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/unit_cost"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:inputType="number"
+                android:background="@drawable/rectangular_edittext"/>
+
+            <TextView
+                android:text="Sales Price: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/sales_price"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:inputType="number"
+                android:background="@drawable/rectangular_edittext"/>
+
+            <TextView
+                android:text="Re-Order Point: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/reorder_point"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:inputType="number"
+                android:background="@drawable/rectangular_edittext"/>
+
+            <TextView
+                android:text="Vendor: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Spinner
+                android:id="@+id/vendor"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:background="@drawable/rectangular_edittext"/>
+
+            <TextView
+                android:text="Notes: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/notes"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:background="@drawable/rectangular_edittext"/>
+
+
+            <TextView
+                android:text="Item Image: "
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="3">
+
+                    <TextView
+                        android:layout_weight="2"
+                        android:layout_marginLeft="5dp"
+                        android:id="@+id/item_image_filename"
+                        android:text="Attachment"
+                        android:layout_width="0dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_height="wrap_content"/>
+
+                    <Button
+                        android:layout_weight="1"
+                        android:id="@+id/add_item_image"
+                        android:layout_width="0dp"
+                        android:enabled="false"
+                        android:layout_height="25dp"
+                        android:background="@color/colorPrimary"
+                        android:text="Add Image"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorText"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

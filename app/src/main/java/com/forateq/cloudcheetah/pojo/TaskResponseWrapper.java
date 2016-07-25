@@ -9,7 +9,7 @@ public class TaskResponseWrapper {
 
     String timestamp;
 
-    TaskData data;
+    SubTasks data;
 
     public Response getResponse() {
         return response;
@@ -27,11 +27,11 @@ public class TaskResponseWrapper {
         this.timestamp = timestamp;
     }
 
-    public TaskData getData() {
+    public SubTasks getData() {
         return data;
     }
 
-    public void setData(TaskData data) {
+    public void setData(SubTasks data) {
         this.data = data;
     }
 }

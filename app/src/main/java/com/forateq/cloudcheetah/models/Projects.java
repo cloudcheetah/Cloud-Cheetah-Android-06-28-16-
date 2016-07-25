@@ -189,4 +189,9 @@ public class Projects extends Model {
         Projects projects = Projects.getProjectsOfflineMode(id);
         return projects.getStatus();
     }
+
+    public static String getProjectStatusOnline(int project_id){
+        Projects projects = Projects.getProjectById(project_id);
+        return projects.getStatus();
+    }
 }
