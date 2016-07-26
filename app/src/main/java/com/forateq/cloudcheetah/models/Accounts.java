@@ -4,6 +4,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.activeandroid.util.SQLiteUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,6 +91,10 @@ public class Accounts extends Model {
         return new Select().from(Accounts.class).execute();
     }
 
+    public static List<Accounts> getChildAccounts(int parent_id){
+        return new Select().from(Accounts.class).where("parent_id = ?", parent_id).execute();
+    }
+
     public static List<String> getAccountsName(){
         List<Accounts> accountsList = Accounts.getAccounts();
         List<String> accountNames = new ArrayList<>();
@@ -110,4 +115,19 @@ public class Accounts extends Model {
         Accounts accounts = new Select().from(Accounts.class).where("account_id = ?", id).executeSingle();
         return  accounts.getAccount_name();
     }
+
+    public static List<Accounts> searchAccounts(String name, int parent_id){
+        String [] selectionArgs = new String[] {"%" + name + "%", ""+parent_id};
+        List<Accounts> searchItems =
+                SQLiteUtils.rawQuery(Accounts.class,
+                        "SELECT * FROM Accounts WHERE account_name  LIKE ? AND parent_id = ?",
+                        selectionArgs);
+        return searchItems;
+    }
+
+    public static Accounts getAccountById(int account_id){
+        return new Select().from(Accounts.class).where("account_id = ?", account_id).executeSingle();
+    }
+
+
 }

@@ -6,18 +6,24 @@ import com.forateq.cloudcheetah.adapters.ProjectMembersAdapter;
 import com.forateq.cloudcheetah.adapters.SubTaskAdapter;
 import com.forateq.cloudcheetah.adapters.TaskProgressAdapter;
 import com.forateq.cloudcheetah.authenticate.AuthenticatorActivity;
+import com.forateq.cloudcheetah.fragments.AccountViewFragment;
+import com.forateq.cloudcheetah.fragments.AddAccountFragment;
 import com.forateq.cloudcheetah.fragments.AddCashFlowFragment;
+import com.forateq.cloudcheetah.fragments.AddCustomerFragment;
 import com.forateq.cloudcheetah.fragments.AddInventoryItemFragment;
 import com.forateq.cloudcheetah.fragments.AddProjectmemberFragment;
 import com.forateq.cloudcheetah.fragments.AddResourceFragment;
 import com.forateq.cloudcheetah.fragments.AddTaskFragment;
 import com.forateq.cloudcheetah.fragments.AddTaskProgressReportFragment;
 import com.forateq.cloudcheetah.fragments.AddTaskResourceFragment;
+import com.forateq.cloudcheetah.fragments.AddVendorFragment;
+import com.forateq.cloudcheetah.fragments.CustomerViewFragment;
 import com.forateq.cloudcheetah.fragments.ERPFragment;
 import com.forateq.cloudcheetah.fragments.EditResourceFragment;
 import com.forateq.cloudcheetah.fragments.ProjectUpdateFragment;
 import com.forateq.cloudcheetah.fragments.ProjectsComponentsContainerFragment;
 import com.forateq.cloudcheetah.fragments.UpdateDeleteInventoryItemFragment;
+import com.forateq.cloudcheetah.fragments.VendorViewFragment;
 import com.forateq.cloudcheetah.modules.AppModule;
 import com.forateq.cloudcheetah.modules.NetworkModule;
 
@@ -51,4 +57,10 @@ public interface NetworkComponent {
     void inject(SubTaskAdapter subTaskAdapter);
     void inject(AddInventoryItemFragment addInventoryItemFragment);
     void inject(UpdateDeleteInventoryItemFragment updateDeleteInventoryItemFragment);
+    void inject(AddAccountFragment addAccountFragment);
+    void inject(AccountViewFragment accountViewFragment);
+    void inject(AddCustomerFragment addCustomerFragment);
+    void inject(CustomerViewFragment customerViewFragment);
+    void inject(AddVendorFragment addVendorFragment);
+    void inject(VendorViewFragment vendorViewFragment);
 }

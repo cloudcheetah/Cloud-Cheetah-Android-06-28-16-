@@ -4,6 +4,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.activeandroid.util.SQLiteUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,5 +80,18 @@ public class Customers extends Model{
     public static String getCustomerName(int id){
         Customers customers = new Select().from(Customers.class).where("customer_id = ?", id).executeSingle();
         return  customers.getName();
+    }
+
+    public static List<Customers> getSearchCustomer(String name){
+        String [] selectionArgs = new String[] {"%" + name + "%"};
+        List<Customers> searchItems =
+                SQLiteUtils.rawQuery(Customers.class,
+                        "SELECT * FROM Customers WHERE name  LIKE ?",
+                        selectionArgs);
+        return searchItems;
+    }
+
+    public static Customers getCustomerById(int customer_id){
+        return new Select().from(Customers.class).where("customer_id = ?", customer_id).executeSingle();
     }
 }

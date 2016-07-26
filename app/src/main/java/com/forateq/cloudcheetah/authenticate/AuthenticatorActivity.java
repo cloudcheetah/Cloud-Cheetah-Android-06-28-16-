@@ -294,7 +294,10 @@ public class AuthenticatorActivity extends AppCompatActivity{
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.e("Accounts", e.getMessage(), e);
+                        if(progressDialog.isShowing()){
+                            progressDialog.dismiss();
+                        }
                     }
 
                     @Override
@@ -321,7 +324,10 @@ public class AuthenticatorActivity extends AppCompatActivity{
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.e("Customers", e.getMessage(), e);
+                        if(progressDialog.isShowing()){
+                            progressDialog.dismiss();
+                        }
                     }
 
                     @Override

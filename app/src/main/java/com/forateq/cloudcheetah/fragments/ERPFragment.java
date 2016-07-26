@@ -275,11 +275,18 @@ public class ERPFragment extends Fragment {
     @OnClick(R.id.accounting_banking)
     public void getAccounts(){
         Log.e(TAG, "Getting accounts...");
+        AccountsFragment accountsFragment = new AccountsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("parent_id", 0);
+        accountsFragment.setArguments(bundle);
+        MainActivity.replaceFragment(accountsFragment, TAG);
     }
 
     @OnClick(R.id.payees)
     public void getVendors(){
         Log.e(TAG, "Getting vendors...");
+        VendorsFragment vendorsFragment = new VendorsFragment();
+        MainActivity.replaceFragment(vendorsFragment, TAG);
     }
 
     @OnClick(R.id.labor)
@@ -297,6 +304,8 @@ public class ERPFragment extends Fragment {
     @OnClick(R.id.payers)
     public void getSales(){
         Log.e(TAG, "Getting sales...");
+        CustomersFragment customersFragment = new CustomersFragment();
+        MainActivity.replaceFragment(customersFragment, TAG);
     }
 
     @OnClick(R.id.reports)

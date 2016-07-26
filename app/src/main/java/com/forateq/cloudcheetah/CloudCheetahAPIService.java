@@ -2,7 +2,10 @@ package com.forateq.cloudcheetah;
 
 import com.forateq.cloudcheetah.fragments.AddInventoryItemFragment;
 import com.forateq.cloudcheetah.pojo.AccountListResponseWrapper;
+import com.forateq.cloudcheetah.pojo.AddAccountWrapper;
+import com.forateq.cloudcheetah.pojo.AddCustomerWrapper;
 import com.forateq.cloudcheetah.pojo.AddInventoryItemResponseWrapper;
+import com.forateq.cloudcheetah.pojo.AddVendorResponseWrapper;
 import com.forateq.cloudcheetah.pojo.CustomerListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.LoginWrapper;
 import com.forateq.cloudcheetah.pojo.MyTasksResponseWrapper;
@@ -169,6 +172,97 @@ public interface CloudCheetahAPIService {
                                                   @Query("deviceid") String deviceid,
                                                   @Query("key") String key,
                                                   @Query("timestamp") String timestamp);
+
+
+    @POST("api_accounts/create")
+    Observable<AddAccountWrapper> addAccount(@Query("account[account_name]") String account_name,
+                                             @Query("account[account_number]") String account_number,
+                                             @Query("account[description]") String account_description,
+                                             @Query("account[parent_id]") int parent_id,
+                                             @Query("account[account_category_id]") int account_category,
+                                             @Query("user") String user,
+                                             @Query("deviceid") String deviceid,
+                                             @Query("key") String key);
+
+    @PUT("api_accounts/{id}")
+    Observable<AddAccountWrapper> updateAccount(@Path("id") int account_id,
+                                                @Query("account[account_name]") String account_name,
+                                                @Query("account[account_number]") String account_number,
+                                                @Query("account[description]") String account_description,
+                                                @Query("account[parent_id]") int parent_id,
+                                                @Query("account[account_category_id]") int account_category,
+                                                @Query("user") String user,
+                                                @Query("deviceid") String deviceid,
+                                                @Query("key") String key,
+                                                @Query("_method") String method);
+
+    @DELETE("api_accounts/{id}")
+    Observable<ResponseWrapper> deleteAccount(@Path("id") int account_id,
+                                              @Query("user") String user,
+                                              @Query("deviceid") String deviceid,
+                                              @Query("key") String key,
+                                              @Query("_method") String method);
+
+    @POST("api_customers/create")
+    Observable<AddCustomerWrapper> addCustomer(@Query("customer[name]") String customer_name,
+                                               @Query("customer[address]") String customer_address,
+                                               @Query("customer[notes]") String customer_notes,
+                                               @Query("user") String user,
+                                               @Query("deviceid") String deviceid,
+                                               @Query("key") String key);
+
+    @PUT("api_customers/{id}")
+    Observable<AddCustomerWrapper> updateCustomer(@Path("id") int customer_id,
+                                                  @Query("customer[name]") String customer_name,
+                                                  @Query("customer[address]") String customer_address,
+                                                  @Query("customer[notes]") String customer_notes,
+                                                  @Query("user") String user,
+                                                  @Query("deviceid") String deviceid,
+                                                  @Query("key") String key,
+                                                  @Query("_method") String method);
+
+    @DELETE("api_customers/{id}")
+    Observable<ResponseWrapper> deleteCustomer(@Path("id") int account_id,
+                                               @Query("user") String user,
+                                               @Query("deviceid") String deviceid,
+                                               @Query("key") String key,
+                                               @Query("_method") String method);
+
+    @POST("api_vendors/create")
+    Observable<AddVendorResponseWrapper> addVendor(@Query("vendor[name]") String vendor_name,
+                                                   @Query("vendor[address]") String vendor_address,
+                                                   @Query("vendor[is_company]") int is_company,
+                                                   @Query("vendor[description]") String description,
+                                                   @Query("vendor[contact_no]") String contact_number,
+                                                   @Query("vendor[contact_person]") String contact_person,
+                                                   @Query("vendor[email_address]") String email,
+                                                   @Query("vendor[notes]") String notes,
+                                                   @Query("user") String user,
+                                                   @Query("deviceid") String deviceid,
+                                                   @Query("key") String key);
+
+    @PUT("api_vendors/{id}")
+    Observable<AddVendorResponseWrapper> updateVendor(@Path("id") int vendor_id,
+                                                      @Query("vendor[name]") String vendor_name,
+                                                      @Query("vendor[address]") String vendor_address,
+                                                      @Query("vendor[is_company]") int is_company,
+                                                      @Query("vendor[description]") String description,
+                                                      @Query("vendor[contact_no]") String contact_number,
+                                                      @Query("vendor[contact_person]") String contact_person,
+                                                      @Query("vendor[email_address]") String email,
+                                                      @Query("vendor[notes]") String notes,
+                                                      @Query("user") String user,
+                                                      @Query("deviceid") String deviceid,
+                                                      @Query("key") String key,
+                                                      @Query("_method") String method);
+
+    @DELETE("api_vendors/{id}")
+    Observable<ResponseWrapper> deleteVendor(@Path("id") int vendor_id,
+                                             @Query("user") String user,
+                                             @Query("deviceid") String deviceid,
+                                             @Query("key") String key,
+                                             @Query("_method") String method);
+
 
 
 

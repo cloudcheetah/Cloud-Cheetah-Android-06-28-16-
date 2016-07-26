@@ -4,9 +4,15 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.activeandroid.util.SQLiteUtils;
+import com.forateq.cloudcheetah.MainActivity;
+import com.forateq.cloudcheetah.R;
+import com.forateq.cloudcheetah.fragments.AddCustomerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.OnClick;
 
 /**
  * Created by PC1 on 7/21/2016.
@@ -123,5 +129,22 @@ public class Vendors extends Model {
     public static int getVendorId(String name){
         Vendors vendors =  new Select().from(Vendors.class).where("name = ?", name).executeSingle();
         return vendors.getVendorId();
+    }
+
+    public static List<Vendors> getVendors(){
+        return new Select().from(Vendors.class).execute();
+    }
+
+    public static List<Vendors> getSearchVendors(String name){
+        String [] selectionArgs = new String[] {"%" + name + "%"};
+        List<Vendors> searchItems =
+                SQLiteUtils.rawQuery(Vendors.class,
+                        "SELECT * FROM Vendors WHERE name  LIKE ?",
+                        selectionArgs);
+        return searchItems;
+    }
+
+    public static Vendors getVendorById(int vendor_id){
+        return new Select().from(Vendors.class).where("vendor_id = ?", vendor_id).executeSingle();
     }
 }
