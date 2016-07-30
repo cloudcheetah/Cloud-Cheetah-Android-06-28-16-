@@ -1,6 +1,7 @@
 package com.forateq.cloudcheetah;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.activeandroid.ActiveAndroid;
 import com.forateq.cloudcheetah.components.DaggerNetworkComponent;
@@ -22,11 +23,11 @@ public class CloudCheetahApp extends Application {
     public void onCreate() {
         super.onCreate();
         ActiveAndroid.initialize(this);
-        OneSignal.startInit(this).init();
         networkComponent = DaggerNetworkComponent.builder()
                 .appModule(new AppModule(this))
                 .networkModule(new NetworkModule("http://128.199.140.96"))
                 .build();
+        OneSignal.startInit(this).init();
     }
 
     public NetworkComponent getNetworkComponent(){

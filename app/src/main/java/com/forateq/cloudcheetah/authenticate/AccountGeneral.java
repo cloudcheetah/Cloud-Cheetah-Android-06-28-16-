@@ -66,4 +66,6 @@ public class AccountGeneral {
     public static final int CASH_IN = 1;
 
     public static final int CASH_OUT = 2;
+
+    public static final String REGISTRATION_ID = "registration_id";
 }

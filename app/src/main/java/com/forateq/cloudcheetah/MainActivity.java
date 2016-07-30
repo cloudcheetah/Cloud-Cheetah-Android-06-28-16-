@@ -6,32 +6,25 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
-import android.app.Activity;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.forateq.cloudcheetah.authenticate.AccountGeneral;
 import com.forateq.cloudcheetah.fragments.MainFragment;
-import com.forateq.cloudcheetah.models.Accounts;
-import com.forateq.cloudcheetah.models.CashInOut;
-import com.forateq.cloudcheetah.models.Customers;
-import com.forateq.cloudcheetah.pojo.ProcessCashIn;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.onesignal.OneSignal;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * this class is the main activity of the class, this is the entry point of the application
@@ -60,7 +53,6 @@ public class MainActivity extends CameraActivity {
     public void init(){
         fragmentManager = getSupportFragmentManager();
         fragmentManager.enableDebugLogging(true);
-        OneSignal.enableNotificationsWhenActive(true);
         if (fragmentManager.findFragmentById(R.id.fragment_container) == null) {
             MainFragment mainFragment = new MainFragment();
             fragmentManager.beginTransaction()
@@ -73,6 +65,25 @@ public class MainActivity extends CameraActivity {
         }
         else{
             Log.e("Not Granted", "Not Granted");
+        }
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
+            @Override
+            public void idsAvailable(String userId, String registrationId) {
+                Log.e("debug", "User:" + userId);
+                editor.putString(AccountGeneral.REGISTRATION_ID, userId);
+                editor.commit();
+                if (registrationId != null)
+                    Log.e("debug", "registrationId:" + registrationId);
+            }
+        });
+        OneSignal.enableInAppAlertNotification(true);
+        String userId = sharedPreferences.getString(AccountGeneral.REGISTRATION_ID, "");
+        try {
+            OneSignal.postNotification(new JSONObject("{'contents': {'en':'Test Message'}, 'include_player_ids': ['" + userId + "']}"), null);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -89,52 +100,6 @@ public class MainActivity extends CameraActivity {
         if(accounts.length == 0){
             Log.e("Authenticating", "Authenticating");
             addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
-        }
-        else{
-//            for(Accounts accounts : Accounts.getAccounts()){
-//                Log.e("Account Name", ""+accounts.getAccount_name());
-//            }
-//            for(Customers customers : Customers.getCustomers()){
-//                Log.e("Customer Name", ""+customers.getName());
-//            }
-//            Gson gson = new GsonBuilder()
-//                    .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
-//                    .serializeNulls()
-//                    .create();
-//            List<CashInOut> cashInOutList = new ArrayList<>();
-//
-//            CashInOut cashInOut = new CashInOut();
-//            cashInOut.setAccount_id(Accounts.getAccounts().get(0).getAccountId());
-//            cashInOut.setAmount(100);
-//            cashInOut.setDescription("Sample");
-//            cashInOut.setInvoice_no(1);
-//            cashInOut.setItem_id(1);
-//            cashInOut.setLocation("QC");
-//            cashInOut.setPayer_id(Customers.getCustomers().get(0).getCustomerId());
-//            cashInOut.setQty(3);
-//            cashInOut.setReceipt_no(2);
-//            cashInOut.setTransaction_date("01/02/16");
-//            cashInOut.setType_id(AccountGeneral.CASH_IN);
-//
-//            CashInOut cashInOut2 = new CashInOut();
-//            cashInOut2.setAccount_id(Accounts.getAccounts().get(1).getAccountId());
-//            cashInOut2.setAmount(100);
-//            cashInOut2.setDescription("Sample");
-//            cashInOut2.setInvoice_no(1);
-//            cashInOut2.setItem_id(1);
-//            cashInOut2.setLocation("QC");
-//            cashInOut2.setPayer_id(Customers.getCustomers().get(1).getCustomerId());
-//            cashInOut2.setQty(3);
-//            cashInOut2.setReceipt_no(2);
-//            cashInOut2.setTransaction_date("01/02/16");
-//            cashInOut2.setType_id(AccountGeneral.CASH_OUT);
-//
-//            cashInOutList.add(cashInOut);
-//            cashInOutList.add(cashInOut2);
-//            ProcessCashIn processCashIn =  new ProcessCashIn();
-//            processCashIn.setCash_flow(cashInOutList);
-//            String json = gson.toJson(processCashIn);
-//            Log.e("Json", json);
         }
     }
 

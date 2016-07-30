@@ -39,10 +39,8 @@ import com.forateq.cloudcheetah.pojo.UserData;
 import com.forateq.cloudcheetah.pojo.UsersListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.VendorsResponseWrapper;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
-import com.onesignal.OneSignal;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+
 
 import javax.inject.Inject;
 
@@ -70,7 +68,7 @@ public class AuthenticatorActivity extends AppCompatActivity{
     private String mAuthTokenType;
     private String mAccountType;
     private Bundle mResultBundle = null;
-    private String notification_id;
+    private String registration_id;
     @Bind(R.id.username)
     EditText usernameEditText;
     @Bind(R.id.password)
@@ -90,22 +88,14 @@ public class AuthenticatorActivity extends AppCompatActivity{
                 Settings.Secure.ANDROID_ID);
         mAccountType = getIntent().getStringExtra(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
         mAccountManager = AccountManager.get(getBaseContext());
-        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
-            @Override
-            public void idsAvailable(String userId, String registrationId) {
-                Log.e("debug", "User:" + userId);
-                notification_id = userId;
-                if (registrationId != null) {
-                    Log.e("debug", "registrationId:" + registrationId);
-                }
-            }
-        });
         mAuthTokenType = getIntent().getStringExtra(ARG_AUTH_TYPE);
         if (mAuthTokenType == null) {
             mAuthTokenType = AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS;
         }
         ButterKnife.bind(this);
         ((CloudCheetahApp) getApplication()).getNetworkComponent().inject(this);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
+        registration_id = sharedPreferences.getString(AccountGeneral.REGISTRATION_ID, "");
     }
 
     public final void setAccountAuthenticatorResult(Bundle result) {
@@ -123,7 +113,7 @@ public class AuthenticatorActivity extends AppCompatActivity{
             mProgressDialog.show();
             final String userName = usernameEditText.getText().toString();
             final String userPass = passwordEditText.getText().toString();
-            Observable<LoginWrapper> observable = cloudCheetahAPIService.login(userName, userPass, AccountGeneral.DEVICE_ID, CloudCheetahAPIService.SERVER_TOKEN, notification_id);
+            Observable<LoginWrapper> observable = cloudCheetahAPIService.login(userName, userPass, AccountGeneral.DEVICE_ID, CloudCheetahAPIService.SERVER_TOKEN, registration_id);
                 observable.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .unsubscribeOn(Schedulers.io())
@@ -157,16 +147,11 @@ public class AuthenticatorActivity extends AppCompatActivity{
                                     SharedPreferences.Editor editor = sharedPreferences.edit();
                                     editor.putString(AccountGeneral.ACCOUNT_USERNAME, userName);
                                     editor.putString(AccountGeneral.SESSION_KEY, authtoken);
-                                    editor.putString(AccountGeneral.NOTIFICATION_ID, notification_id);
+                                    editor.putString(AccountGeneral.NOTIFICATION_ID, registration_id);
                                     editor.putString(AccountGeneral.PROJECT_TIMESTAMP, "");
                                     editor.putString(AccountGeneral.USER_ID, ""+loginWrapper.getLogin().getId());
                                     editor.commit();
                                     data.putString(PARAM_USER_PASS, userPass);
-                                    try {
-                                        OneSignal.postNotification(new JSONObject("{'contents': {'en':'Login success!'}, 'include_player_ids': ['" + notification_id + "']}"), null);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
                                 }
                                 else{
                                     Toast.makeText(AuthenticatorActivity.this, "Username and password does not match", Toast.LENGTH_LONG).show();
