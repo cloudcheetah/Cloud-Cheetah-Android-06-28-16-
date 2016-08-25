@@ -135,6 +135,11 @@ public class Users extends Model {
         return users.getUser_id();
     }
 
+    public static String getFullName(int id){
+        Users users =  new Select().from(Users.class).where("user_id = ?", id).executeSingle();
+        return users.getFull_name();
+    }
+
     /**
      * This method is used to get a specific user using its user id
      * @param user_id
@@ -144,4 +149,15 @@ public class Users extends Model {
         Users users = new Select().from(Users.class).where("user_name = ?", user_id).executeSingle();
         return users.getUser_id();
     }
+
+    public static int getUserIdByUserName(String user_name){
+        Users users = new Select().from(Users.class).where("user_name = ?", user_name).executeSingle();
+        return users.getUser_id();
+    }
+
+    public static int getEmployeeId(String user_name){
+        Users users = new Select().from(Users.class).where("user_name = ?", user_name).executeSingle();
+        return users.getEmployee_id();
+    }
+
 }

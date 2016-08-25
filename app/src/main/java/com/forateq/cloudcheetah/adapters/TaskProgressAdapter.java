@@ -127,6 +127,7 @@ public class TaskProgressAdapter extends RecyclerView.Adapter<TaskProgressAdapte
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
+                    bundle.putString("status", taskStatus.getText().toString());
                     bundle.putString("task_progress_id", taskProgressId.getText().toString());
                     bundle.putString("task_progress_offline_id", taskProgressOfflineId.getText().toString());
                     ProgressReportViewFragment progressReportViewFragment = new ProgressReportViewFragment();

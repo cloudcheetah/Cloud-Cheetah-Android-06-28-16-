@@ -202,5 +202,9 @@ public class TaskProgressReports extends Model {
         return new Select().from(TaskProgressReports.class).where("id = ?", task_progress_offline_id).executeSingle();
     }
 
+    public static TaskProgressReports getProgressReportById(int task_progress_id){
+        return new Select().from(TaskProgressReports.class).where("task_progress_id = ?", task_progress_id).executeSingle();
+    }
+
 
 }

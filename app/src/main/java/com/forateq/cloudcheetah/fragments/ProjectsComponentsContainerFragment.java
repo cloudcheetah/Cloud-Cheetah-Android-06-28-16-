@@ -28,12 +28,14 @@ import com.forateq.cloudcheetah.CloudCheetahApp;
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.authenticate.AccountGeneral;
+import com.forateq.cloudcheetah.models.Messages;
 import com.forateq.cloudcheetah.models.ProjectMembers;
 import com.forateq.cloudcheetah.models.ProjectResources;
 import com.forateq.cloudcheetah.models.Projects;
 import com.forateq.cloudcheetah.models.TaskResources;
 import com.forateq.cloudcheetah.models.Tasks;
 import com.forateq.cloudcheetah.models.Users;
+import com.forateq.cloudcheetah.pojo.MessageListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ProjectBatchMembers;
 import com.forateq.cloudcheetah.pojo.ProjectBatchProcess;
 import com.forateq.cloudcheetah.pojo.ProjectBatchResources;
@@ -95,6 +97,8 @@ public class ProjectsComponentsContainerFragment extends Fragment {
     LinearLayout submitProjectLayout;
     @Bind(R.id.update_project)
     LinearLayout updateProjectLayout;
+    @Bind(R.id.project_chat)
+    LinearLayout projectChatLayout;
     int project_id;
     long project_offline_id;
     public static final String COMPONENT_PROJECT_MEMBERS = "Project Members";
@@ -469,6 +473,73 @@ public class ProjectsComponentsContainerFragment extends Fragment {
         ProjectUpdateFragment projectUpdateFragment = new ProjectUpdateFragment();
         projectUpdateFragment.setArguments(bundle);
         MainActivity.replaceFragment(projectUpdateFragment, TAG);
+    }
+
+    @OnClick(R.id.project_chat)
+    void displayProjectChat(){
+        if(isNetworkAvailable()){
+            final ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setMessage("Processing...");
+            mProgressDialog.show();
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
+            String userName = sharedPreferences.getString(AccountGeneral.ACCOUNT_USERNAME, "");
+            String sessionKey = sharedPreferences.getString(AccountGeneral.SESSION_KEY, "");
+            String deviceid = Settings.Secure.getString(ApplicationContext.get().getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+            Observable<MessageListResponseWrapper> observable = cloudCheetahAPIService.getProjectMessages(userName, deviceid, sessionKey, project_id);
+            observable.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .unsubscribeOn(Schedulers.io())
+                    .subscribe(new Subscriber<MessageListResponseWrapper>() {
+                        @Override
+                        public void onCompleted() {
+                            if(mProgressDialog.isShowing()){
+                                mProgressDialog.dismiss();
+                            }
+                            Projects project = Projects.getProjectById(project_id);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("project_id", project_id);
+                            bundle.putString("project_name", project.getName());
+                            ProjectChatFragment projectChatFragment = new ProjectChatFragment();
+                            projectChatFragment.setArguments(bundle);
+                            MainActivity.replaceFragment(projectChatFragment, TAG);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if(mProgressDialog.isShowing()){
+                                mProgressDialog.dismiss();
+                            }
+                            Log.e("GetProjectMessage", e.getMessage(), e);
+                        }
+
+                        @Override
+                        public void onNext(MessageListResponseWrapper messageListResponseWrapper) {
+                            Messages.deleteProjectMessages(project_id);
+                            for(Messages messages : messageListResponseWrapper.getData()){
+                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
+                                String userName = sharedPreferences.getString(AccountGeneral.ACCOUNT_USERNAME, "");
+                                if(messages.getSender_id() == Users.getUserIdByUserName(userName)){
+                                    messages.setDirection(0);
+                                }
+                                else{
+                                    messages.setDirection(1);
+                                }
+                                messages.save();
+                            }
+                        }
+                    });
+        }
+        else{
+            Projects project = Projects.getProjectById(project_id);
+            Bundle bundle = new Bundle();
+            bundle.putInt("project_id", project_id);
+            bundle.putString("project_name", project.getName());
+            ProjectChatFragment projectChatFragment = new ProjectChatFragment();
+            projectChatFragment.setArguments(bundle);
+            MainActivity.replaceFragment(projectChatFragment, TAG);
+        }
     }
 
     @OnClick(R.id.submit_project)

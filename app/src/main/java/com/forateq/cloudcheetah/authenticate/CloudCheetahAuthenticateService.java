@@ -21,7 +21,6 @@ public class CloudCheetahAuthenticateService extends Service {
     public void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
-        Log.e("First", "FirstService destroyed");
     }
 
 }

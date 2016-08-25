@@ -1,6 +1,8 @@
 package com.forateq.cloudcheetah.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -15,6 +17,7 @@ import android.widget.EditText;
 
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.adapters.ContactAdapter;
+import com.forateq.cloudcheetah.authenticate.AccountGeneral;
 import com.forateq.cloudcheetah.models.Users;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
 
@@ -44,12 +47,15 @@ public class ContactsFragment extends Fragment {
     }
 
     public void init(){
-        Log.e("Size", ""+Users.getUsers().size());
-        contactAdapter = new ContactAdapter(Users.getUsers(), ApplicationContext.get());
-        mLinearLayoutManager = new LinearLayoutManager(ApplicationContext.get());
-        listContacts.setAdapter(contactAdapter);
-        listContacts.setLayoutManager(mLinearLayoutManager);
-        listContacts.setItemAnimator(new DefaultItemAnimator());
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
+        boolean isLogin = sharedPreferences.getBoolean(AccountGeneral.LOGIN_STATUS, false);
+        if(isLogin){
+            contactAdapter = new ContactAdapter(Users.getUsers(), getActivity());
+            mLinearLayoutManager = new LinearLayoutManager(getActivity());
+            listContacts.setAdapter(contactAdapter);
+            listContacts.setLayoutManager(mLinearLayoutManager);
+            listContacts.setItemAnimator(new DefaultItemAnimator());
+        }
     }
 
     @Override

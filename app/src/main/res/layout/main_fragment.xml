@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorPrimaryDark"
         app:theme="@style/ToolbarCustomIconColor"
         app:popupTheme="@style/AppTheme">
 
@@ -33,10 +33,27 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"/>
 
+    <LinearLayout
+        android:id="@+id/linlaHeaderProgress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:visibility="gone" >
+
+        <ProgressBar
+            android:id="@+id/pbHeaderProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </ProgressBar>
+    </LinearLayout>
+
     <com.forateq.cloudcheetah.utils.SlidingTabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"/>
+
 
 </LinearLayout>

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -25,12 +26,14 @@ import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.models.Accounts;
 import com.forateq.cloudcheetah.models.Customers;
+import com.forateq.cloudcheetah.models.Employees;
 import com.forateq.cloudcheetah.models.Resources;
 import com.forateq.cloudcheetah.models.Units;
 import com.forateq.cloudcheetah.models.Users;
 import com.forateq.cloudcheetah.models.Vendors;
 import com.forateq.cloudcheetah.pojo.AccountListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.CustomerListResponseWrapper;
+import com.forateq.cloudcheetah.pojo.EmployeeListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.LoginWrapper;
 import com.forateq.cloudcheetah.pojo.ResourceData;
 import com.forateq.cloudcheetah.pojo.ResourceListResponseWrapper;
@@ -39,8 +42,12 @@ import com.forateq.cloudcheetah.pojo.UserData;
 import com.forateq.cloudcheetah.pojo.UsersListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.VendorsResponseWrapper;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.onesignal.OneSignal;
 
 
+import java.lang.reflect.Modifier;
 
 import javax.inject.Inject;
 
@@ -94,8 +101,33 @@ public class AuthenticatorActivity extends AppCompatActivity{
         }
         ButterKnife.bind(this);
         ((CloudCheetahApp) getApplication()).getNetworkComponent().inject(this);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
-        registration_id = sharedPreferences.getString(AccountGeneral.REGISTRATION_ID, "");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        final ProgressDialog mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.show();
+        OneSignal.setSubscription(true);
+        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
+            @Override
+            public void idsAvailable(String userId, String registrationId) {
+                Log.d("debug", "User:" + userId);
+                if (registrationId != null){
+                    registration_id = userId;
+                    if(mProgressDialog.isShowing())
+                        mProgressDialog.dismiss();
+                }
+                else{
+                    Toast.makeText(AuthenticatorActivity.this, "Cant connect to server.", Toast.LENGTH_SHORT).show();
+                    if(mProgressDialog.isShowing())
+                        mProgressDialog.dismiss();
+                }
+                    Log.d("debug", "registrationId:" + registrationId);
+            }
+        });
     }
 
     public final void setAccountAuthenticatorResult(Bundle result) {
@@ -113,6 +145,7 @@ public class AuthenticatorActivity extends AppCompatActivity{
             mProgressDialog.show();
             final String userName = usernameEditText.getText().toString();
             final String userPass = passwordEditText.getText().toString();
+            Log.e("Credentials", userName + " " + userPass + " " + AccountGeneral.DEVICE_ID + " " + CloudCheetahAPIService.SERVER_TOKEN + " " + registration_id );
             Observable<LoginWrapper> observable = cloudCheetahAPIService.login(userName, userPass, AccountGeneral.DEVICE_ID, CloudCheetahAPIService.SERVER_TOKEN, registration_id);
                 observable.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -136,6 +169,11 @@ public class AuthenticatorActivity extends AppCompatActivity{
 
                             @Override
                             public void onNext(LoginWrapper loginWrapper) {
+                                GsonBuilder builder = new GsonBuilder();
+                                builder.excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC);
+                                Gson gson = builder.create();
+                                String json = gson.toJson(loginWrapper);
+                                Log.e("Response", json);
                                 Bundle data = new Bundle();
                                 if(loginWrapper.getLogin().isLogin_success()){
                                     authtoken =  loginWrapper.getKey().getSession_key();
@@ -150,13 +188,13 @@ public class AuthenticatorActivity extends AppCompatActivity{
                                     editor.putString(AccountGeneral.NOTIFICATION_ID, registration_id);
                                     editor.putString(AccountGeneral.PROJECT_TIMESTAMP, "");
                                     editor.putString(AccountGeneral.USER_ID, ""+loginWrapper.getLogin().getId());
+                                    editor.putBoolean(AccountGeneral.LOGIN_STATUS, true);
                                     editor.commit();
                                     data.putString(PARAM_USER_PASS, userPass);
                                 }
                                 else{
                                     Toast.makeText(AuthenticatorActivity.this, "Username and password does not match", Toast.LENGTH_LONG).show();
                                 }
-                                new Delete().from(Users.class).execute();
                                 saveUsers(userName, AccountGeneral.DEVICE_ID, authtoken, mProgressDialog, data);
                             }
                         });
@@ -198,23 +236,28 @@ public class AuthenticatorActivity extends AppCompatActivity{
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e(TAG, e.toString());
+                        Log.e("Users", e.toString(), e);
+                        e.printStackTrace();
                     }
 
                     @Override
                     public void onNext(UsersListResponseWrapper usersListResponseWrapper) {
-                        Log.e("User Size:", ""+usersListResponseWrapper.getData().size());
-                        for(UserData userData : usersListResponseWrapper.getData()){
-                            Users users = new Users();
-                            users.setUser_id(userData.getId());
-                            users.setUser_name(userData.getUser_id());
-                            users.setEmployee_id(userData.getEmployee_id());
-                            users.setIs_admin(userData.is_admin());
-                            users.setActive(userData.isActive());
-                            users.setFull_name(userData.getFull_name());
-                            users.setFirst_name(userData.getFirst_name());
-                            users.setLast_name(userData.getLast_name());
-                            users.save();
+                        if(usersListResponseWrapper.getResponse().getStatus_code() == AccountGeneral.SUCCESS_CODE){
+                            for(UserData userData : usersListResponseWrapper.getData()){
+                                Users users = new Users();
+                                users.setUser_id(userData.getId());
+                                users.setUser_name(userData.getUser_id());
+                                users.setEmployee_id(userData.getEmployee_id());
+                                users.setIs_admin(userData.is_admin());
+                                users.setActive(userData.isActive());
+                                users.setFull_name(userData.getFull_name());
+                                users.setFirst_name(userData.getFirst_name());
+                                users.setLast_name(userData.getLast_name());
+                                users.save();
+                            }
+                        }
+                        else{
+                            Toast.makeText(AuthenticatorActivity.this, "Error: "+usersListResponseWrapper.getResponse().getStatus_code(), Toast.LENGTH_SHORT).show();
                         }
                         saveResources(userid, deviceid, key, progressDialog, data);
                     }
@@ -236,35 +279,42 @@ public class AuthenticatorActivity extends AppCompatActivity{
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e(TAG, e.toString());
+                        Log.e("Resources", e.toString(), e);
+                        e.printStackTrace();
                     }
 
                     @Override
                     public void onNext(ResourceListResponseWrapper resourceListResponseWrapper) {
-                        Log.e("Resource Size:", ""+resourceListResponseWrapper.getData().size());
-                        for(ResourceData resourceData : resourceListResponseWrapper.getData()){
-                            Resources resources = new Resources();
-                            resources.setResource_id(resourceData.getId());
-                            resources.setName(resourceData.getName());
-                            resources.setParent_id(resourceData.getParent_id());
-                            resources.setAccount_id(resourceData.getAccount_id());
-                            resources.setType_id(resourceData.getType_id());
-                            resources.setUnit_id(resourceData.getUnit_id());
-                            resources.setUnit_cost(resourceData.getUnit_cost());
-                            resources.setSales_price(resourceData.getSales_price());
-                            resources.setReorder_point(resourceData.getReorder_point());
-                            resources.setVendor_id(resourceData.getVendor_id());
-                            resources.setOn_hand_qty(resourceData.getOn_hand_qty());
-                            resources.setReserved_qty(resourceData.getReserved_qty());
-                            resources.setIn_transit_qty(resourceData.getIn_transit_qty());
-                            resources.setImage(resourceData.getImage());
-                            resources.save();
+                        if(resourceListResponseWrapper.getResponse().getStatus_code() == AccountGeneral.SUCCESS_CODE){
+                            for(ResourceData resourceData : resourceListResponseWrapper.getData()){
+                                Resources resources = new Resources();
+                                resources.setResource_id(resourceData.getId());
+                                resources.setName(resourceData.getName());
+                                resources.setParent_id(resourceData.getParent_id());
+                                resources.setAccount_id(resourceData.getAccount_id());
+                                resources.setType_id(resourceData.getType_id());
+                                resources.setUnit_id(resourceData.getUnit_id());
+                                resources.setUnit_cost(resourceData.getUnit_cost());
+                                resources.setSales_price(resourceData.getSales_price());
+                                resources.setReorder_point(resourceData.getReorder_point());
+                                resources.setVendor_id(resourceData.getVendor_id());
+                                resources.setOn_hand_qty(resourceData.getOn_hand_qty());
+                                resources.setReserved_qty(resourceData.getReserved_qty());
+                                resources.setIn_transit_qty(resourceData.getIn_transit_qty());
+                                resources.setImage(resourceData.getImage());
+                                resources.save();
+                            }
+                        }
+                        else{
+                            Toast.makeText(AuthenticatorActivity.this, "Error: "+resourceListResponseWrapper.getResponse().getStatus_code(), Toast.LENGTH_SHORT).show();
                         }
                         saveAccounts(userid, deviceid, key, progressDialog, data);
                     }
                 });
 
     }
+
+
 
     public void saveAccounts(final String userid, final String deviceid, final String key, final ProgressDialog progressDialog, final Bundle data){
         Observable<AccountListResponseWrapper> observable = cloudCheetahAPIService.getAllAccounts(userid, deviceid, key);
@@ -355,7 +405,7 @@ public class AuthenticatorActivity extends AppCompatActivity{
                 });
     }
 
-    public void saveUnits(String userid, String deviceid, String key, final ProgressDialog progressDialog, final Bundle data){
+    public void saveUnits(final String userid, final String deviceid, final String key, final ProgressDialog progressDialog, final Bundle data){
         Observable<UnitsResponseWrapper> observable = cloudCheetahAPIService.getAllUnits(userid, deviceid, key);
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -363,9 +413,7 @@ public class AuthenticatorActivity extends AppCompatActivity{
                 .subscribe(new Subscriber<UnitsResponseWrapper>() {
                     @Override
                     public void onCompleted() {
-                        Intent res = new Intent();
-                        res.putExtras(data);
-                        finishLogin(res);
+
                     }
 
                     @Override
@@ -381,9 +429,41 @@ public class AuthenticatorActivity extends AppCompatActivity{
                         for(Units units : unitsResponseWrapper.getData()){
                             units.save();
                         }
+                        saveEmployees(userid, deviceid, key, progressDialog, data);
+                    }
+                });
+    }
+
+    public void saveEmployees(String userid, String deviceid, String key, final ProgressDialog progressDialog, final Bundle data){
+        Observable<EmployeeListResponseWrapper> observable = cloudCheetahAPIService.getEmployees(userid, deviceid, key);
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<EmployeeListResponseWrapper>() {
+                    @Override
+                    public void onCompleted() {
+                        Intent res = new Intent();
+                        res.putExtras(data);
+                        finishLogin(res);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("Employees", e.getMessage(), e);
                         if(progressDialog.isShowing()){
                             progressDialog.dismiss();
                         }
+                    }
+
+                    @Override
+                    public void onNext(EmployeeListResponseWrapper employeeListResponseWrapper) {
+                        for(Employees employees : employeeListResponseWrapper.getData()){
+                            employees.save();
+                        }
+                        if(progressDialog.isShowing()){
+                            progressDialog.dismiss();
+                        }
+                        OneSignal.setSubscription(true);
                     }
                 });
     }

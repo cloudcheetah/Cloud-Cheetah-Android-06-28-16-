@@ -2,6 +2,8 @@ package com.forateq.cloudcheetah.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.forateq.cloudcheetah.R;
+import com.forateq.cloudcheetah.authenticate.AccountGeneral;
+import com.forateq.cloudcheetah.models.Employees;
 import com.forateq.cloudcheetah.models.Messages;
 import com.forateq.cloudcheetah.models.Users;
+import com.forateq.cloudcheetah.utils.ApplicationContext;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -38,6 +43,7 @@ public class MessagingAdapter extends BaseAdapter {
     }
 
     public void addMessage(Messages messages) {
+
         listMessage.add(messages);
         notifyDataSetChanged();
     }
@@ -73,9 +79,8 @@ public class MessagingAdapter extends BaseAdapter {
         int direction = getItemViewType(i);
         Users users = Users.getUser(messages.getSender_id());
         String sender = users.getFull_name();
-        String timeStamp = messages.getTimestamp();
+        String timeStamp = messages.getCreated_at();
         String message = messages.getMessage();
-//        String profile_pic = users.ge
         if (convertView == null) {
             Log.e("Direction Inside", "" + direction);
 
@@ -87,6 +92,11 @@ public class MessagingAdapter extends BaseAdapter {
             convertView = layoutInflater.inflate(res, viewGroup, false);
         }
         ImageView userPhotoIV = (ImageView) convertView.findViewById(R.id.profile_pic);
+        Employees employees = Employees.getEmployee(users.getEmployee_id());
+        if(null != employees){
+            Picasso.with(ApplicationContext.get()).load("http://"+employees.getImage()).placeholder( R.drawable.progress_animation ).resize(50, 50)
+                    .centerCrop().into(userPhotoIV);
+        }
         TextView senderTV = (TextView) convertView.findViewById(R.id.sender);
         TextView messageTV = (TextView) convertView.findViewById(R.id.message);
         TextView timestampTV = (TextView) convertView.findViewById(R.id.timestamp);

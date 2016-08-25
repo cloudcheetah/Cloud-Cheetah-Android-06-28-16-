@@ -45,6 +45,8 @@ public class AccountGeneral {
      */
     public final static String NOTIFICATION_ID = "Notification Id";
 
+    public static final String LOGIN_STATUS = "Login Status";
+
     public final static String USER_ID = "user_id";
 
     public static final String STATUS_DRAFT = "draft";
@@ -62,6 +64,8 @@ public class AccountGeneral {
     public static final String METHOD_DELETE = "delete";
 
     public static final int SUCCESS_CODE = 1007;
+
+    public static final int LOGOUT_CODE = 777;
 
     public static final int CASH_IN = 1;
 

@@ -6,12 +6,18 @@ import com.forateq.cloudcheetah.pojo.AddAccountWrapper;
 import com.forateq.cloudcheetah.pojo.AddCustomerWrapper;
 import com.forateq.cloudcheetah.pojo.AddInventoryItemResponseWrapper;
 import com.forateq.cloudcheetah.pojo.AddVendorResponseWrapper;
+import com.forateq.cloudcheetah.pojo.ConversationResponseWrapper;
 import com.forateq.cloudcheetah.pojo.CustomerListResponseWrapper;
+import com.forateq.cloudcheetah.pojo.EmployeeListResponseWrapper;
+import com.forateq.cloudcheetah.pojo.EmployeeResponseWrapper;
 import com.forateq.cloudcheetah.pojo.LoginWrapper;
+import com.forateq.cloudcheetah.pojo.MessageListResponseWrapper;
+import com.forateq.cloudcheetah.pojo.MessageResponseWrapper;
 import com.forateq.cloudcheetah.pojo.MyTasksResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ProjectListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ProjectResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ResourceListResponseWrapper;
+import com.forateq.cloudcheetah.pojo.Response;
 import com.forateq.cloudcheetah.pojo.ResponseWrapper;
 import com.forateq.cloudcheetah.pojo.SingleTaskResponseWrapper;
 import com.forateq.cloudcheetah.pojo.SubmitProgressReportResponseWrapper;
@@ -46,6 +52,9 @@ public interface CloudCheetahAPIService {
 
     @GET("/api/apilogin/")
     Observable<LoginWrapper> login(@Query("user") String user, @Query("password") String password, @Query("deviceid") String deviceId, @Query("token") String token, @Query("notif") String notification_id);
+
+    @GET("/api/apilogout/")
+    Observable<ResponseWrapper> logout(@Query("user") String user, @Query("deviceid") String deviceid, @Query("key") String key);
 
     @GET("/api_users/")
     Observable<UsersListResponseWrapper> getAllUsers(@Query("userid") String user, @Query("deviceid") String deviceid, @Query("key") String key);
@@ -262,6 +271,99 @@ public interface CloudCheetahAPIService {
                                              @Query("deviceid") String deviceid,
                                              @Query("key") String key,
                                              @Query("_method") String method);
+
+    @GET("api/send_chat")
+    Observable<MessageResponseWrapper> sendMessage(@Query("user") String user,
+                                                   @Query("deviceid") String deviceid,
+                                                   @Query("key") String key,
+                                                   @Query("receiverid") int receiver_id,
+                                                   @Query("message") String message);
+
+    @GET("api/send_project_chat")
+    Observable<MessageResponseWrapper> sendProjectMessage(@Query("user") String user,
+                                                   @Query("deviceid") String deviceid,
+                                                   @Query("key") String key,
+                                                   @Query("projectid") int project_id,
+                                                   @Query("message") String message);
+
+    @GET("api/get_project_chats")
+    Observable<MessageListResponseWrapper> getProjectMessages(@Query("user") String user,
+                                                              @Query("deviceid") String deviceid,
+                                                              @Query("key") String key,
+                                                              @Query("projectid") int project_id);
+
+    @GET("api/get_chats")
+    Observable<MessageListResponseWrapper> getMessages(@Query("user") String user,
+                                                       @Query("deviceid") String deviceid,
+                                                       @Query("key") String key,
+                                                       @Query("p1") int sender_id,
+                                                       @Query("p2") int receiver_id);
+
+    @GET("api/get_chat_lists")
+    Observable<ConversationResponseWrapper> getConversations(@Query("user") String user,
+                                                             @Query("deviceid") String deviceid,
+                                                             @Query("key") String key);
+
+    @GET("/api_employees")
+    Observable<EmployeeListResponseWrapper> getEmployees(@Query("user") String user,
+                                                         @Query("deviceid") String deviceid,
+                                                         @Query("key") String key);
+
+    @POST("api_employees/create")
+    Observable<EmployeeResponseWrapper> createEmployee(@Query("employee[first_name]") String first_name,
+                                                       @Query("employee[middle_name]") String middle_name,
+                                                       @Query("employee[last_name]") String last_name,
+                                                       @Query("employee[gender_id]") int gender_id,
+                                                       @Query("employee[date_of_birth]") String date_of_birth,
+                                                       @Query("employee[address]") String address,
+                                                       @Query("employee[email_address]") String email,
+                                                       @Query("employee[contact_no]") String contact_no,
+                                                       @Query("employee[status_id]") int status_id,
+                                                       @Query("employee[title]") String title,
+                                                       @Query("employee[employment_type_id]") int employment_type_id,
+                                                       @Query("employee[zip_code]") String zip_code,
+                                                       @Query("employee[tin_no]") String tin_no,
+                                                       @Query("employee[sss_no]") String sss_no,
+                                                       @Query("employee[drivers_license_no]") String drivers_license_no,
+                                                       @Query("employee[civil_status_id]") int civil_status_id,
+                                                       @Query("employee[notes]") String employee_notes,
+                                                       @Body RequestBody requestBody,
+                                                       @Query("user") String user,
+                                                       @Query("deviceid") String deviceid,
+                                                       @Query("key") String key);
+
+
+    @PUT("api_employees/{id}")
+    Observable<EmployeeResponseWrapper> updateEmployee(@Path("id") int employee_id,
+                                                       @Query("employee[first_name]") String first_name,
+                                                       @Query("employee[middle_name]") String middle_name,
+                                                       @Query("employee[last_name]") String last_name,
+                                                       @Query("employee[gender_id]") int gender_id,
+                                                       @Query("employee[date_of_birth]") String date_of_birth,
+                                                       @Query("employee[address]") String address,
+                                                       @Query("employee[email_address]") String email,
+                                                       @Query("employee[contact_no]") String contact_no,
+                                                       @Query("employee[status_id]") int status_id,
+                                                       @Query("employee[title]") String title,
+                                                       @Query("employee[employment_type_id]") int employment_type_id,
+                                                       @Query("employee[zip_code]") String zip_code,
+                                                       @Query("employee[tin_no]") String tin_no,
+                                                       @Query("employee[sss_no]") String sss_no,
+                                                       @Query("employee[drivers_license_no]") String drivers_license_no,
+                                                       @Query("employee[civil_status_id]") int civil_status_id,
+                                                       @Query("employee[notes]") String employee_notes,
+                                                       @Body RequestBody requestBody,
+                                                       @Query("user") String user,
+                                                       @Query("deviceid") String deviceid,
+                                                       @Query("key") String key,
+                                                       @Query("_method") String method);
+
+    @DELETE("api_employees/{id}")
+    Observable<ResponseWrapper> deleteEmployee(@Path("id") int employee_id,
+                                               @Query("user") String user,
+                                               @Query("deviceid") String deviceid,
+                                               @Query("key") String key,
+                                               @Query("_method") String method);
 
 
 

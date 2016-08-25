@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.balysv.materialripple.MaterialRippleLayout;
+import com.forateq.cloudcheetah.CloudCheetahApp;
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.models.TaskProgressReports;
@@ -31,7 +32,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/** This fragment is used to display the selected progress report
+/**
+ * This fragment is used to display the selected progress report
  * Created by Vallejos Family on 6/13/2016.
  */
 public class ProgressReportViewFragment extends Fragment {
@@ -70,12 +72,14 @@ public class ProgressReportViewFragment extends Fragment {
     TextView attachment3TV;
     int taskProgressId;
     long taskProgressOfflineId;
+    String taskStatus;
     TaskProgressReports taskProgressReports;
     Gson gson;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.task_progress_report_view, container, false);
+        taskStatus = getArguments().getString("status");
         taskProgressId = Integer.parseInt(getArguments().getString("task_progress_id"));
         taskProgressOfflineId = Long.parseLong(getArguments().getString("task_progress_offline_id"));
         return v;
@@ -88,14 +92,23 @@ public class ProgressReportViewFragment extends Fragment {
         init();
     }
 
-    public void init(){
+    public ProgressReportViewFragment() {
+        super();
+    }
+
+
+    public void init() {
         gson = new Gson();
         addResourceIV.setVisibility(View.GONE);
-        taskProgressReports = TaskProgressReports.getProgressOfflineReportById(taskProgressOfflineId);
+        if (taskStatus.equals("Submitted")) {
+            taskProgressReports = TaskProgressReports.getProgressReportById(taskProgressId);
+        } else {
+            taskProgressReports = TaskProgressReports.getProgressOfflineReportById(taskProgressOfflineId);
+        }
         taskStatusET.setText(taskProgressReports.getTask_status());
         reportDateET.setText(taskProgressReports.getReport_date());
-        hoursWorkET.setText(""+taskProgressReports.getHours_work());
-        percentCompletionET.setText(""+taskProgressReports.getPercent_completion());
+        hoursWorkET.setText("" + taskProgressReports.getHours_work());
+        percentCompletionET.setText("" + taskProgressReports.getPercent_completion());
         taskActionET.setText(taskProgressReports.getTask_action());
         taskNameET.setText(taskProgressReports.getTask_name());
         taskNotesET.setText(taskProgressReports.getNotes());
@@ -106,26 +119,26 @@ public class ProgressReportViewFragment extends Fragment {
         attachment3TV.setText(taskProgressReports.getAttachment_3());
         addReportButton.setVisibility(View.GONE);
         AddResourceWrapper addResourceWrapper = gson.fromJson(taskProgressReports.getResources_used(), AddResourceWrapper.class);
-        for(AddResource addResource : addResourceWrapper.getResourceList()){
+        for (AddResource addResource : addResourceWrapper.getResourceList()) {
             ResourceRowView resourceRowView = new ResourceRowView(getActivity());
             resourceRowView.getResourceNameTV().setText(addResource.getResourceName());
-            resourceRowView.getResourceQuantityTV().setText(""+addResource.getResourceQuantity());
+            resourceRowView.getResourceQuantityTV().setText("" + addResource.getResourceQuantity());
             resourceContainerLayout.addView(resourceRowView);
         }
     }
 
     @OnClick(R.id.ripple_back)
-    public void back(){
+    public void back() {
         MainActivity.popFragment();
     }
 
     @OnClick(R.id.attachment_one)
-    public void showAttachment1(){
-        if(!attachment1TV.getText().toString().equals("")){
-            if(taskProgressReports.is_submitted()){
+    public void showAttachment1() {
+        if (!attachment1TV.getText().toString().equals("")) {
+            if (taskProgressReports.is_submitted()) {
                 Log.e("URL", taskProgressReports.getAttachment_1());
                 final ImageView imageView = new ImageView(getActivity());
-                Picasso.with(ApplicationContext.get()).load("http://"+taskProgressReports.getAttachment_1()).placeholder( R.drawable.progress_animation ).resize(500, 500)
+                Picasso.with(ApplicationContext.get()).load("http://" + taskProgressReports.getAttachment_1()).placeholder(R.drawable.progress_animation).resize(500, 500)
                         .centerCrop().into(imageView);
                 final MaterialDialog.Builder createNoteDialog = new MaterialDialog.Builder(getActivity())
                         .title("Attachment 1")
@@ -149,8 +162,7 @@ public class ProgressReportViewFragment extends Fragment {
                         });
                 final MaterialDialog addNoteDialog = createNoteDialog.build();
                 addNoteDialog.show();
-            }
-            else{
+            } else {
                 final ImageView imageView = new ImageView(getActivity());
                 Picasso.with(ApplicationContext.get()).load(new File(attachment1TV.getText().toString())).resize(500, 500)
                         .centerCrop().into(imageView);
@@ -181,12 +193,12 @@ public class ProgressReportViewFragment extends Fragment {
     }
 
     @OnClick(R.id.attachment_two)
-    public void showAttachment2(){
-        if(!attachment2TV.getText().toString().equals("")){
-            if(taskProgressReports.is_submitted()){
+    public void showAttachment2() {
+        if (!attachment2TV.getText().toString().equals("")) {
+            if (taskProgressReports.is_submitted()) {
                 Log.e("URL", taskProgressReports.getAttachment_2());
                 final ImageView imageView = new ImageView(getActivity());
-                Picasso.with(ApplicationContext.get()).load("http://"+taskProgressReports.getAttachment_2()).placeholder( R.drawable.progress_animation ).resize(500, 500)
+                Picasso.with(ApplicationContext.get()).load("http://" + taskProgressReports.getAttachment_2()).placeholder(R.drawable.progress_animation).resize(500, 500)
                         .centerCrop().into(imageView);
                 final MaterialDialog.Builder createNoteDialog = new MaterialDialog.Builder(getActivity())
                         .title("Attachment 2")
@@ -210,8 +222,7 @@ public class ProgressReportViewFragment extends Fragment {
                         });
                 final MaterialDialog addNoteDialog = createNoteDialog.build();
                 addNoteDialog.show();
-            }
-            else{
+            } else {
                 final ImageView imageView = new ImageView(getActivity());
                 Picasso.with(ApplicationContext.get()).load(new File(attachment2TV.getText().toString())).resize(500, 500)
                         .centerCrop().into(imageView);
@@ -242,12 +253,12 @@ public class ProgressReportViewFragment extends Fragment {
     }
 
     @OnClick(R.id.attachment_three)
-    public void showAttachment3(){
-        if(!attachment3TV.getText().toString().equals("")){
-            if(taskProgressReports.is_submitted()){
+    public void showAttachment3() {
+        if (!attachment3TV.getText().toString().equals("")) {
+            if (taskProgressReports.is_submitted()) {
                 final ImageView imageView = new ImageView(getActivity());
                 Log.e("URL", taskProgressReports.getAttachment_3());
-                Picasso.with(ApplicationContext.get()).load("http://"+taskProgressReports.getAttachment_3()).placeholder( R.drawable.progress_animation ).resize(500, 500)
+                Picasso.with(ApplicationContext.get()).load("http://" + taskProgressReports.getAttachment_3()).placeholder(R.drawable.progress_animation).resize(500, 500)
                         .centerCrop().into(imageView);
                 final MaterialDialog.Builder createNoteDialog = new MaterialDialog.Builder(getActivity())
                         .title("Attachment 3")
@@ -271,8 +282,7 @@ public class ProgressReportViewFragment extends Fragment {
                         });
                 final MaterialDialog addNoteDialog = createNoteDialog.build();
                 addNoteDialog.show();
-            }
-            else{
+            } else {
                 final ImageView imageView = new ImageView(getActivity());
                 Picasso.with(ApplicationContext.get()).load(new File(attachment3TV.getText().toString())).resize(500, 500)
                         .centerCrop().into(imageView);

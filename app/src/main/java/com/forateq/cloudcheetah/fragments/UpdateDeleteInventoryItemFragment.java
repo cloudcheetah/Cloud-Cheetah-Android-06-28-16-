@@ -348,7 +348,7 @@ public class UpdateDeleteInventoryItemFragment extends Fragment {
             addNoteDialog.show();
         }
         else{
-
+            Toast.makeText(getActivity(), "Please connect to a network to delete this item.", Toast.LENGTH_SHORT).show();
         }
     }
 

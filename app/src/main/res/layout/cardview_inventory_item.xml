@@ -49,14 +49,14 @@
                 <TextView
                     android:id="@+id/resource_name"
                     android:text="Project 1"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorPrimaryText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20dp"/>
 
                 <TextView
                     android:id="@+id/resource_on_hand_quantity"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorSecondaryText"
                     android:text="On Hand: "
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
 
                 <TextView
                     android:id="@+id/resource_reserved_quantity"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorSecondaryText"
                     android:text="Reserved: "
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
 
                 <TextView
                     android:id="@+id/resource_in_transit_quantity"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorSecondaryText"
                     android:text="In Transit: "
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

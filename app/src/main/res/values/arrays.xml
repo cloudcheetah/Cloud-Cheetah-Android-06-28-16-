@@ -17,4 +17,14 @@
         <item>@mipmap/ic_profile_white</item>
     </string-array>
 
+    <string-array name="home_icon_imgs">
+        <item>@mipmap/ic_notifications_black_24dp</item>
+        <item>@mipmap/ic_today_black_24dp</item>
+    </string-array>
+
+    <string-array name="home_selected_icon_imgs">
+        <item>@mipmap/ic_notifications_white_24dp</item>
+        <item>@mipmap/ic_today_white_24dp</item>
+    </string-array>
+
 </resources>

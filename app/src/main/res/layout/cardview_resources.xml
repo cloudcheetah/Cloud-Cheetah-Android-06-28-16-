@@ -47,14 +47,14 @@
                 <TextView
                     android:id="@+id/resource_name"
                     android:text="Project 1"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorPrimaryText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20dp"/>
 
                 <TextView
                     android:id="@+id/resource_quantity"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorSecondaryText"
                     android:text="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -1,56 +1,105 @@
 package com.forateq.cloudcheetah;
 
+import android.*;
+import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
+import android.app.AlarmManager;
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.forateq.cloudcheetah.authenticate.AccountGeneral;
+import com.forateq.cloudcheetah.fragments.CalendarFragment;
+import com.forateq.cloudcheetah.fragments.ChatFragment;
+import com.forateq.cloudcheetah.fragments.ContactsFragment;
+import com.forateq.cloudcheetah.fragments.ERPFragment;
+import com.forateq.cloudcheetah.fragments.HomeFragment;
 import com.forateq.cloudcheetah.fragments.MainFragment;
+import com.forateq.cloudcheetah.fragments.NotificationsFragment;
+import com.forateq.cloudcheetah.fragments.ProfileFragment;
+import com.forateq.cloudcheetah.models.ToDo;
+import com.forateq.cloudcheetah.pojo.ResponseWrapper;
+import com.forateq.cloudcheetah.receivers.AlarmReceiver;
+import com.forateq.cloudcheetah.utils.AlarmEvent;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
+import com.forateq.cloudcheetah.utils.NetworkStateChanged;
+import com.forateq.cloudcheetah.views.AddTodoView;
 import com.onesignal.OneSignal;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.List;
+
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * this class is the main activity of the class, this is the entry point of the application
  */
-public class MainActivity extends CameraActivity {
+public class MainActivity extends CameraActivity implements EasyPermissions.PermissionCallbacks{
 
     private static FragmentManager fragmentManager;
     private AccountManager accountManager;
     private Account[] accounts;
     private Account account;
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
-            android.Manifest.permission.READ_EXTERNAL_STORAGE,
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
+    private static final int RC_LOCATION_INTERNET_PERM = 124;
+    private Vibrator vibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        EventBus.getDefault().register(this); // register EventBus
+        checkAlarm();
         init();
     }
 
 
 
     public void init(){
+        stopVibrate();
+        CloudCheetahApp.homeFragment = new HomeFragment();
+        CloudCheetahApp.chatFragment = new ChatFragment();
+        CloudCheetahApp.contactsFragment = new ContactsFragment();
+        CloudCheetahApp.erpFragment = new ERPFragment();
+        CloudCheetahApp.profileFragment = new ProfileFragment();
+        CloudCheetahApp.notificationsFragment = new NotificationsFragment();
+        CloudCheetahApp.calendarFragment = new CalendarFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.enableDebugLogging(true);
         if (fragmentManager.findFragmentById(R.id.fragment_container) == null) {
@@ -60,45 +109,27 @@ public class MainActivity extends CameraActivity {
                     .commit();
         }
         ApplicationContext.getInstance().init(getApplicationContext());
-        if(isStoragePermissionGranted()){
-            Log.e("Granted", "Granted");
-        }
-        else{
-            Log.e("Not Granted", "Not Granted");
-        }
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
-        final SharedPreferences.Editor editor = sharedPreferences.edit();
-        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
-            @Override
-            public void idsAvailable(String userId, String registrationId) {
-                Log.e("debug", "User:" + userId);
-                editor.putString(AccountGeneral.REGISTRATION_ID, userId);
-                editor.commit();
-                if (registrationId != null)
-                    Log.e("debug", "registrationId:" + registrationId);
-            }
-        });
-        OneSignal.enableInAppAlertNotification(true);
-        String userId = sharedPreferences.getString(AccountGeneral.REGISTRATION_ID, "");
-        try {
-            OneSignal.postNotification(new JSONObject("{'contents': {'en':'Test Message'}, 'include_player_ids': ['" + userId + "']}"), null);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        OneSignal.enableInAppAlertNotification(false);
+        OneSignal.enableNotificationsWhenActive(false);
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        initAccounts();
+        if (Build.VERSION.SDK_INT >= 23) {
+            Log.e("Build Here", "Here");
+            locationAndContactsTask();
+        }
+        else {
+            initAccounts();
+        }
     }
 
     public void initAccounts(){
-        accountManager = AccountManager.get(this);
-        accounts = accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE);
-        if(accounts.length == 0){
-            Log.e("Authenticating", "Authenticating");
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
+        boolean isLogin = sharedPreferences.getBoolean(AccountGeneral.LOGIN_STATUS, false);
+        if(isLogin == false){
             addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
         }
     }
@@ -151,34 +182,127 @@ public class MainActivity extends CameraActivity {
         }
     }
 
-    public  boolean isStoragePermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
-                Log.e("MainActivity","Permission is granted");
-                return true;
-            } else {
 
-                Log.e("MainActivity","Permission is revoked");
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                return false;
-            }
-        }
-        else { //permission is automatically granted on sdk<23 upon installation
-            Log.e("MainActivity","Permission is granted");
-            return true;
-        }
-
-
+    public void checkAlarm(){
+        Intent myIntent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,  0, myIntent, 0);
+        AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.add(Calendar.SECOND, 60); // first time
+        long frequency= 60 * 1000; // in ms
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), frequency, pendingIntent);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
-            Log.e("MainActivity","Permission: "+permissions[0]+ "was "+grantResults[0]);
-            //resume tasks needing this permission
+            EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
         }
     }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+
+    }
+
+    @AfterPermissionGranted(RC_LOCATION_INTERNET_PERM)
+    public void locationAndContactsTask() {
+        String[] perms = { android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.INTERNET,
+                android.Manifest.permission.ACCESS_WIFI_STATE,
+                android.Manifest.permission.ACCESS_NETWORK_STATE,
+                android.Manifest.permission.VIBRATE,
+                android.Manifest.permission.CAMERA,
+                android.Manifest.permission.RECEIVE_BOOT_COMPLETED,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.GET_ACCOUNTS,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                android.Manifest.permission.RECORD_AUDIO,
+                android.Manifest.permission.MODIFY_AUDIO_SETTINGS,
+                android.Manifest.permission.READ_PHONE_STATE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.WAKE_LOCK,
+                android.Manifest.permission.SYSTEM_ALERT_WINDOW
+
+        };
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            Log.e("Here", "Here");
+            initAccounts();
+        } else {
+            // Ask for both permissions
+            EasyPermissions.requestPermissions(this, getString(R.string.rationale_location_contacts),
+                    RC_LOCATION_INTERNET_PERM, perms);
+            initAccounts();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this); // unregister EventBus
+    }
+
+    // method that will be called when someone posts an event NetworkStateChanged
+    @Subscribe
+    public void onEventMainThread(NetworkStateChanged event) {
+        if (!event.isInternetConnected()) {
+            Toast.makeText(this, "No Internet connection!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Subscribe
+    public void onEventMainThread(AlarmEvent event) {
+        if (event.isAlarm()) {
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+            String date = month+"-"+day+"-"+year;
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+            String time = hour + ":" + minute;
+            Log.e("datetime", ""+date+time);
+            ToDo todo = ToDo.getToDo(date, time);
+            if(todo != null){
+                startVibrate();
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("stop_vibrate", true);
+                PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
+                NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.mipmap.ic_stop_white_24dp, "Stop", pIntent).build();
+                NotificationCompat.Builder notification = new NotificationCompat.Builder(this);
+                notification.setContentTitle("To Do");
+                notification.setContentText(todo.getNote());
+                notification.setSmallIcon(R.mipmap.ic_launcher);
+                notification.setContentIntent(pIntent);
+                notification.addAction(action);
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(1, notification.build());
+            }
+            else{
+                Log.e("Null", "Null");
+            }
+        }
+    }
+
+    public void startVibrate() {
+        long pattern[] = { 0, 100, 200, 300, 400 };
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(pattern, 0);
+    }
+
+    public void stopVibrate() {
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.cancel();
+    }
+
 
 }

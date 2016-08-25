@@ -292,6 +292,8 @@ public class ERPFragment extends Fragment {
     @OnClick(R.id.labor)
     public void getEmployees(){
         Log.e(TAG, "Getting employees...");
+        EmployeesFragment employeesFragment = new EmployeesFragment();
+        MainActivity.replaceFragment(employeesFragment, TAG);
     }
 
     @OnClick(R.id.resources)

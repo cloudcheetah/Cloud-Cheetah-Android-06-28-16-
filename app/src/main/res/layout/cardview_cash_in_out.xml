@@ -48,14 +48,14 @@
                 <TextView
                     android:id="@+id/cash_in_out_date"
                     android:text="01/12/87"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorPrimaryText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20dp"/>
 
                 <TextView
                     android:id="@+id/type"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorSecondaryText"
                     android:text="Cash-In"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
 
                 <TextView
                     android:id="@+id/amount"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorSecondaryText"
                     android:text="P200"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
 
                 <TextView
                     android:id="@+id/cash_flow_status"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorSecondaryText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="15dp"/>

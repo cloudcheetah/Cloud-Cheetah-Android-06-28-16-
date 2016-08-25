@@ -5,6 +5,9 @@ import android.preference.PreferenceManager;
 
 import com.forateq.cloudcheetah.CloudCheetahAPIService;
 import com.forateq.cloudcheetah.CloudCheetahApp;
+import com.google.gson.GsonBuilder;
+
+import java.lang.reflect.Modifier;
 
 import javax.inject.Singleton;
 
@@ -31,7 +34,9 @@ public class NetworkModule {
     CloudCheetahAPIService provideCloudCheetahAPIService() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(mBaseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
+                        .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
+                        .create()))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
         CloudCheetahAPIService cloudCheetahAPIService = retrofit.create(CloudCheetahAPIService.class);

@@ -1,12 +1,319 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@color/background"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:text="This is profile fragment"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"/>
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <LinearLayout
+            android:id="@+id/viewA"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/background"
+                android:adjustViewBounds="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/viewB"
+            android:background="@color/background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_marginTop="30dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="4">
+
+                        <ImageView
+                            android:src="@mipmap/ic_contact_phone_black_24dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp" />
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:gravity="center_vertical"
+                            android:layout_weight="3"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp">
+
+                            <TextView
+                                android:text="Contact No:"
+                                android:textSize="20sp"
+                                android:textColor="@color/colorPrimaryText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:id="@+id/contact_no"
+                                android:text="(02)625-45-45"
+                                android:textSize="15sp"
+                                android:textColor="@color/colorSecondaryText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="4">
+
+                        <ImageView
+                            android:src="@mipmap/ic_contact_mail_black_24dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp" />
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:gravity="center_vertical"
+                            android:layout_weight="3"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp">
+
+                            <TextView
+                                android:text="Email:"
+                                android:textSize="20sp"
+                                android:textColor="@color/colorPrimaryText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:id="@+id/email"
+                                android:text="jayharvallejos12@gmail.com"
+                                android:textSize="15sp"
+                                android:textColor="@color/colorSecondaryText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="4">
+
+                        <ImageView
+                            android:src="@mipmap/ic_cake_black_24dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp" />
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:gravity="center_vertical"
+                            android:layout_weight="3"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp">
+
+                            <TextView
+                                android:text="Birthday:"
+                                android:textSize="20sp"
+                                android:textColor="@color/colorPrimaryText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:id="@+id/birthday"
+                                android:text="01/01/1987"
+                                android:textSize="15sp"
+                                android:textColor="@color/colorSecondaryText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="4">
+
+                        <ImageView
+                            android:src="@mipmap/ic_wc_black_24dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp" />
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:gravity="center_vertical"
+                            android:layout_weight="3"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp">
+
+                            <TextView
+                                android:text="Gender:"
+                                android:textSize="20sp"
+                                android:textColor="@color/colorPrimaryText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:id="@+id/gender"
+                                android:text="Male"
+                                android:textSize="15sp"
+                                android:textColor="@color/colorSecondaryText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="4">
+
+                        <ImageView
+                            android:src="@mipmap/ic_power_settings_new_black_24dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp" />
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:gravity="center_vertical"
+                            android:layout_weight="3"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp">
+
+                            <TextView
+                                android:text="Logout"
+                                android:textSize="20sp"
+                                android:layout_gravity="center_vertical"
+                                android:textColor="@color/colorPrimaryText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/profile_pic"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/sample_profile_pic"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="30dp" />
+
+    <LinearLayout
+        android:layout_marginTop="60dp"
+        android:orientation="vertical"
+        android:layout_marginLeft="135dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/name"
+            android:textSize="25sp"
+            android:text="Jayhar Vallejos"
+            android:textColor="@color/colorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/address"
+            android:textSize="20sp"
+            android:text="Philippines"
+            android:textColor="@color/colorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:src="@mipmap/ic_mode_edit_white_24dp"
+        app:layout_anchor="@id/viewA"
+        app:layout_anchorGravity="bottom|right|end"/>
+
+</android.support.design.widget.CoordinatorLayout>

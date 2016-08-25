@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_gravity="top"
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:theme="@style/ToolbarCustomIconColor"
+        app:popupTheme="@style/AppTheme">
+
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:id="@+id/ripple_back"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp">
+
+            <ImageView
+                android:layout_gravity="start|center_vertical"
+                android:clickable="true"
+                android:src="@mipmap/ic_arrow_back_white_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+        <TextView
+            android:id="@+id/project_name"
+            android:text="Sample"
+            android:layout_weight="1.5"
+            android:layout_marginLeft="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorText"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <ListView
+        android:id="@+id/list_chats"
+        android:background="@color/chat_background"
+        android:layout_below="@+id/toolbar"
+        android:layout_above="@+id/message_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="0dip"
+        android:divider="@null"
+        android:transcriptMode="alwaysScroll"
+        android:dividerHeight="0dp"
+        android:stackFromBottom="true"
+        tools:listitem="@layout/cardview_outgoing_message" />
+
+    <LinearLayout
+        android:id="@+id/message_layout"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:weightSum="5">
+
+        <EditText
+            android:id="@+id/message"
+            android:hint="Type Here"
+            android:layout_weight="4.5"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@drawable/search_edittext_design"
+            />
+        <ImageView
+            android:id="@+id/send"
+            android:src="@mipmap/ic_send_black_24dp"
+            android:layout_weight=".5"
+            android:layout_width="0dp"
+            android:layout_height="40dp" />
+    </LinearLayout>
+</RelativeLayout>

@@ -44,14 +44,14 @@
             <TextView
                 android:id="@+id/project_name"
                 android:text="Project 1"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorPrimaryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20dp"/>
 
             <TextView
                 android:id="@+id/status"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorSecondaryText"
                 android:text="Draft"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

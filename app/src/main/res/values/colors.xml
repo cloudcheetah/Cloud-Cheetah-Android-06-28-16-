@@ -9,5 +9,8 @@
     <color name="colorSecondaryText">#727272</color>
     <color name="tab_background">#f3eee6</color>
     <color name="colorDivider">#B6B6B6</color>
+    <color name="background">#FAFAFA</color>
+    <color name="profile_bg">#00B0FF</color>
+    <color name="chat_background">#FFEBEE</color>
 </resources>
 
