@@ -49,7 +49,7 @@ public class CashFlowViewFragment extends Fragment {
     EditText amountET;
     @Bind(R.id.invoice_number)
     EditText invoiceNumberET;
-    @Bind(R.id.payer_label)
+    @Bind(R.id.payers_label)
     TextView payersTV;
     @Bind(R.id.payers)
     EditText payersET;

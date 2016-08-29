@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -65,12 +66,14 @@ public class ToDoFragment extends Fragment {
     private LinearLayoutManager mLinearLayoutManager;
     public static ToDoAdapter toDoAdapter;
     String date;
+    long milliseconds;
     public static final String TAG = "ToDoFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.todo_fragment, container, false);
         date = getArguments().getString("date");
+        milliseconds = getArguments().getLong("milliseconds");
         return v;
     }
 
@@ -144,6 +147,8 @@ public class ToDoFragment extends Fragment {
                         toDo.setUser_id(Users.getUserIdByUserName(userName));
                         toDo.save();
                         toDoAdapter.addItem(toDo);
+                        Event event = new Event(R.color.colorPrimaryDark, milliseconds);
+                        CalendarFragment.calendarView.addEvent(event, true);
                     }
 
                     @Override

@@ -6,6 +6,7 @@ import com.forateq.cloudcheetah.CloudCheetahApp;
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.models.Messages;
 import com.forateq.cloudcheetah.pojo.JsonDataWrapper;
+import com.forateq.cloudcheetah.pojo.SubTasks;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
 import com.google.gson.Gson;
 import com.onesignal.OneSignal;
@@ -46,6 +47,14 @@ public class NotificationOpenedHandler implements OneSignal.NotificationOpenedHa
         else if(json.getNotification_type() == 3){
             CloudCheetahApp.notificationType = json.getNotification_type();
             CloudCheetahApp.taskProgressReports = json.getJson().getProgress_report();
+            Intent intent = new Intent(ApplicationContext.get(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
+            ApplicationContext.get().startActivity(intent);
+        }
+        else if(json.getNotification_type() == 4){
+            SubTasks subTasks = json.getJson().getTask();
+            CloudCheetahApp.notificationType = json.getNotification_type();
+            CloudCheetahApp.taskId = subTasks.getId();
             Intent intent = new Intent(ApplicationContext.get(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
             ApplicationContext.get().startActivity(intent);

@@ -75,7 +75,7 @@ public class AuthenticatorActivity extends AppCompatActivity{
     private String mAuthTokenType;
     private String mAccountType;
     private Bundle mResultBundle = null;
-    private String registration_id;
+    private String registration_id = "no_registration";
     @Bind(R.id.username)
     EditText usernameEditText;
     @Bind(R.id.password)

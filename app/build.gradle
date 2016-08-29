@@ -7,13 +7,13 @@ android {
 
     defaultConfig {
         applicationId "com.forateq.cloudcheetah"
-        minSdkVersion 14
+        minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
         manifestPlaceholders = [manifestApplicationId: "${applicationId}",
-                                onesignal_app_id: "22a2c97e-a74f-4cc5-b33b-0a6f99f0ea8a",
-                                onesignal_google_project_number: "125753861457"]
+                                onesignal_app_id: "c82e5667-e67b-41b8-9c80-c7e732834b1f",
+                                onesignal_google_project_number: "521846990723"]
     }
     buildTypes {
         release {
@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.balysv:material-ripple:1.0.2'
@@ -51,9 +51,14 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.1.1'
     apt 'org.parceler:parceler:1.1.2'
     compile 'com.android.support:design:23.1.1'
+    compile 'com.afollestad.material-dialogs:core:0.8.5.9'
+    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.onesignal:OneSignal:2.+@aar'
     compile 'com.google.android.gms:play-services-gcm:+'
     compile 'com.google.android.gms:play-services-analytics:+'
     compile "com.google.android.gms:play-services-location:+"
-    compile 'com.afollestad.material-dialogs:core:0.8.5.9'
+    compile 'pub.devrel:easypermissions:0.1.9'
+    compile 'com.github.sundeepk:compact-calendar-view:1.8.9'
+    compile 'org.greenrobot:eventbus:3.0.0'
+
 }

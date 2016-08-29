@@ -17,6 +17,8 @@ import com.forateq.cloudcheetah.models.Tasks;
 import com.forateq.cloudcheetah.models.Users;
 import com.forateq.cloudcheetah.pojo.JsonData;
 import com.forateq.cloudcheetah.pojo.JsonDataWrapper;
+import com.forateq.cloudcheetah.pojo.SubTasks;
+import com.forateq.cloudcheetah.pojo.TaskData;
 import com.forateq.cloudcheetah.utils.MyLifeCycleHandler;
 import com.google.gson.Gson;
 import com.onesignal.OSNotificationPayload;
@@ -48,6 +50,16 @@ public class NotificationHandler extends NotificationExtenderService {
                     TaskProgressReports taskProgressReports = jsonWrapper.getJson().getProgress_report();
                     return builder.setColor(new BigInteger("FF00FF00", 16).intValue()).setContentText(Users.getFullName(Tasks.getTaskById(taskProgressReports.getTask_id()).getPerson_responsible_id()) + " " + "submitted a progress report.").setContentTitle("Task Progress Report");
                 }
+                else if(jsonWrapper.getNotification_type() == 4){
+                    SubTasks subTasks = jsonWrapper.getJson().getTask();
+                    return builder.setColor(new BigInteger("FF00FF00", 16).intValue()).setContentText("New task assigned to you.").setContentTitle("Task");
+                }
+                else if(jsonWrapper.getNotification_type() == 5){
+                    return builder;
+                }
+                else if(jsonWrapper.getNotification_type() == 6){
+                    return builder;
+                }
                 else{
                     return builder;
                 }
@@ -77,6 +89,15 @@ public class NotificationHandler extends NotificationExtenderService {
                 });
             }
             else if(jsonWrapper.getNotification_type() == 3){
+                displayNotification(overrideSettings);
+            }
+            else if(jsonWrapper.getNotification_type() == 4){
+                displayNotification(overrideSettings);
+            }
+            else if(jsonWrapper.getNotification_type() == 5){
+                displayNotification(overrideSettings);
+            }
+            else if(jsonWrapper.getNotification_type() == 6){
                 displayNotification(overrideSettings);
             }
         }

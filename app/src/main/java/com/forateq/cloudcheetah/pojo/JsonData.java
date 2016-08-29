@@ -9,6 +9,7 @@ import com.forateq.cloudcheetah.models.TaskProgressReports;
 public class JsonData {
     Messages message;
     TaskProgressReports progress_report;
+    SubTasks task;
 
     public Messages getMessage() {
         return message;
@@ -24,5 +25,13 @@ public class JsonData {
 
     public void setProgress_report(TaskProgressReports progress_report) {
         this.progress_report = progress_report;
+    }
+
+    public SubTasks getTask() {
+        return task;
+    }
+
+    public void setTask(SubTasks task) {
+        this.task = task;
     }
 }

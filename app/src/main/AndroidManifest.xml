@@ -38,6 +38,8 @@
                 android:resource="@xml/authenticator" />
         </service>
 
+        <service android:name=".service.AlarmService" />
+
         <service
             android:name=".service.NotificationHandler"
             android:exported="false">

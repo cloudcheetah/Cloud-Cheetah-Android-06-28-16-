@@ -37,6 +37,7 @@ public class CloudCheetahApp extends Application {
     public static int currentSenderId = 0;
     public static int projectChatId = 0;
     public static TaskProgressReports taskProgressReports = null;
+    public static int taskId = 0;
     //Fragments
     public static HomeFragment homeFragment = null;
     public static ChatFragment chatFragment = null;

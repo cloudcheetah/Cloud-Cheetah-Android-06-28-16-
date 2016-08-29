@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -46,6 +47,7 @@ import com.forateq.cloudcheetah.fragments.ProfileFragment;
 import com.forateq.cloudcheetah.models.ToDo;
 import com.forateq.cloudcheetah.pojo.ResponseWrapper;
 import com.forateq.cloudcheetah.receivers.AlarmReceiver;
+import com.forateq.cloudcheetah.service.AlarmService;
 import com.forateq.cloudcheetah.utils.AlarmEvent;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
 import com.forateq.cloudcheetah.utils.NetworkStateChanged;
@@ -78,21 +80,22 @@ public class MainActivity extends CameraActivity implements EasyPermissions.Perm
     private Account[] accounts;
     private Account account;
     private static final int RC_LOCATION_INTERNET_PERM = 124;
-    private Vibrator vibrator;
+    public static Vibrator vibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this); // register EventBus
-        checkAlarm();
+        Intent i= new Intent(this, AlarmService.class);
+        this.startService(i);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         init();
     }
 
 
 
     public void init(){
-        stopVibrate();
         CloudCheetahApp.homeFragment = new HomeFragment();
         CloudCheetahApp.chatFragment = new ChatFragment();
         CloudCheetahApp.contactsFragment = new ContactsFragment();
@@ -111,19 +114,17 @@ public class MainActivity extends CameraActivity implements EasyPermissions.Perm
         ApplicationContext.getInstance().init(getApplicationContext());
         OneSignal.enableInAppAlertNotification(false);
         OneSignal.enableNotificationsWhenActive(false);
+        if (Build.VERSION.SDK_INT >= 23) {
+            Log.e("Build Here", "Here");
+            locationAndContactsTask();
+        }
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (Build.VERSION.SDK_INT >= 23) {
-            Log.e("Build Here", "Here");
-            locationAndContactsTask();
-        }
-        else {
-            initAccounts();
-        }
+        initAccounts();
     }
 
     public void initAccounts(){
@@ -235,13 +236,11 @@ public class MainActivity extends CameraActivity implements EasyPermissions.Perm
 
         };
         if (EasyPermissions.hasPermissions(this, perms)) {
-            Log.e("Here", "Here");
-            initAccounts();
+
         } else {
             // Ask for both permissions
             EasyPermissions.requestPermissions(this, getString(R.string.rationale_location_contacts),
                     RC_LOCATION_INTERNET_PERM, perms);
-            initAccounts();
         }
     }
 
@@ -295,14 +294,15 @@ public class MainActivity extends CameraActivity implements EasyPermissions.Perm
 
     public void startVibrate() {
         long pattern[] = { 0, 100, 200, 300, 400 };
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         vibrator.vibrate(pattern, 0);
-    }
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
 
-    public void stopVibrate() {
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        vibrator.cancel();
+            @Override
+            public void run() {
+                vibrator.cancel();
+            }
+        }, 45000);
     }
-
 
 }

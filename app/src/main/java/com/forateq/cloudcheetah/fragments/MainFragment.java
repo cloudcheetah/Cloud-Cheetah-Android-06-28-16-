@@ -31,9 +31,11 @@ import com.forateq.cloudcheetah.models.Conversations;
 import com.forateq.cloudcheetah.models.Messages;
 import com.forateq.cloudcheetah.models.Projects;
 import com.forateq.cloudcheetah.models.TaskProgressReports;
+import com.forateq.cloudcheetah.models.Tasks;
 import com.forateq.cloudcheetah.models.Users;
 import com.forateq.cloudcheetah.pojo.ConversationResponseWrapper;
 import com.forateq.cloudcheetah.pojo.MessageListResponseWrapper;
+import com.forateq.cloudcheetah.pojo.SingleTaskResponseWrapper;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
 import com.forateq.cloudcheetah.utils.CustomViewPager;
 import com.forateq.cloudcheetah.utils.SlidingTabLayout;
@@ -131,6 +133,9 @@ public class MainFragment extends Fragment {
             }
             else if(CloudCheetahApp.notificationType == 3){
                 getProgressReport();
+            }
+            else if(CloudCheetahApp.notificationType == 4){
+                getTask();
             }
         }
         tabs.setViewPager(pager);
@@ -340,6 +345,64 @@ public class MainFragment extends Fragment {
     public void getProgressReport(){
         //to be created
         clearNotifications();
+    }
+
+    public void getTask(){
+        if(isNetworkAvailable()){
+            final ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setMessage("Processing...");
+            mProgressDialog.show();
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
+            String userName = sharedPreferences.getString(AccountGeneral.ACCOUNT_USERNAME, "");
+            String sessionKey = sharedPreferences.getString(AccountGeneral.SESSION_KEY, "");
+            String deviceid = Settings.Secure.getString(ApplicationContext.get().getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+            Observable<SingleTaskResponseWrapper> observable = cloudCheetahAPIService.getSubTasks(CloudCheetahApp.taskId, userName, deviceid, sessionKey);
+            observable.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .unsubscribeOn(Schedulers.io())
+                    .subscribe(new Subscriber<SingleTaskResponseWrapper>() {
+                        @Override
+                        public void onCompleted() {
+                            if(mProgressDialog.isShowing()){
+                                mProgressDialog.dismiss();
+                            }
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("task_id", CloudCheetahApp.taskId);
+                            TaskNotificationFragment taskNotificationFragment = new TaskNotificationFragment();
+                            taskNotificationFragment.setArguments(bundle);
+                            MainActivity.replaceFragment(taskNotificationFragment, TAG);
+                            clearNotifications();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if(mProgressDialog.isShowing()){
+                                mProgressDialog.dismiss();
+                            }
+                            Log.e("GetProjectMessage", e.getMessage(), e);
+                        }
+
+                        @Override
+                        public void onNext(SingleTaskResponseWrapper singleTaskResponseWrapper) {
+                            Tasks tasks = new Tasks();
+                            tasks.setName(singleTaskResponseWrapper.getData().getName());
+                            tasks.setStart_date(singleTaskResponseWrapper.getData().getStart_date());
+                            tasks.setEnd_date(singleTaskResponseWrapper.getData().getEnd_date());
+                            tasks.setBudget(singleTaskResponseWrapper.getData().getBudget());
+                            tasks.setDescription(singleTaskResponseWrapper.getData().getDescription());
+                            tasks.setPerson_responsible_id(singleTaskResponseWrapper.getData().getPerson_responsible_id());
+                            tasks.setDuration(singleTaskResponseWrapper.getData().getDuration());
+                            tasks.setTask_id(singleTaskResponseWrapper.getData().getId());
+                            tasks.setProject_id(singleTaskResponseWrapper.getData().getProject_id());
+                            tasks.save();
+                        }
+                    });
+        }
+        else{
+            Toast.makeText(getActivity(), "Error! No internet connection.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void clearNotifications(){

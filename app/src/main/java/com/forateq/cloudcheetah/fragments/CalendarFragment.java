@@ -1,6 +1,7 @@
 package com.forateq.cloudcheetah.fragments;
 
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -30,8 +31,9 @@ public class CalendarFragment extends Fragment {
     TextView yearTV;
     @Bind(R.id.month)
     TextView monthTV;
-    @Bind(R.id.compactcalendar_view)
-    CompactCalendarView calendarView;
+    static CompactCalendarView calendarView;
+    View v;
+    public static List<Event> events;
     private String[] months = {"January",
             "February",
             "March",
@@ -47,7 +49,7 @@ public class CalendarFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.calendar_fragment, container, false);
+        v = inflater.inflate(R.layout.calendar_fragment, container, false);
         return v;
     }
 
@@ -64,18 +66,20 @@ public class CalendarFragment extends Fragment {
         int month = cal.get(Calendar.MONTH);
         yearTV.setText(""+year);
         monthTV.setText(months[month]);
+        calendarView = (CompactCalendarView) v.findViewById(R.id.compactcalendar_view);
         calendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
-                List<Event> events = calendarView.getEvents(dateClicked);
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(dateClicked);
                 int year = cal.get(Calendar.YEAR);
                 int month = cal.get(Calendar.MONTH);
                 int day = cal.get(Calendar.DAY_OF_MONTH);
+                events = calendarView.getEvents(dateClicked);
                 String date = month+"-"+day+"-"+year;
                 Bundle bundle = new Bundle();
                 bundle.putString("date", date);
+                bundle.putLong("milliseconds", dateClicked.getTime());
                 ToDoFragment toDoFragment = new ToDoFragment();
                 toDoFragment.setArguments(bundle);
                 MainActivity.replaceFragment(toDoFragment, "Calendar");
