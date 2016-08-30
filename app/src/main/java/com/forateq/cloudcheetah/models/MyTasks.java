@@ -37,6 +37,9 @@ public class MyTasks extends Model {
     int parent_id;
     @Column(name = "person_responsible_id")
     int person_responsible_id;
+    @Column(name = "status_id")
+    int status_id;
+
 
 
     public int getTaskId() {
@@ -141,5 +144,13 @@ public class MyTasks extends Model {
 
     public static MyTasks getMyTask(int task_id){
         return new Select().from(MyTasks.class).where("task_id = ?", task_id).executeSingle();
+    }
+
+    public int getStatus_id() {
+        return status_id;
+    }
+
+    public void setStatus_id(int status_id) {
+        this.status_id = status_id;
     }
 }

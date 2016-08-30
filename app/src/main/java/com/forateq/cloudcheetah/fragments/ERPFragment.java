@@ -22,14 +22,12 @@ import com.forateq.cloudcheetah.CloudCheetahApp;
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.authenticate.AccountGeneral;
-import com.forateq.cloudcheetah.models.MyTasks;
 import com.forateq.cloudcheetah.models.ProjectMembers;
 import com.forateq.cloudcheetah.models.ProjectResources;
 import com.forateq.cloudcheetah.models.Resources;
 import com.forateq.cloudcheetah.models.Users;
-import com.forateq.cloudcheetah.pojo.MyTasksResponseWrapper;
-import com.forateq.cloudcheetah.pojo.Projects;
 import com.forateq.cloudcheetah.pojo.ProjectListResponseWrapper;
+import com.forateq.cloudcheetah.pojo.Projects;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
 
 import javax.inject.Inject;
@@ -213,63 +211,65 @@ public class ERPFragment extends Fragment {
 
     @OnClick(R.id.task_progress)
     public void getTasks(){
-        if(isNetworkAvailable()){
-            final ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setMessage("Getting my tasks...");
-            mProgressDialog.show();
-            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
-            String sessionKey = sharedPreferences.getString(AccountGeneral.SESSION_KEY, "");
-            String userName = sharedPreferences.getString(AccountGeneral.ACCOUNT_USERNAME, "");
-            String myTaskTimeStamp = sharedPreferences.getString(AccountGeneral.MY_TASKS_TIMESTAMP, "");
-            Observable<MyTasksResponseWrapper> observable = cloudCheetahAPIService.getMyTasks(userName, Settings.Secure.getString(ApplicationContext.get().getContentResolver(),
-                    Settings.Secure.ANDROID_ID), sessionKey, myTaskTimeStamp);
-            observable.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .unsubscribeOn(Schedulers.io())
-                    .subscribe(new Subscriber<MyTasksResponseWrapper>() {
-                        @Override
-                        public void onCompleted() {
-                            if(mProgressDialog.isShowing()){
-                                mProgressDialog.dismiss();
-                            }
-                            SharedPreferences prefs = ApplicationContext.get().getSharedPreferences(AccountGeneral.ACCOUNT_NAME, Context.MODE_PRIVATE);
-                            Log.e(TAG, prefs.getString(AccountGeneral.ACCOUNT_USERNAME, ""));
-                            ProgressReportFragment progressReportFragment = new ProgressReportFragment();
-                            MainActivity.replaceFragment(progressReportFragment, TAG);
-                        }
+//        if(isNetworkAvailable()){
+//            final ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
+//            mProgressDialog.setIndeterminate(true);
+//            mProgressDialog.setMessage("Getting my tasks...");
+//            mProgressDialog.show();
+//            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
+//            String sessionKey = sharedPreferences.getString(AccountGeneral.SESSION_KEY, "");
+//            String userName = sharedPreferences.getString(AccountGeneral.ACCOUNT_USERNAME, "");
+//            String myTaskTimeStamp = sharedPreferences.getString(AccountGeneral.MY_TASKS_TIMESTAMP, "");
+//            Observable<MyTasksResponseWrapper> observable = cloudCheetahAPIService.getMyTasks(userName, Settings.Secure.getString(ApplicationContext.get().getContentResolver(),
+//                    Settings.Secure.ANDROID_ID), sessionKey, myTaskTimeStamp);
+//            observable.subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .unsubscribeOn(Schedulers.io())
+//                    .subscribe(new Subscriber<MyTasksResponseWrapper>() {
+//                        @Override
+//                        public void onCompleted() {
+//                            if(mProgressDialog.isShowing()){
+//                                mProgressDialog.dismiss();
+//                            }
+//                            SharedPreferences prefs = ApplicationContext.get().getSharedPreferences(AccountGeneral.ACCOUNT_NAME, Context.MODE_PRIVATE);
+//                            Log.e(TAG, prefs.getString(AccountGeneral.ACCOUNT_USERNAME, ""));
+//                            ProgressReportFragment progressReportFragment = new ProgressReportFragment();
+//                            MainActivity.replaceFragment(progressReportFragment, TAG);
+//                        }
+//
+//                        @Override
+//                        public void onError(Throwable e) {
+//                            Log.e("GettingTasks", e.getMessage(), e);
+//                            if(mProgressDialog.isShowing()){
+//                                mProgressDialog.dismiss();
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onNext(MyTasksResponseWrapper myTasksResponseWrapper) {
+//                            Log.e("Size", ""+myTasksResponseWrapper.getData().size());
+//                            for(MyTasks myTasks : myTasksResponseWrapper.getData()){
+//                                if(MyTasks.getMyTask(myTasks.getTaskId()) == null){
+//                                    myTasks.save();
+//                                }
+//                            }
+//
+//                            SharedPreferences.Editor editor = sharedPreferences.edit();
+//                            editor.putString(AccountGeneral.MY_TASKS_TIMESTAMP, myTasksResponseWrapper.getTimestamp());
+//                            editor.apply();
+//                        }
+//                    });
+//        }
+//        else{
+//            Log.e(TAG, "Getting tasks...");
+//            SharedPreferences prefs = ApplicationContext.get().getSharedPreferences(AccountGeneral.ACCOUNT_NAME, Context.MODE_PRIVATE);
+//            Log.e(TAG, prefs.getString(AccountGeneral.ACCOUNT_USERNAME, ""));
+//            ProgressReportFragment progressReportFragment = new ProgressReportFragment();
+//            MainActivity.replaceFragment(progressReportFragment, TAG);
+//        }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.e("GettingTasks", e.getMessage(), e);
-                            if(mProgressDialog.isShowing()){
-                                mProgressDialog.dismiss();
-                            }
-                        }
-
-                        @Override
-                        public void onNext(MyTasksResponseWrapper myTasksResponseWrapper) {
-                            Log.e("Size", ""+myTasksResponseWrapper.getData().size());
-                            for(MyTasks myTasks : myTasksResponseWrapper.getData()){
-                                if(MyTasks.getMyTask(myTasks.getTaskId()) == null){
-                                    myTasks.save();
-                                }
-                            }
-
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(AccountGeneral.MY_TASKS_TIMESTAMP, myTasksResponseWrapper.getTimestamp());
-                            editor.apply();
-                        }
-                    });
-        }
-        else{
-            Log.e(TAG, "Getting tasks...");
-            SharedPreferences prefs = ApplicationContext.get().getSharedPreferences(AccountGeneral.ACCOUNT_NAME, Context.MODE_PRIVATE);
-            Log.e(TAG, prefs.getString(AccountGeneral.ACCOUNT_USERNAME, ""));
-            ProgressReportFragment progressReportFragment = new ProgressReportFragment();
-            MainActivity.replaceFragment(progressReportFragment, TAG);
-        }
-
+        TaskInProgressFragment taskInProgressFragment = new TaskInProgressFragment();
+        MainActivity.replaceFragment(taskInProgressFragment, TAG);
     }
 
     @OnClick(R.id.accounting_banking)

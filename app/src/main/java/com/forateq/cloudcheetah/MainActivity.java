@@ -1,7 +1,5 @@
 package com.forateq.cloudcheetah;
 
-import android.*;
-import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
@@ -9,11 +7,8 @@ import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.AlarmManager;
-
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,18 +18,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.forateq.cloudcheetah.authenticate.AccountGeneral;
 import com.forateq.cloudcheetah.fragments.CalendarFragment;
 import com.forateq.cloudcheetah.fragments.ChatFragment;
@@ -45,19 +34,15 @@ import com.forateq.cloudcheetah.fragments.MainFragment;
 import com.forateq.cloudcheetah.fragments.NotificationsFragment;
 import com.forateq.cloudcheetah.fragments.ProfileFragment;
 import com.forateq.cloudcheetah.models.ToDo;
-import com.forateq.cloudcheetah.pojo.ResponseWrapper;
 import com.forateq.cloudcheetah.receivers.AlarmReceiver;
 import com.forateq.cloudcheetah.service.AlarmService;
 import com.forateq.cloudcheetah.utils.AlarmEvent;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
 import com.forateq.cloudcheetah.utils.NetworkStateChanged;
-import com.forateq.cloudcheetah.views.AddTodoView;
 import com.onesignal.OneSignal;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -65,10 +50,6 @@ import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * this class is the main activity of the class, this is the entry point of the application

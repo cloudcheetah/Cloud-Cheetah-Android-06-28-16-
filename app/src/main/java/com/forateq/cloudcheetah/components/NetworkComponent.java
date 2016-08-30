@@ -6,6 +6,7 @@ import com.forateq.cloudcheetah.adapters.ContactAdapter;
 import com.forateq.cloudcheetah.adapters.ConversationsAdapter;
 import com.forateq.cloudcheetah.adapters.ProjectMembersAdapter;
 import com.forateq.cloudcheetah.adapters.SubTaskAdapter;
+import com.forateq.cloudcheetah.adapters.TaskInProgressViewPagerAdapter;
 import com.forateq.cloudcheetah.adapters.TaskProgressAdapter;
 import com.forateq.cloudcheetah.authenticate.AuthenticatorActivity;
 import com.forateq.cloudcheetah.fragments.AccountViewFragment;
@@ -24,6 +25,7 @@ import com.forateq.cloudcheetah.fragments.CustomerViewFragment;
 import com.forateq.cloudcheetah.fragments.ERPFragment;
 import com.forateq.cloudcheetah.fragments.EditResourceFragment;
 import com.forateq.cloudcheetah.fragments.MainFragment;
+import com.forateq.cloudcheetah.fragments.MyTasksFragment;
 import com.forateq.cloudcheetah.fragments.ProfileFragment;
 import com.forateq.cloudcheetah.fragments.ProjectChatFragment;
 import com.forateq.cloudcheetah.fragments.ProjectUpdateFragment;
@@ -36,7 +38,6 @@ import com.forateq.cloudcheetah.fragments.VendorViewFragment;
 import com.forateq.cloudcheetah.modules.AppModule;
 import com.forateq.cloudcheetah.modules.NetworkModule;
 import com.forateq.cloudcheetah.service.NotificationOpenedHandler;
-import com.onesignal.OneSignal;
 
 import javax.inject.Singleton;
 
@@ -84,4 +85,6 @@ public interface NetworkComponent {
     void inject(AddEmployeeFragment addEmployeeFragment);
     void inject(ProjectChatFragment projectChatFragment);
     void inject(NotificationOpenedHandler notificationOpenedHandler);
+    void inject(TaskInProgressViewPagerAdapter taskInProgressViewPagerAdapter);
+    void inject(MyTasksFragment myTasksFragment);
 }
