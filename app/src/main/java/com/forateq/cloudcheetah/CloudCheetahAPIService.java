@@ -1,6 +1,5 @@
 package com.forateq.cloudcheetah;
 
-import com.forateq.cloudcheetah.fragments.AddInventoryItemFragment;
 import com.forateq.cloudcheetah.pojo.AccountListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.AddAccountWrapper;
 import com.forateq.cloudcheetah.pojo.AddCustomerWrapper;
@@ -17,19 +16,16 @@ import com.forateq.cloudcheetah.pojo.MyTasksResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ProjectListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ProjectResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ResourceListResponseWrapper;
-import com.forateq.cloudcheetah.pojo.Response;
 import com.forateq.cloudcheetah.pojo.ResponseWrapper;
 import com.forateq.cloudcheetah.pojo.SingleTaskResponseWrapper;
 import com.forateq.cloudcheetah.pojo.SubmitProgressReportResponseWrapper;
 import com.forateq.cloudcheetah.pojo.TaskListResponseWrapper;
+import com.forateq.cloudcheetah.pojo.TaskProgressReportsResponseWrapper;
 import com.forateq.cloudcheetah.pojo.TaskResponseWrapper;
 import com.forateq.cloudcheetah.pojo.UnitsResponseWrapper;
 import com.forateq.cloudcheetah.pojo.UsersListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.VendorsResponseWrapper;
 import com.squareup.okhttp.RequestBody;
-
-
-import java.util.List;
 
 import retrofit.http.Body;
 import retrofit.http.DELETE;
@@ -115,6 +111,12 @@ public interface CloudCheetahAPIService {
                                                                       @Query("concerns") String concerns,
                                                                       @Query("requests") String requests,
                                                                       @Body RequestBody requestBody);
+
+    @GET("api/get_task_updates")
+    Observable<TaskProgressReportsResponseWrapper> getTaskUpdates(@Query("user") String user,
+                                                                  @Query("deviceid") String deviceid,
+                                                                  @Query("key") String key,
+                                                                  @Query("task_id") int task_id);
 
 
 

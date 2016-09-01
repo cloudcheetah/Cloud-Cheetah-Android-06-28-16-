@@ -4,6 +4,7 @@ import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.adapters.CashInOutAdapter;
 import com.forateq.cloudcheetah.adapters.ContactAdapter;
 import com.forateq.cloudcheetah.adapters.ConversationsAdapter;
+import com.forateq.cloudcheetah.adapters.MyTasksAdapter;
 import com.forateq.cloudcheetah.adapters.ProjectMembersAdapter;
 import com.forateq.cloudcheetah.adapters.SubTaskAdapter;
 import com.forateq.cloudcheetah.adapters.TaskInProgressViewPagerAdapter;
@@ -87,4 +88,5 @@ public interface NetworkComponent {
     void inject(NotificationOpenedHandler notificationOpenedHandler);
     void inject(TaskInProgressViewPagerAdapter taskInProgressViewPagerAdapter);
     void inject(MyTasksFragment myTasksFragment);
+    void inject(MyTasksAdapter myTasksAdapter);
 }

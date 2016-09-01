@@ -33,6 +33,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -55,8 +57,23 @@ public class MyTasksFragment extends Fragment {
     public static MyTasksAdapter myTasksAdapter;
     private LinearLayoutManager mLinearLayoutManager;
     public static final String TAG = "MyTasksFragment";
+    private String started = "";
+    private String hold = "";
+    private String resume = "";
+    private String cancel = "";
+    private String complete = "";
     @Inject
     CloudCheetahAPIService cloudCheetahAPIService;
+    private SharedPreferences preferences;
+    private String[] status = new String[]{
+            "Started",
+            "Hold",
+            "Resume",
+            "Cancel",
+            "Complete"
+    };
+    private boolean[] checkedStatus;
+    private List<String> statusList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,7 +90,37 @@ public class MyTasksFragment extends Fragment {
     }
 
     public void init(){
-        myTasksAdapter = new MyTasksAdapter(MyTasks.getMyTasks(), ApplicationContext.get());
+        preferences = getActivity().getSharedPreferences("Filter", Context.MODE_PRIVATE);
+        checkedStatus = new boolean[]{
+                preferences.getBoolean(status[0], false),
+                preferences.getBoolean(status[1], false),
+                preferences.getBoolean(status[2], false),
+                preferences.getBoolean(status[3], false),
+                preferences.getBoolean(status[4], false)
+
+        };
+        statusList = Arrays.asList(status);
+        if(checkedStatus[0] || checkedStatus[1] || checkedStatus[2] || checkedStatus[3] || checkedStatus[4]){
+            if(checkedStatus[0]){
+                started = ""+1;
+            }
+            if(checkedStatus[1]){
+                hold = ""+2;
+            }
+            if(checkedStatus[2]){
+                resume = ""+3;
+            }
+            if(checkedStatus[3]){
+                cancel = ""+4;
+            }
+            if(checkedStatus[4]){
+                complete = ""+5;
+            }
+            myTasksAdapter = new MyTasksAdapter(MyTasks.getFilterTasks(started, hold, resume, cancel, complete), getActivity());
+        }
+        else{
+            myTasksAdapter = new MyTasksAdapter(MyTasks.getMyTasks(), getActivity());
+        }
         mLinearLayoutManager = new LinearLayoutManager(ApplicationContext.get());
         listTasks.setLayoutManager(mLinearLayoutManager);
         listTasks.setAdapter(myTasksAdapter);
