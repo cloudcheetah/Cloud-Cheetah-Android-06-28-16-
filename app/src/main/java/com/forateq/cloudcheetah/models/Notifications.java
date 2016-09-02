@@ -18,7 +18,9 @@ public class Notifications extends Model {
     @Column(name = "notification_message")
     String notification_message;
     @Column(name = "notification_pointer_id")
-    String notification_pointer_id;
+    int notification_pointer_id;
+    @Column(name = "sender_id")
+    int sender_id;
 
     public int getNotification_type() {
         return notification_type;
@@ -36,15 +38,23 @@ public class Notifications extends Model {
         this.notification_message = notification_message;
     }
 
-    public String getNotification_pointer_id() {
+    public int getNotification_pointer_id() {
         return notification_pointer_id;
     }
 
-    public void setNotification_pointer_id(String notification_pointer_id) {
+    public void setNotification_pointer_id(int notification_pointer_id) {
         this.notification_pointer_id = notification_pointer_id;
     }
 
     public static List<Notifications> getAllNotifications(){
-        return new Select().from(Notifications.class).execute();
+        return new Select().from(Notifications.class).orderBy("id desc").execute();
+    }
+
+    public int getSender_id() {
+        return sender_id;
+    }
+
+    public void setSender_id(int sender_id) {
+        this.sender_id = sender_id;
     }
 }

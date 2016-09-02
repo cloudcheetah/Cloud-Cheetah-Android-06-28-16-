@@ -6,11 +6,15 @@ package com.forateq.cloudcheetah.utils;
 public class NotificationEvent {
 
     int notification_type;
-    String json;
+    String notification_message;
+    int sender_id;
+    int notification_pointer_id;
 
-    public NotificationEvent(int notification_type, String json) {
+    public NotificationEvent(int notification_type, String notification_message, int sender_id, int notification_pointer_id) {
         this.notification_type = notification_type;
-        this.json = json;
+        this.notification_message = notification_message;
+        this.sender_id = sender_id;
+        this.notification_pointer_id = notification_pointer_id;
     }
 
     public int getNotification_type() {
@@ -21,11 +25,27 @@ public class NotificationEvent {
         this.notification_type = notification_type;
     }
 
-    public String getJson() {
-        return json;
+    public String getNotification_message() {
+        return notification_message;
     }
 
-    public void setJson(String json) {
-        this.json = json;
+    public void setNotification_message(String notification_message) {
+        this.notification_message = notification_message;
+    }
+
+    public int getNotification_pointer_id() {
+        return notification_pointer_id;
+    }
+
+    public void setNotification_pointer_id(int notification_pointer_id) {
+        this.notification_pointer_id = notification_pointer_id;
+    }
+
+    public int getSender_id() {
+        return sender_id;
+    }
+
+    public void setSender_id(int sender_id) {
+        this.sender_id = sender_id;
     }
 }

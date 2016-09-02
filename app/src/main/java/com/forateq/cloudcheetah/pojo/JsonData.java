@@ -10,6 +10,8 @@ public class JsonData {
     Messages message;
     TaskProgressReports progress_report;
     SubTasks task;
+    ProjectsNotificationWrapper project;
+    int project_id;
 
     public Messages getMessage() {
         return message;
@@ -33,5 +35,21 @@ public class JsonData {
 
     public void setTask(SubTasks task) {
         this.task = task;
+    }
+
+    public ProjectsNotificationWrapper getProject() {
+        return project;
+    }
+
+    public void setProject(ProjectsNotificationWrapper project) {
+        this.project = project;
+    }
+
+    public int getProject_id() {
+        return project_id;
+    }
+
+    public void setProject_id(int project_id) {
+        this.project_id = project_id;
     }
 }

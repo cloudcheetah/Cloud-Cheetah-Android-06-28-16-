@@ -33,12 +33,14 @@ import com.forateq.cloudcheetah.fragments.HomeFragment;
 import com.forateq.cloudcheetah.fragments.MainFragment;
 import com.forateq.cloudcheetah.fragments.NotificationsFragment;
 import com.forateq.cloudcheetah.fragments.ProfileFragment;
+import com.forateq.cloudcheetah.models.Notifications;
 import com.forateq.cloudcheetah.models.ToDo;
 import com.forateq.cloudcheetah.receivers.AlarmReceiver;
 import com.forateq.cloudcheetah.service.AlarmService;
 import com.forateq.cloudcheetah.utils.AlarmEvent;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
 import com.forateq.cloudcheetah.utils.NetworkStateChanged;
+import com.forateq.cloudcheetah.utils.NotificationEvent;
 import com.onesignal.OneSignal;
 
 import org.greenrobot.eventbus.EventBus;
@@ -271,6 +273,17 @@ public class MainActivity extends CameraActivity implements EasyPermissions.Perm
                 Log.e("Null", "Null");
             }
         }
+    }
+
+    @Subscribe
+    public void onEventMainThread(NotificationEvent notificationEvent){
+        Notifications notifications = new Notifications();
+        notifications.setNotification_message(notificationEvent.getNotification_message());
+        notifications.setNotification_pointer_id(notificationEvent.getNotification_pointer_id());
+        notifications.setNotification_type(notificationEvent.getNotification_type());
+        notifications.setSender_id(notificationEvent.getSender_id());
+        notifications.save();
+        Log.e("Size", ""+Notifications.getAllNotifications().size());
     }
 
     public void startVibrate() {

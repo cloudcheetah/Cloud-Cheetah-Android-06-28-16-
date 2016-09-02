@@ -1,13 +1,10 @@
 package com.forateq.cloudcheetah.service;
 
-import android.content.Intent;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.activeandroid.ActiveAndroid;
 import com.forateq.cloudcheetah.fragments.ProjectChatFragment;
 import com.forateq.cloudcheetah.fragments.SingleChatFragment;
 import com.forateq.cloudcheetah.models.Messages;
@@ -15,14 +12,16 @@ import com.forateq.cloudcheetah.models.Projects;
 import com.forateq.cloudcheetah.models.TaskProgressReports;
 import com.forateq.cloudcheetah.models.Tasks;
 import com.forateq.cloudcheetah.models.Users;
-import com.forateq.cloudcheetah.pojo.JsonData;
 import com.forateq.cloudcheetah.pojo.JsonDataWrapper;
+import com.forateq.cloudcheetah.pojo.ProjectsNotificationWrapper;
 import com.forateq.cloudcheetah.pojo.SubTasks;
-import com.forateq.cloudcheetah.pojo.TaskData;
 import com.forateq.cloudcheetah.utils.MyLifeCycleHandler;
+import com.forateq.cloudcheetah.utils.NotificationEvent;
 import com.google.gson.Gson;
-import com.onesignal.OSNotificationPayload;
 import com.onesignal.NotificationExtenderService;
+import com.onesignal.OSNotificationPayload;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.math.BigInteger;
 
@@ -48,17 +47,27 @@ public class NotificationHandler extends NotificationExtenderService {
                 }
                 else if(jsonWrapper.getNotification_type() == 3){
                     TaskProgressReports taskProgressReports = jsonWrapper.getJson().getProgress_report();
-                    return builder.setColor(new BigInteger("FF00FF00", 16).intValue()).setContentText(Users.getFullName(Tasks.getTaskById(taskProgressReports.getTask_id()).getPerson_responsible_id()) + " " + "submitted a progress report.").setContentTitle("Task Progress Report");
+                    NotificationEvent notificationEvent = new NotificationEvent(jsonWrapper.getNotification_type(), notification.message, Tasks.getTaskById(taskProgressReports.getTask_id()).getPerson_responsible_id(),taskProgressReports.getTask_progress_id());
+                    EventBus.getDefault().post(notificationEvent);
+                    return builder.setColor(new BigInteger("FF00FF00", 16).intValue()).setContentText(notification.message).setContentTitle("Task Progress Report");
                 }
                 else if(jsonWrapper.getNotification_type() == 4){
                     SubTasks subTasks = jsonWrapper.getJson().getTask();
-                    return builder.setColor(new BigInteger("FF00FF00", 16).intValue()).setContentText("New task assigned to you.").setContentTitle("Task");
+                    NotificationEvent notificationEvent = new NotificationEvent(jsonWrapper.getNotification_type(), notification.message, 0, subTasks.getId());
+                    EventBus.getDefault().post(notificationEvent);
+                    return builder.setColor(new BigInteger("FF00FF00", 16).intValue()).setContentText(notification.message).setContentTitle("Task");
                 }
                 else if(jsonWrapper.getNotification_type() == 5){
-                    return builder;
+                    ProjectsNotificationWrapper project = jsonWrapper.getJson().getProject();
+                    NotificationEvent notificationEvent = new NotificationEvent(jsonWrapper.getNotification_type(), notification.message, 0, project.getId());
+                    EventBus.getDefault().post(notificationEvent);
+                    return builder.setColor(new BigInteger("FF00FF00", 16).intValue()).setContentText(notification.message).setContentTitle("Project");
                 }
                 else if(jsonWrapper.getNotification_type() == 6){
-                    return builder;
+                    int project_id = jsonWrapper.getJson().getProject_id();
+                    NotificationEvent notificationEvent = new NotificationEvent(jsonWrapper.getNotification_type(), notification.message, 0, project_id);
+                    EventBus.getDefault().post(notificationEvent);
+                    return builder.setColor(new BigInteger("FF00FF00", 16).intValue()).setContentText(notification.message).setContentTitle("Project");
                 }
                 else{
                     return builder;
