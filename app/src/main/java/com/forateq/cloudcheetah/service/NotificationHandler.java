@@ -24,11 +24,18 @@ import com.onesignal.OSNotificationPayload;
 import org.greenrobot.eventbus.EventBus;
 
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class NotificationHandler extends NotificationExtenderService {
     Gson gson;
     @Override
     protected boolean onNotificationProcessing(final OSNotificationPayload notification) {
+        Calendar c = Calendar.getInstance();
+        Date mTime = c.getTime();
+        final String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(mTime);
+        Log.e("Time", timestamp);
         gson = new Gson();
         Log.e("OneSignalExample", "Data: " + notification.additionalData);
         Log.e("OneSignalExample", "Data: " + notification.message);
@@ -47,25 +54,25 @@ public class NotificationHandler extends NotificationExtenderService {
                 }
                 else if(jsonWrapper.getNotification_type() == 3){
                     TaskProgressReports taskProgressReports = jsonWrapper.getJson().getProgress_report();
-                    NotificationEvent notificationEvent = new NotificationEvent(jsonWrapper.getNotification_type(), notification.message, Tasks.getTaskById(taskProgressReports.getTask_id()).getPerson_responsible_id(),taskProgressReports.getTask_progress_id());
+                    NotificationEvent notificationEvent = new NotificationEvent(jsonWrapper.getNotification_type(), notification.message, Tasks.getTaskById(taskProgressReports.getTask_id()).getPerson_responsible_id(),taskProgressReports.getTask_progress_id(), timestamp);
                     EventBus.getDefault().post(notificationEvent);
                     return builder.setColor(new BigInteger("FF00FF00", 16).intValue()).setContentText(notification.message).setContentTitle("Task Progress Report");
                 }
                 else if(jsonWrapper.getNotification_type() == 4){
                     SubTasks subTasks = jsonWrapper.getJson().getTask();
-                    NotificationEvent notificationEvent = new NotificationEvent(jsonWrapper.getNotification_type(), notification.message, 0, subTasks.getId());
+                    NotificationEvent notificationEvent = new NotificationEvent(jsonWrapper.getNotification_type(), notification.message, 0, subTasks.getId(), timestamp);
                     EventBus.getDefault().post(notificationEvent);
                     return builder.setColor(new BigInteger("FF00FF00", 16).intValue()).setContentText(notification.message).setContentTitle("Task");
                 }
                 else if(jsonWrapper.getNotification_type() == 5){
                     ProjectsNotificationWrapper project = jsonWrapper.getJson().getProject();
-                    NotificationEvent notificationEvent = new NotificationEvent(jsonWrapper.getNotification_type(), notification.message, 0, project.getId());
+                    NotificationEvent notificationEvent = new NotificationEvent(jsonWrapper.getNotification_type(), notification.message, 0, project.getId(), timestamp);
                     EventBus.getDefault().post(notificationEvent);
                     return builder.setColor(new BigInteger("FF00FF00", 16).intValue()).setContentText(notification.message).setContentTitle("Project");
                 }
                 else if(jsonWrapper.getNotification_type() == 6){
                     int project_id = jsonWrapper.getJson().getProject_id();
-                    NotificationEvent notificationEvent = new NotificationEvent(jsonWrapper.getNotification_type(), notification.message, 0, project_id);
+                    NotificationEvent notificationEvent = new NotificationEvent(jsonWrapper.getNotification_type(), notification.message, 0, project_id, timestamp);
                     EventBus.getDefault().post(notificationEvent);
                     return builder.setColor(new BigInteger("FF00FF00", 16).intValue()).setContentText(notification.message).setContentTitle("Project");
                 }

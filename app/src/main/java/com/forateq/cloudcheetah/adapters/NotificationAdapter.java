@@ -10,11 +10,7 @@ import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.forateq.cloudcheetah.R;
-import com.forateq.cloudcheetah.models.Employees;
 import com.forateq.cloudcheetah.models.Notifications;
-import com.forateq.cloudcheetah.models.Users;
-import com.forateq.cloudcheetah.utils.ApplicationContext;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -49,12 +45,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         viewHolder.notificationMessageTV.setText(notifications.getNotification_message());
         viewHolder.notificationTypeIdTV.setText(""+notifications.getNotification_type());
         viewHolder.notificationPointerIdTV.setText(""+notifications.getNotification_pointer_id());
-        if(notifications.getSender_id() != 0){
-            Users users = Users.getUser(notifications.getSender_id());
-            Employees employees = Employees.getEmployee(users.getEmployee_id());
-            Picasso.with(ApplicationContext.get()).load("http://"+employees.getImage()).placeholder( R.drawable.progress_animation ).resize(50, 50)
-                    .centerCrop().into(viewHolder.senderPicIV);
-        }
+        viewHolder.notificationTimestamp.setText(notifications.getTimestamp());
     }
 
     /**
@@ -85,6 +76,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         public TextView notificationMessageTV;
         public TextView notificationPointerIdTV;
         public TextView notificationTypeIdTV;
+        public TextView notificationTimestamp;
         public ImageView senderPicIV;
 
         public ViewHolder(View itemView) {
@@ -93,6 +85,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             notificationPointerIdTV = (TextView) itemView.findViewById(R.id.notification_pointer_id);
             notificationTypeIdTV = (TextView) itemView.findViewById(R.id.notification_type_id);
             senderPicIV = (ImageView) itemView.findViewById(R.id.sender_profile_pic);
+            notificationTimestamp = (TextView) itemView.findViewById(R.id.timestamp);
             rippleLayout = (MaterialRippleLayout) itemView.findViewById(R.id.ripple);
             rippleLayout.setOnClickListener(new View.OnClickListener() {
                 @Override

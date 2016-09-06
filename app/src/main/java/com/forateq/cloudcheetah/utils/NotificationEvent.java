@@ -9,12 +9,14 @@ public class NotificationEvent {
     String notification_message;
     int sender_id;
     int notification_pointer_id;
+    String timestamp;
 
-    public NotificationEvent(int notification_type, String notification_message, int sender_id, int notification_pointer_id) {
+    public NotificationEvent(int notification_type, String notification_message, int sender_id, int notification_pointer_id, String timestamp) {
         this.notification_type = notification_type;
         this.notification_message = notification_message;
         this.sender_id = sender_id;
         this.notification_pointer_id = notification_pointer_id;
+        this.timestamp = timestamp;
     }
 
     public int getNotification_type() {
@@ -47,5 +49,13 @@ public class NotificationEvent {
 
     public void setSender_id(int sender_id) {
         this.sender_id = sender_id;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }

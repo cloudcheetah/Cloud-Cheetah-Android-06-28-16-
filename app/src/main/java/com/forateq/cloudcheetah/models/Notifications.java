@@ -21,6 +21,11 @@ public class Notifications extends Model {
     int notification_pointer_id;
     @Column(name = "sender_id")
     int sender_id;
+    @Column(name = "timestamp")
+    String timestamp;
+    @Column(name = "is_read")
+    boolean is_read;
+
 
     public int getNotification_type() {
         return notification_type;
@@ -56,5 +61,21 @@ public class Notifications extends Model {
 
     public void setSender_id(int sender_id) {
         this.sender_id = sender_id;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public boolean is_read() {
+        return is_read;
+    }
+
+    public void setIs_read(boolean is_read) {
+        this.is_read = is_read;
     }
 }

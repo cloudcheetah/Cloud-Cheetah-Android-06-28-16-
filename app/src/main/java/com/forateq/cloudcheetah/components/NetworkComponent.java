@@ -4,6 +4,7 @@ import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.adapters.CashInOutAdapter;
 import com.forateq.cloudcheetah.adapters.ContactAdapter;
 import com.forateq.cloudcheetah.adapters.ConversationsAdapter;
+import com.forateq.cloudcheetah.adapters.MyHandledTasksAdapter;
 import com.forateq.cloudcheetah.adapters.MyTasksAdapter;
 import com.forateq.cloudcheetah.adapters.ProjectMembersAdapter;
 import com.forateq.cloudcheetah.adapters.SubTaskAdapter;
@@ -22,10 +23,12 @@ import com.forateq.cloudcheetah.fragments.AddTaskFragment;
 import com.forateq.cloudcheetah.fragments.AddTaskProgressReportFragment;
 import com.forateq.cloudcheetah.fragments.AddTaskResourceFragment;
 import com.forateq.cloudcheetah.fragments.AddVendorFragment;
+import com.forateq.cloudcheetah.fragments.ChatFragment;
 import com.forateq.cloudcheetah.fragments.CustomerViewFragment;
 import com.forateq.cloudcheetah.fragments.ERPFragment;
 import com.forateq.cloudcheetah.fragments.EditResourceFragment;
 import com.forateq.cloudcheetah.fragments.MainFragment;
+import com.forateq.cloudcheetah.fragments.MyHandledTaskFragment;
 import com.forateq.cloudcheetah.fragments.MyTasksFragment;
 import com.forateq.cloudcheetah.fragments.ProfileFragment;
 import com.forateq.cloudcheetah.fragments.ProjectChatFragment;
@@ -89,4 +92,7 @@ public interface NetworkComponent {
     void inject(TaskInProgressViewPagerAdapter taskInProgressViewPagerAdapter);
     void inject(MyTasksFragment myTasksFragment);
     void inject(MyTasksAdapter myTasksAdapter);
+    void inject(ChatFragment chatFragment);
+    void inject(MyHandledTasksAdapter myHandledTasksAdapter);
+    void inject(MyHandledTaskFragment myHandledTaskFragment);
 }

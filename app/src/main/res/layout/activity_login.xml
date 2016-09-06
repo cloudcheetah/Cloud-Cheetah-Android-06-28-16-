@@ -1,50 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:background="@color/tab_background"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/colorText"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_marginTop="70dp"
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_gravity="center_horizontal"
-        android:textSize="50dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mobile ERP"
-        />
+        android:src="@drawable/logo"/>
 
-    <EditText
-        android:id="@+id/username"
+
+    <android.support.design.widget.TextInputLayout
+        android:background="@color/colorText"
+        android:id="@+id/input_layout_username"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="90dp"
-        android:textSize="20dp"
-        android:hint="Username"
-        android:background="@drawable/search_edittext_design"
         android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/password"
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:hint="Username" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:background="@color/colorText"
+        android:id="@+id/input_layout_password"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:hint="Password" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <com.balysv.materialripple.MaterialRippleLayout
+        android:id="@+id/ripple_login"
+        app:mrl_rippleOverlay="true"
+        app:mrl_rippleColor="@color/colorPrimaryDark"
+        app:mrl_rippleAlpha="0.2"
+        app:mrl_rippleDelayClick="false"
+        app:mrl_rippleHover="true"
         android:layout_marginTop="10dp"
-        android:inputType="textPassword"
-        android:textSize="20dp"
-        android:hint="Password"
-        android:background="@drawable/search_edittext_design"
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
-
-    <Button
-        android:id="@+id/login"
-        android:text="Login"
-        android:textColor="@color/colorText"
-        android:background="@color/colorPrimary"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/login"
+            android:text="Login"
+            android:textColor="@color/colorText"
+            android:background="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+    </com.balysv.materialripple.MaterialRippleLayout>
+
+
 
 </LinearLayout>

@@ -282,6 +282,7 @@ public class MainActivity extends CameraActivity implements EasyPermissions.Perm
         notifications.setNotification_pointer_id(notificationEvent.getNotification_pointer_id());
         notifications.setNotification_type(notificationEvent.getNotification_type());
         notifications.setSender_id(notificationEvent.getSender_id());
+        notifications.setTimestamp(notificationEvent.getTimestamp());
         notifications.save();
         Log.e("Size", ""+Notifications.getAllNotifications().size());
     }
@@ -291,7 +292,6 @@ public class MainActivity extends CameraActivity implements EasyPermissions.Perm
         vibrator.vibrate(pattern, 0);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
-
             @Override
             public void run() {
                 vibrator.cancel();

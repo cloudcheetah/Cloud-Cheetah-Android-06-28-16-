@@ -1,16 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:res-auto="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <EditText
+        android:id="@+id/search"
+        android:hint="Search Tasks"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_height="40dp"
+        android:background="@drawable/search_edittext_design"
+        android:drawableLeft="@mipmap/ic_search_black_24dp"
+        />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="You Are In Tab 2"
-        android:id="@+id/textView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+    <FrameLayout
+        android:layout_below="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_tasks"
+            android:layout_gravity="bottom|center_horizontal"
+            res-auto:cardCornerRadius="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            />
+
+    </FrameLayout>
 
 </RelativeLayout>

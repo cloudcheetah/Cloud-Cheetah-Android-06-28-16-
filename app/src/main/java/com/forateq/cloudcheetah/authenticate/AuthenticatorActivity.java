@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -19,7 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.activeandroid.query.Delete;
+import com.balysv.materialripple.MaterialRippleLayout;
 import com.forateq.cloudcheetah.CloudCheetahAPIService;
 import com.forateq.cloudcheetah.CloudCheetahApp;
 import com.forateq.cloudcheetah.MainActivity;
@@ -27,6 +26,7 @@ import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.models.Accounts;
 import com.forateq.cloudcheetah.models.Customers;
 import com.forateq.cloudcheetah.models.Employees;
+import com.forateq.cloudcheetah.models.Notifications;
 import com.forateq.cloudcheetah.models.Resources;
 import com.forateq.cloudcheetah.models.Units;
 import com.forateq.cloudcheetah.models.Users;
@@ -35,6 +35,8 @@ import com.forateq.cloudcheetah.pojo.AccountListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.CustomerListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.EmployeeListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.LoginWrapper;
+import com.forateq.cloudcheetah.pojo.NotificationsResponseWrapper;
+import com.forateq.cloudcheetah.pojo.NotificationsWrapper;
 import com.forateq.cloudcheetah.pojo.ResourceData;
 import com.forateq.cloudcheetah.pojo.ResourceListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.UnitsResponseWrapper;
@@ -45,7 +47,6 @@ import com.forateq.cloudcheetah.utils.ApplicationContext;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.onesignal.OneSignal;
-
 
 import java.lang.reflect.Modifier;
 
@@ -82,6 +83,8 @@ public class AuthenticatorActivity extends AppCompatActivity{
     EditText passwordEditText;
     @Bind(R.id.login)
     Button loginButton;
+    @Bind(R.id.ripple_login)
+    MaterialRippleLayout rippleLogin;
     @Inject
     CloudCheetahAPIService cloudCheetahAPIService;
     public static final String TAG = "AuthenticatorActivity";
@@ -206,7 +209,7 @@ public class AuthenticatorActivity extends AppCompatActivity{
         }
     }
 
-    @OnClick(R.id.login)
+    @OnClick(R.id.ripple_login)
     void login(){
         Log.e("Clicked", "Clicked");
         submit();
@@ -434,12 +437,42 @@ public class AuthenticatorActivity extends AppCompatActivity{
                 });
     }
 
-    public void saveEmployees(String userid, String deviceid, String key, final ProgressDialog progressDialog, final Bundle data){
+    public void saveEmployees(final String userid, final String deviceid, final String key, final ProgressDialog progressDialog, final Bundle data){
         Observable<EmployeeListResponseWrapper> observable = cloudCheetahAPIService.getEmployees(userid, deviceid, key);
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .unsubscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<EmployeeListResponseWrapper>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("Employees", e.getMessage(), e);
+                        if(progressDialog.isShowing()){
+                            progressDialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onNext(EmployeeListResponseWrapper employeeListResponseWrapper) {
+                        for(Employees employees : employeeListResponseWrapper.getData()){
+                            employees.save();
+                        }
+                        getNotifications(userid, deviceid, key, progressDialog, data);
+                    }
+                });
+    }
+
+
+    public void getNotifications(String userid, String deviceid, String key, final ProgressDialog progressDialog, final Bundle data){
+        Observable<NotificationsResponseWrapper> observable = cloudCheetahAPIService.getNotifications(userid, deviceid, key);
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<NotificationsResponseWrapper>() {
                     @Override
                     public void onCompleted() {
                         Intent res = new Intent();
@@ -456,9 +489,16 @@ public class AuthenticatorActivity extends AppCompatActivity{
                     }
 
                     @Override
-                    public void onNext(EmployeeListResponseWrapper employeeListResponseWrapper) {
-                        for(Employees employees : employeeListResponseWrapper.getData()){
-                            employees.save();
+                    public void onNext(NotificationsResponseWrapper notificationsResponseWrapper) {
+                        for(NotificationsWrapper notificationsWrapper : notificationsResponseWrapper.getData()){
+                            Notifications notifications = new Notifications();
+                            notifications.setNotification_type(notificationsWrapper.getType_id());
+                            notifications.setSender_id(notificationsWrapper.getSender_id());
+                            notifications.setTimestamp(notificationsWrapper.getCreated_at());
+                            notifications.setNotification_message(notificationsWrapper.getDescription());
+                            notifications.setIs_read(notificationsWrapper.is_read());
+                            notifications.save();
+
                         }
                         if(progressDialog.isShowing()){
                             progressDialog.dismiss();

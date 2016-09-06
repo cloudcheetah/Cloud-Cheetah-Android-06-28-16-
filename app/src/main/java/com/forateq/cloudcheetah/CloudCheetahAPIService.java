@@ -12,7 +12,9 @@ import com.forateq.cloudcheetah.pojo.EmployeeResponseWrapper;
 import com.forateq.cloudcheetah.pojo.LoginWrapper;
 import com.forateq.cloudcheetah.pojo.MessageListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.MessageResponseWrapper;
+import com.forateq.cloudcheetah.pojo.MyHandledTasksResponseWrapper;
 import com.forateq.cloudcheetah.pojo.MyTasksResponseWrapper;
+import com.forateq.cloudcheetah.pojo.NotificationsResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ProjectListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ProjectResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ResourceListResponseWrapper;
@@ -367,7 +369,13 @@ public interface CloudCheetahAPIService {
                                                @Query("key") String key,
                                                @Query("_method") String method);
 
+    @GET("api/get_notifications")
+    Observable<NotificationsResponseWrapper> getNotifications(@Query("user") String user,
+                                                              @Query("deviceid") String deviceid,
+                                                              @Query("key") String key);
 
-
-
+    @GET("api/get_my_handled_tasks")
+    Observable<MyHandledTasksResponseWrapper> getMyHandledTasks(@Query("user") String user,
+                                                                @Query("deviceid") String deviceid,
+                                                                @Query("key") String key);
 }

@@ -1,13 +1,14 @@
 package com.forateq.cloudcheetah.fragments;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
@@ -21,29 +22,48 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.activeandroid.query.Delete;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.balysv.materialripple.MaterialRippleLayout;
 import com.forateq.cloudcheetah.CloudCheetahAPIService;
 import com.forateq.cloudcheetah.CloudCheetahApp;
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.adapters.ViewPagerAdapter;
 import com.forateq.cloudcheetah.authenticate.AccountGeneral;
+import com.forateq.cloudcheetah.models.Accounts;
+import com.forateq.cloudcheetah.models.CashInOut;
 import com.forateq.cloudcheetah.models.Conversations;
+import com.forateq.cloudcheetah.models.Customers;
+import com.forateq.cloudcheetah.models.Employees;
 import com.forateq.cloudcheetah.models.Messages;
+import com.forateq.cloudcheetah.models.MyTasks;
+import com.forateq.cloudcheetah.models.Notifications;
+import com.forateq.cloudcheetah.models.ProjectMembers;
+import com.forateq.cloudcheetah.models.ProjectResources;
 import com.forateq.cloudcheetah.models.Projects;
+import com.forateq.cloudcheetah.models.Resources;
+import com.forateq.cloudcheetah.models.TaskCashInCashOut;
 import com.forateq.cloudcheetah.models.TaskProgressReports;
+import com.forateq.cloudcheetah.models.TaskResources;
 import com.forateq.cloudcheetah.models.Tasks;
+import com.forateq.cloudcheetah.models.ToDo;
+import com.forateq.cloudcheetah.models.Units;
 import com.forateq.cloudcheetah.models.Users;
+import com.forateq.cloudcheetah.models.Vendors;
 import com.forateq.cloudcheetah.pojo.ConversationResponseWrapper;
 import com.forateq.cloudcheetah.pojo.MessageListResponseWrapper;
+import com.forateq.cloudcheetah.pojo.ResponseWrapper;
 import com.forateq.cloudcheetah.pojo.SingleTaskResponseWrapper;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
 import com.forateq.cloudcheetah.utils.CustomViewPager;
 import com.forateq.cloudcheetah.utils.SlidingTabLayout;
+import com.onesignal.OneSignal;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -54,26 +74,32 @@ import rx.schedulers.Schedulers;
  */
 public class MainFragment extends Fragment {
 
-    @Bind(R.id.viewPager)
-    CustomViewPager pager;
+    public static CustomViewPager pager;
     private ViewPagerAdapter adapter;
     @Bind(R.id.tabs)
     SlidingTabLayout tabs;
-    @Bind(R.id.linlaHeaderProgress)
-    LinearLayout progressBarLayout;
+    public static LinearLayout progressBarLayout;
+    @Bind(R.id.ripple_logout)
+    MaterialRippleLayout rippleLogout;
     private CharSequence Titles[] = {"Home", "Contacts", "Chat", "ERP", "Profile"};
     private int Numboftabs = 5;
     public static final String TAG = "MainFragment";
     @Inject
     CloudCheetahAPIService cloudCheetahAPIService;
+    private AccountManager accountManager;
+    private Account[] accounts;
+    private View v;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.main_fragment, container, false);
+        v = inflater.inflate(R.layout.main_fragment, container, false);
         return v;
     }
 
     public void init(){
+        progressBarLayout = (LinearLayout) v.findViewById(R.id.linlaHeaderProgress);
+        pager = (CustomViewPager) v.findViewById(R.id.viewPager);
         tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
         // Setting Custom Color for the Scroll bar indicator of the Tab View
         tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
@@ -101,9 +127,6 @@ public class MainFragment extends Fragment {
                     }
                     case 2:{
                         Log.e("Chat ", "Fragment");
-                        if(isNetworkAvailable()){
-                            getAllConversations();
-                        }
                         break;
                     }
                     case 3:{
@@ -405,12 +428,123 @@ public class MainFragment extends Fragment {
         }
     }
 
+    @OnClick(R.id.ripple_logout)
+    public void logout(){
+        if(isNetworkAvailable()){
+            final MaterialDialog.Builder createNoteDialog = new MaterialDialog.Builder(getActivity())
+                    .title("Logout")
+                    .content("Are you sure you want to logout?")
+                    .contentColorRes(R.color.colorText)
+                    .titleColorRes(R.color.colorText)
+                    .backgroundColorRes(R.color.colorPrimary)
+                    .widgetColorRes(R.color.colorText)
+                    .positiveText("Ok")
+                    .negativeText("Cancel")
+                    .positiveColorRes(R.color.colorText)
+                    .negativeColorRes(R.color.colorText)
+                    .callback(new MaterialDialog.ButtonCallback() {
+                        @Override
+                        public void onPositive(MaterialDialog dialog) {
+                            super.onPositive(dialog);
+                            final ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
+                            mProgressDialog.setIndeterminate(true);
+                            mProgressDialog.setMessage("Logging out...");
+                            mProgressDialog.show();
+                            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
+                            String sessionKey = sharedPreferences.getString(AccountGeneral.SESSION_KEY, "");
+                            String userName = sharedPreferences.getString(AccountGeneral.ACCOUNT_USERNAME, "");
+                            String deviceid = Settings.Secure.getString(ApplicationContext.get().getContentResolver(),
+                                    Settings.Secure.ANDROID_ID);
+                            Log.e("Credentials", sessionKey + " " + userName + " " + deviceid);
+                            Observable<ResponseWrapper> observable = cloudCheetahAPIService.logout(userName, deviceid, sessionKey);
+                            observable.subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .unsubscribeOn(Schedulers.io())
+                                    .subscribe(new Subscriber<ResponseWrapper>() {
+                                        @Override
+                                        public void onCompleted() {
+                                            if(mProgressDialog.isShowing()){
+                                                mProgressDialog.dismiss();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            if(mProgressDialog.isShowing()){
+                                                mProgressDialog.dismiss();
+                                            }
+                                            Log.e("Logout", e.getMessage(), e);
+                                        }
+
+                                        @Override
+                                        public void onNext(ResponseWrapper responseWrapper) {
+                                            if(responseWrapper.getResponse().getStatus_code() == AccountGeneral.SUCCESS_CODE){
+                                                truncateTables();
+                                                Toast.makeText(getActivity(), "You have logout successfully.", Toast.LENGTH_SHORT).show();
+                                            }
+                                            else{
+                                                Toast.makeText(getActivity(), "Error: "+responseWrapper.getResponse().getStatus_code(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                        }
+
+                        @Override
+                        public void onNegative(MaterialDialog dialog) {
+                            super.onNegative(dialog);
+                        }
+                    });
+            final MaterialDialog addNoteDialog = createNoteDialog.build();
+            addNoteDialog.show();
+        }
+    }
+
     public void clearNotifications(){
         CloudCheetahApp.currentSenderId = 0;
         CloudCheetahApp.currentReceiverId = 0;
         CloudCheetahApp.notificationType = 0;
         CloudCheetahApp.projectChatId = 0;
         CloudCheetahApp.taskProgressReports = null;
+    }
+
+    public void truncateTables(){
+        new Delete().from(Accounts.class).execute();
+        new Delete().from(CashInOut.class).execute();
+        new Delete().from(Conversations.class).execute();
+        new Delete().from(Customers.class).execute();
+        new Delete().from(Employees.class).execute();
+        new Delete().from(Messages.class).execute();
+        new Delete().from(MyTasks.class).execute();
+        new Delete().from(ProjectMembers.class).execute();
+        new Delete().from(ProjectResources.class).execute();
+        new Delete().from(Projects.class).execute();
+        new Delete().from(Resources.class).execute();
+        new Delete().from(TaskCashInCashOut.class).execute();
+        new Delete().from(TaskProgressReports.class).execute();
+        new Delete().from(TaskResources.class).execute();
+        new Delete().from(Tasks.class).execute();
+        new Delete().from(Units.class).execute();
+        new Delete().from(Users.class).execute();
+        new Delete().from(Vendors.class).execute();
+        new Delete().from(Conversations.class).execute();
+        new Delete().from(Notifications.class).execute();
+        new Delete().from(ToDo.class).execute();
+        accountManager = AccountManager.get(getActivity());
+        accounts = accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE);
+        accountManager.removeAccount(accounts[0], null, null);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(AccountGeneral.ACCOUNT_USERNAME, "");
+        editor.putString(AccountGeneral.SESSION_KEY, "");
+        editor.putString(AccountGeneral.NOTIFICATION_ID, "");
+        editor.putString(AccountGeneral.PROJECT_TIMESTAMP, "");
+        editor.putString(AccountGeneral.USER_ID, "");
+        editor.putBoolean(AccountGeneral.LOGIN_STATUS, false);
+        editor.commit();
+        OneSignal.setSubscription(false);
+        Intent loginIntent = new Intent(getActivity(), MainActivity.class);
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        this.startActivity(loginIntent);
     }
 
 }

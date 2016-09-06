@@ -24,10 +24,12 @@ import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.authenticate.AccountGeneral;
 import com.forateq.cloudcheetah.fragments.SingleChatFragment;
 import com.forateq.cloudcheetah.models.Conversations;
+import com.forateq.cloudcheetah.models.Employees;
 import com.forateq.cloudcheetah.models.Messages;
 import com.forateq.cloudcheetah.models.Users;
 import com.forateq.cloudcheetah.pojo.MessageListResponseWrapper;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -69,8 +71,13 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
             viewHolder.contactName.setText(Users.getFullName(conversations.getUser_id()));
             viewHolder.userId.setText(""+conversations.getUser_id());
             viewHolder.lastMessage.setText(conversations.getLast_message());
+            Users users = Users.getUser(conversations.getUser_id());
+            Employees employees = Employees.getEmployee(users.getEmployee_id());
+            if(employees != null){
+                Picasso.with(ApplicationContext.get()).load("http://"+employees.getImage()).placeholder( R.drawable.progress_animation ).resize(50, 50)
+                        .centerCrop().into(viewHolder.profilePicIV);
+            }
         }
-
     }
 
     /**
@@ -99,6 +106,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
         public TextView contactName;
         public TextView userId;
         public TextView lastMessage;
+        public ImageView profilePicIV;
         public MaterialRippleLayout rippleLayout;
 
         public ViewHolder(View itemView) {
@@ -106,6 +114,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
             contactName = (TextView) itemView.findViewById(R.id.contact_name);
             userId = (TextView) itemView.findViewById(R.id.user_id);
             lastMessage = (TextView) itemView.findViewById(R.id.last_message);
+            profilePicIV = (ImageView) itemView.findViewById(R.id.profile_pic);
             rippleLayout = (MaterialRippleLayout) itemView.findViewById(R.id.ripple);
             rippleLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
