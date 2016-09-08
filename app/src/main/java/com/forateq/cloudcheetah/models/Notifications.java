@@ -51,9 +51,14 @@ public class Notifications extends Model {
         this.notification_pointer_id = notification_pointer_id;
     }
 
-    public static List<Notifications> getAllNotifications(){
-        return new Select().from(Notifications.class).orderBy("id desc").execute();
+    public static List<Notifications> getFirstTenNotifications(int limit){
+        return new Select().from(Notifications.class).orderBy("id desc").limit(limit).execute();
     }
+
+    public  static List<Notifications> getOtherNotifications(int limit, int offset){
+        return new Select().from(Notifications.class).orderBy("id desc").limit(limit).offset(offset).execute();
+    }
+
 
     public int getSender_id() {
         return sender_id;

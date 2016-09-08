@@ -46,6 +46,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         viewHolder.notificationTypeIdTV.setText(""+notifications.getNotification_type());
         viewHolder.notificationPointerIdTV.setText(""+notifications.getNotification_pointer_id());
         viewHolder.notificationTimestamp.setText(notifications.getTimestamp());
+        if(notifications.is_read()){
+            viewHolder.rippleLayout.setBackgroundColor(mContext.getResources().getColor(R.color.colorLightPrimary));
+        }
     }
 
     /**

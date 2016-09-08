@@ -17,6 +17,7 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.adapters.TaskInProgressViewPagerAdapter;
+import com.forateq.cloudcheetah.models.MyHandledTasks;
 import com.forateq.cloudcheetah.models.MyTasks;
 import com.forateq.cloudcheetah.utils.ParentSlidingTabLayout;
 
@@ -48,19 +49,19 @@ public class TaskInProgressFragment extends Fragment {
     public static final String TAG = "TaskInProgressFragment";
     private SharedPreferences preferences;
     private String[] status = new String[]{
-            "Started",
-            "Hold",
-            "Resume",
-            "Cancel",
-            "Complete"
+            "Awaiting to Start",
+            "Ongoing",
+            "Completed",
+            "Cancelled",
+            "On-Hold"
     };
     private boolean[] checkedStatus;
     private List<String> statusList;
-    private String started = "";
-    private String hold = "";
-    private String resume = "";
-    private String cancel = "";
-    private String complete = "";
+    private String awaiting_to_start = "";
+    private String on_going = "";
+    private String completed = "";
+    private String cancelled = "";
+    private String on_hold = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -125,44 +126,52 @@ public class TaskInProgressFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         if(checkedStatus[0] || checkedStatus[1] || checkedStatus[2] || checkedStatus[3] || checkedStatus[4]){
                             if(checkedStatus[0]){
-                                started = ""+1;
+                                awaiting_to_start = ""+1;
                             }
                             else{
-                                started = "";
+                                awaiting_to_start = "";
                             }
                             if(checkedStatus[1]){
-                                hold = ""+2;
+                                on_going = ""+2;
                             }
                             else{
-                                hold = "";
+                                on_going = "";
                             }
                             if(checkedStatus[2]){
-                                resume = ""+3;
+                                completed = ""+3;
                             }
                             else{
-                                resume = "";
+                                completed = "";
                             }
                             if(checkedStatus[3]){
-                                cancel = ""+4;
+                                cancelled = ""+(-1);
                             }
                             else{
-                                cancel = "";
+                                cancelled = "";
                             }
                             if(checkedStatus[4]){
-                                complete = ""+5;
+                                on_hold = ""+4;
                             }
                             else{
-                                complete = "";
+                                on_hold = "";
                             }
                             MyTasksFragment.myTasksAdapter.clearItems();
-                            for(MyTasks myTasks : MyTasks.getFilterTasks(started, hold, resume, cancel, complete)){
+                            for(MyTasks myTasks : MyTasks.getFilterTasks(awaiting_to_start,on_going, completed, cancelled, on_hold)){
                                 MyTasksFragment.myTasksAdapter.addItem(myTasks);
+                            }
+                            MyHandledTaskFragment.myHandledTasksAdapter.clearItems();
+                            for(MyHandledTasks myHandledTasks : MyHandledTasks.getFilterHandledTasks(awaiting_to_start,on_going, completed, cancelled, on_hold)){
+                                MyHandledTaskFragment.myHandledTasksAdapter.addItem(myHandledTasks);
                             }
                         }
                         else{
                             MyTasksFragment.myTasksAdapter.clearItems();
                             for(MyTasks myTasks : MyTasks.getMyTasks()){
                                 MyTasksFragment.myTasksAdapter.addItem(myTasks);
+                            }
+                            MyHandledTaskFragment.myHandledTasksAdapter.clearItems();
+                            for(MyHandledTasks myHandledTasks : MyHandledTasks.getMyHandledTasks()){
+                                MyHandledTaskFragment.myHandledTasksAdapter.addItem(myHandledTasks);
                             }
                         }
                     }

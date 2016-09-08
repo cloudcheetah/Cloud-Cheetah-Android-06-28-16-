@@ -38,7 +38,7 @@ public class MyTasks extends Model {
     @Column(name = "person_responsible_id")
     int person_responsible_id;
     @Column(name = "status_id")
-    String status_id;
+    int status_id;
 
 
 
@@ -146,16 +146,19 @@ public class MyTasks extends Model {
         return new Select().from(MyTasks.class).where("task_id = ?", task_id).executeSingle();
     }
 
+    public int getStatusId() {
+        return id;
+    }
 
-    public String getStatus_id() {
+    public int getStatus_id() {
         return status_id;
     }
 
-    public void setStatus_id(String status_id) {
+    public void setStatus_id(int status_id) {
         this.status_id = status_id;
     }
 
-    public static List<MyTasks> getFilterTasks(String started, String hold, String resume, String cancel, String complete){
-        return new Select().from(MyTasks.class).where("status_id = ? OR status_id = ? OR status_id = ? OR status_id = ? OR status_id = ?", started, hold, resume, cancel, complete).execute();
+    public static List<MyTasks> getFilterTasks(String awaiting_to_start, String on_going, String completed, String cancelled, String on_hold){
+        return new Select().from(MyTasks.class).where("status_id = ? OR status_id = ? OR status_id = ? OR status_id = ? OR status_id = ?", awaiting_to_start, on_going, completed, cancelled, on_hold).execute();
     }
 }

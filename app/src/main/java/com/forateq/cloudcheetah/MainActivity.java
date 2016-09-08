@@ -255,7 +255,6 @@ public class MainActivity extends CameraActivity implements EasyPermissions.Perm
             Log.e("datetime", ""+date+time);
             ToDo todo = ToDo.getToDo(date, time);
             if(todo != null){
-                startVibrate();
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra("stop_vibrate", true);
                 PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
@@ -268,6 +267,7 @@ public class MainActivity extends CameraActivity implements EasyPermissions.Perm
                 notification.addAction(action);
                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(1, notification.build());
+                startVibrate(notificationManager);
             }
             else{
                 Log.e("Null", "Null");
@@ -284,10 +284,10 @@ public class MainActivity extends CameraActivity implements EasyPermissions.Perm
         notifications.setSender_id(notificationEvent.getSender_id());
         notifications.setTimestamp(notificationEvent.getTimestamp());
         notifications.save();
-        Log.e("Size", ""+Notifications.getAllNotifications().size());
+
     }
 
-    public void startVibrate() {
+    public void startVibrate(final NotificationManager notificationManager) {
         long pattern[] = { 0, 100, 200, 300, 400 };
         vibrator.vibrate(pattern, 0);
         Handler handler = new Handler();
@@ -295,6 +295,7 @@ public class MainActivity extends CameraActivity implements EasyPermissions.Perm
             @Override
             public void run() {
                 vibrator.cancel();
+                notificationManager.cancelAll();
             }
         }, 45000);
     }

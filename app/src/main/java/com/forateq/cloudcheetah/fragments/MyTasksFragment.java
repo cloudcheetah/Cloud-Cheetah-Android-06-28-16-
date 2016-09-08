@@ -57,20 +57,20 @@ public class MyTasksFragment extends Fragment {
     public static MyTasksAdapter myTasksAdapter;
     private LinearLayoutManager mLinearLayoutManager;
     public static final String TAG = "MyTasksFragment";
-    private String started = "";
-    private String hold = "";
-    private String resume = "";
-    private String cancel = "";
-    private String complete = "";
+    private String awaiting_to_start = "";
+    private String on_going = "";
+    private String completed = "";
+    private String cancelled = "";
+    private String on_hold = "";
     @Inject
     CloudCheetahAPIService cloudCheetahAPIService;
     private SharedPreferences preferences;
     private String[] status = new String[]{
-            "Started",
-            "Hold",
-            "Resume",
-            "Cancel",
-            "Complete"
+            "Awaiting to Start",
+            "Ongoing",
+            "Completed",
+            "Cancelled",
+            "On-Hold"
     };
     private boolean[] checkedStatus;
     private List<String> statusList;
@@ -102,21 +102,21 @@ public class MyTasksFragment extends Fragment {
         statusList = Arrays.asList(status);
         if(checkedStatus[0] || checkedStatus[1] || checkedStatus[2] || checkedStatus[3] || checkedStatus[4]){
             if(checkedStatus[0]){
-                started = ""+1;
+                awaiting_to_start = ""+1;
             }
             if(checkedStatus[1]){
-                hold = ""+2;
+                on_going = ""+2;
             }
             if(checkedStatus[2]){
-                resume = ""+3;
+                completed = ""+3;
             }
             if(checkedStatus[3]){
-                cancel = ""+4;
+                cancelled = ""+(-1);
             }
             if(checkedStatus[4]){
-                complete = ""+5;
+                on_hold = ""+4;
             }
-            myTasksAdapter = new MyTasksAdapter(MyTasks.getFilterTasks(started, hold, resume, cancel, complete), getActivity());
+            myTasksAdapter = new MyTasksAdapter(MyTasks.getFilterTasks(awaiting_to_start, on_going, completed, cancelled, on_hold), getActivity());
         }
         else{
             myTasksAdapter = new MyTasksAdapter(MyTasks.getMyTasks(), getActivity());

@@ -108,7 +108,7 @@ public interface CloudCheetahAPIService {
                                                                       @Query("task_status") String task_status,
                                                                       @Query("hours_worked") String hours_worked,
                                                                       @Query("resources_used") String resources_used,
-                                                                      @Query("action") String action,
+                                                                      @Query("task_action") int action,
                                                                       @Query("notes") String notes,
                                                                       @Query("concerns") String concerns,
                                                                       @Query("requests") String requests,

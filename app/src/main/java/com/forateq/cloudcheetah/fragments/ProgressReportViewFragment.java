@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.balysv.materialripple.MaterialRippleLayout;
-import com.forateq.cloudcheetah.CloudCheetahApp;
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.models.TaskProgressReports;
@@ -27,6 +26,8 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -75,6 +76,7 @@ public class ProgressReportViewFragment extends Fragment {
     String taskStatus;
     TaskProgressReports taskProgressReports;
     Gson gson;
+    private Map<Integer, String> actionMap;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -98,6 +100,10 @@ public class ProgressReportViewFragment extends Fragment {
 
 
     public void init() {
+        actionMap = new HashMap();
+        actionMap.put(4, "On-Hold");
+        actionMap.put(5, "Resume");
+        actionMap.put(-1, "Cancelled");
         gson = new Gson();
         addResourceIV.setVisibility(View.GONE);
         if (taskStatus.equals("Submitted")) {
@@ -109,7 +115,7 @@ public class ProgressReportViewFragment extends Fragment {
         reportDateET.setText(taskProgressReports.getReport_date());
         hoursWorkET.setText("" + taskProgressReports.getHours_work());
         percentCompletionET.setText("" + taskProgressReports.getPercent_completion());
-        taskActionET.setText(taskProgressReports.getTask_action());
+        taskActionET.setText(actionMap.get(taskProgressReports.getTask_action()));
         taskNameET.setText(taskProgressReports.getTask_name());
         taskNotesET.setText(taskProgressReports.getNotes());
         taskIssuesET.setText(taskProgressReports.getConcerns_issues());

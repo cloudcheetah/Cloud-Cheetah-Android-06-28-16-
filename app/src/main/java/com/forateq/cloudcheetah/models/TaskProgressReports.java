@@ -32,7 +32,7 @@ public class TaskProgressReports extends Model {
     @Column(name="resources_used")
     String resources_used;
     @Column(name="task_action")
-    String task_action;
+    int task_action;
     @Column(name="notes")
     String notes;
     @Column(name="concern_issues")
@@ -112,11 +112,11 @@ public class TaskProgressReports extends Model {
         this.resources_used = resources_used;
     }
 
-    public String getTask_action() {
+    public int getTask_action() {
         return task_action;
     }
 
-    public void setTask_action(String task_action) {
+    public void setTask_action(int task_action) {
         this.task_action = task_action;
     }
 

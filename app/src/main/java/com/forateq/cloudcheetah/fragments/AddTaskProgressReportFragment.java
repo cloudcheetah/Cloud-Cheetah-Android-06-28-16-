@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -18,7 +16,6 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +42,6 @@ import com.forateq.cloudcheetah.models.Resources;
 import com.forateq.cloudcheetah.models.TaskProgressReports;
 import com.forateq.cloudcheetah.pojo.AddResource;
 import com.forateq.cloudcheetah.pojo.AddResourceWrapper;
-import com.forateq.cloudcheetah.pojo.ResponseWrapper;
 import com.forateq.cloudcheetah.pojo.SubmitProgressReportResponseWrapper;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
 import com.forateq.cloudcheetah.views.AddResourceView;
@@ -136,19 +132,22 @@ public class AddTaskProgressReportFragment extends Fragment {
     CloudCheetahAPIService cloudCheetahAPIService;
     private String imageFileName;
     private File storageDir;
+    private Map<String, Integer> actionMap;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.add_task_progress_report_fragment, container, false);
         ButterKnife.bind(this, v);
         ((CloudCheetahApp) getActivity().getApplication()).getNetworkComponent().inject(this);
+        actionMap = new HashMap();
+        actionMap.put("On-Hold", 4);
+        actionMap.put("Resume", 5);
+        actionMap.put("Cancelled", -1);
         storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +"/CloudCheetah/Pictures");
         List<String> actionList = new ArrayList<>();
-        actionList.add("Start");
-        actionList.add("Hold");
+        actionList.add("On-Hold");
         actionList.add("Resume");
-        actionList.add("Cancel");
-        actionList.add("Complete");
+        actionList.add("Cancelled");
         addResourceList = new ArrayList<>();
         taskName = getArguments().getString("task_name");
         task_id = Integer.parseInt(getArguments().getString("task_id"));
@@ -232,7 +231,7 @@ public class AddTaskProgressReportFragment extends Fragment {
             AddResourceWrapper addResourceWrapper = new AddResourceWrapper();
             addResourceWrapper.setResourceList(addResourceList);
             String resources_used = gson.toJson(addResourceWrapper);
-            String action = actionSpinner.getSelectedItem().toString();
+            int  action = actionMap.get(actionSpinner.getSelectedItem().toString());
             String notes = taskNotesET.getText().toString();
             String concerns = taskIssuesET.getText().toString();
             String requests = changeRequestET.getText().toString();
@@ -304,7 +303,7 @@ public class AddTaskProgressReportFragment extends Fragment {
                                 AddResourceWrapper addResourceWrapper = new AddResourceWrapper();
                                 addResourceWrapper.setResourceList(addResourceList);
                                 taskProgressReports.setResources_used(gson.toJson(addResourceWrapper));
-                                taskProgressReports.setTask_action(actionSpinner.getSelectedItem().toString());
+                                taskProgressReports.setTask_action(actionMap.get(actionSpinner.getSelectedItem().toString()));
                                 taskProgressReports.setIs_submitted(true);
                                 taskProgressReports.setAttachment_1(submitProgressReportResponseWrapper.getData().getImage_1());
                                 taskProgressReports.setAttachment_2(submitProgressReportResponseWrapper.getData().getImage_2());
@@ -333,7 +332,7 @@ public class AddTaskProgressReportFragment extends Fragment {
             AddResourceWrapper addResourceWrapper = new AddResourceWrapper();
             addResourceWrapper.setResourceList(addResourceList);
             taskProgressReports.setResources_used(gson.toJson(addResourceWrapper));
-            taskProgressReports.setTask_action(actionSpinner.getSelectedItem().toString());
+            taskProgressReports.setTask_action(actionMap.get(actionSpinner.getSelectedItem().toString()));
             taskProgressReports.setIs_submitted(false);
             taskProgressReports.setAttachment_1(new File(storageDir, attachmentOneTV.getText().toString()).getAbsolutePath());
             taskProgressReports.setAttachment_2(new File(storageDir, attachmentTwoTV.getText().toString()).getAbsolutePath());

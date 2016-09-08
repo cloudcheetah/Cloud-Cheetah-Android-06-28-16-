@@ -119,9 +119,9 @@ public class ProfileFragment extends Fragment {
 
     public void init(){
         Picasso.with(getActivity()).load(R.drawable.background).fit().centerCrop().into(backGroundIV);
-        contactTV.setText(employee.getContact_no());
-        emailTV.setText(employee.getEmail_address());
-        birthdayTV.setText(employee.getDate_of_birth());
+        contactTV.setText(""+employee.getContact_no());
+        emailTV.setText(""+employee.getEmail_address());
+        birthdayTV.setText(""+employee.getDate_of_birth());
         if(employee.getGender_id() == 0){
             genderTV.setText("Male");
         }

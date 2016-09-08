@@ -211,63 +211,6 @@ public class ERPFragment extends Fragment {
 
     @OnClick(R.id.task_progress)
     public void getTasks(){
-//        if(isNetworkAvailable()){
-//            final ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
-//            mProgressDialog.setIndeterminate(true);
-//            mProgressDialog.setMessage("Getting my tasks...");
-//            mProgressDialog.show();
-//            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
-//            String sessionKey = sharedPreferences.getString(AccountGeneral.SESSION_KEY, "");
-//            String userName = sharedPreferences.getString(AccountGeneral.ACCOUNT_USERNAME, "");
-//            String myTaskTimeStamp = sharedPreferences.getString(AccountGeneral.MY_TASKS_TIMESTAMP, "");
-//            Observable<MyTasksResponseWrapper> observable = cloudCheetahAPIService.getMyTasks(userName, Settings.Secure.getString(ApplicationContext.get().getContentResolver(),
-//                    Settings.Secure.ANDROID_ID), sessionKey, myTaskTimeStamp);
-//            observable.subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .unsubscribeOn(Schedulers.io())
-//                    .subscribe(new Subscriber<MyTasksResponseWrapper>() {
-//                        @Override
-//                        public void onCompleted() {
-//                            if(mProgressDialog.isShowing()){
-//                                mProgressDialog.dismiss();
-//                            }
-//                            SharedPreferences prefs = ApplicationContext.get().getSharedPreferences(AccountGeneral.ACCOUNT_NAME, Context.MODE_PRIVATE);
-//                            Log.e(TAG, prefs.getString(AccountGeneral.ACCOUNT_USERNAME, ""));
-//                            ProgressReportFragment progressReportFragment = new ProgressReportFragment();
-//                            MainActivity.replaceFragment(progressReportFragment, TAG);
-//                        }
-//
-//                        @Override
-//                        public void onError(Throwable e) {
-//                            Log.e("GettingTasks", e.getMessage(), e);
-//                            if(mProgressDialog.isShowing()){
-//                                mProgressDialog.dismiss();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onNext(MyTasksResponseWrapper myTasksResponseWrapper) {
-//                            Log.e("Size", ""+myTasksResponseWrapper.getData().size());
-//                            for(MyTasks myTasks : myTasksResponseWrapper.getData()){
-//                                if(MyTasks.getMyTask(myTasks.getTaskId()) == null){
-//                                    myTasks.save();
-//                                }
-//                            }
-//
-//                            SharedPreferences.Editor editor = sharedPreferences.edit();
-//                            editor.putString(AccountGeneral.MY_TASKS_TIMESTAMP, myTasksResponseWrapper.getTimestamp());
-//                            editor.apply();
-//                        }
-//                    });
-//        }
-//        else{
-//            Log.e(TAG, "Getting tasks...");
-//            SharedPreferences prefs = ApplicationContext.get().getSharedPreferences(AccountGeneral.ACCOUNT_NAME, Context.MODE_PRIVATE);
-//            Log.e(TAG, prefs.getString(AccountGeneral.ACCOUNT_USERNAME, ""));
-//            ProgressReportFragment progressReportFragment = new ProgressReportFragment();
-//            MainActivity.replaceFragment(progressReportFragment, TAG);
-//        }
-
         TaskInProgressFragment taskInProgressFragment = new TaskInProgressFragment();
         MainActivity.replaceFragment(taskInProgressFragment, TAG);
     }
@@ -285,8 +228,8 @@ public class ERPFragment extends Fragment {
     @OnClick(R.id.payees)
     public void getVendors(){
         Log.e(TAG, "Getting vendors...");
-        VendorsFragment vendorsFragment = new VendorsFragment();
-        MainActivity.replaceFragment(vendorsFragment, TAG);
+        VendorsAndProcurementFragment vendorsAndProcurementFragment = new VendorsAndProcurementFragment();
+        MainActivity.replaceFragment(vendorsAndProcurementFragment, TAG);
     }
 
     @OnClick(R.id.labor)

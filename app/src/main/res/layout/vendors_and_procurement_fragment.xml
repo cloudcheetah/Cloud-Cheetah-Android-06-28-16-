@@ -32,30 +32,12 @@
         </com.balysv.materialripple.MaterialRippleLayout>
 
         <TextView
-            android:text="Task-In-Progress"
+            android:text="Vendors And Procurement"
             android:layout_marginLeft="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorText"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
-
-        <com.balysv.materialripple.MaterialRippleLayout
-            android:id="@+id/ripple_filter"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="10dp"
-            android:layout_gravity="end|center_vertical"
-            android:layout_width="40dp"
-            android:layout_height="40dp">
-
-            <ImageView
-                android:id="@+id/filter"
-                android:clickable="true"
-                android:layout_gravity="center_horizontal"
-                android:src="@mipmap/ic_filter_list_white_24dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </com.balysv.materialripple.MaterialRippleLayout>
 
     </android.support.v7.widget.Toolbar>
 
