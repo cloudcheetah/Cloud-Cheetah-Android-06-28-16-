@@ -18,6 +18,7 @@ import com.forateq.cloudcheetah.fragments.AddCustomerFragment;
 import com.forateq.cloudcheetah.fragments.AddEmployeeFragment;
 import com.forateq.cloudcheetah.fragments.AddInventoryItemFragment;
 import com.forateq.cloudcheetah.fragments.AddProjectmemberFragment;
+import com.forateq.cloudcheetah.fragments.AddPurchaseRequestFragment;
 import com.forateq.cloudcheetah.fragments.AddResourceFragment;
 import com.forateq.cloudcheetah.fragments.AddTaskFragment;
 import com.forateq.cloudcheetah.fragments.AddTaskProgressReportFragment;
@@ -97,4 +98,5 @@ public interface NetworkComponent {
     void inject(MyHandledTasksAdapter myHandledTasksAdapter);
     void inject(MyHandledTaskFragment myHandledTaskFragment);
     void inject(TasksComponentsContainerFragment tasksComponentsContainerFragment);
+    void inject(AddPurchaseRequestFragment addPurchaseRequestFragment);
 }

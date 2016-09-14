@@ -17,6 +17,7 @@ import com.forateq.cloudcheetah.pojo.MyTasksResponseWrapper;
 import com.forateq.cloudcheetah.pojo.NotificationsResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ProjectListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ProjectResponseWrapper;
+import com.forateq.cloudcheetah.pojo.PurchaseRequestsResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ResourceListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.ResponseWrapper;
 import com.forateq.cloudcheetah.pojo.SingleTaskResponseWrapper;
@@ -381,4 +382,14 @@ public interface CloudCheetahAPIService {
     Observable<MyHandledTasksResponseWrapper> getMyHandledTasks(@Query("user") String user,
                                                                 @Query("deviceid") String deviceid,
                                                                 @Query("key") String key);
+
+    @POST("purchase_requests/create")
+    Observable<PurchaseRequestsResponseWrapper> submitPurchaseRequest(@Query("user") String user,
+                                                                      @Query("deviceid") String deviceid,
+                                                                      @Query("key") String key,
+                                                                      @Query("purchase_request[trans_date]") String date,
+                                                                      @Query("purchase_request[ref_no]") String ref_no,
+                                                                      @Query("purchase_request[vendor_id]") int vendor_id,
+                                                                      @Query("purchase_request[remarks]") String remarks,
+                                                                      @Query("json_details") String json);
 }

@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,12 +24,9 @@ import com.forateq.cloudcheetah.CloudCheetahApp;
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.authenticate.AccountGeneral;
-import com.forateq.cloudcheetah.models.Accounts;
 import com.forateq.cloudcheetah.models.Customers;
 import com.forateq.cloudcheetah.pojo.AddCustomerWrapper;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -132,6 +128,11 @@ public class AddCustomerFragment extends Fragment {
         else{
             Toast.makeText(getActivity(), "Please connect to a network to add new customer.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @OnClick(R.id.ripple_back)
+    public void back(){
+        MainActivity.popFragment();
     }
 
     /**

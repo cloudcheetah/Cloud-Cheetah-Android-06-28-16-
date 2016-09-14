@@ -41,9 +41,9 @@ public class PurchaseRequestAdapter extends RecyclerView.Adapter<PurchaseRequest
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         PurchaseRequests purchaseRequests = listPurchaseRequests.get(i);
-        viewHolder.purchaseRequestCodeTV.setText("PR000"+purchaseRequests.getId());
-        viewHolder.purchaseRequestIdTV.setText(""+purchaseRequests.getId());
-        viewHolder.timeStampTV.setText(purchaseRequests.getDate());
+        viewHolder.purchaseRequestCodeTV.setText(purchaseRequests.getTrans_no());
+        viewHolder.purchaseRequestIdTV.setText(""+purchaseRequests.getPurchaseRequestId());
+        viewHolder.timeStampTV.setText(purchaseRequests.getTrans_date());
     }
 
     /**

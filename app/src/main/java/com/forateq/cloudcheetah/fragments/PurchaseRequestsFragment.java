@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.adapters.PurchaseRequestAdapter;
 import com.forateq.cloudcheetah.models.PurchaseRequests;
@@ -44,7 +45,7 @@ public class PurchaseRequestsFragment extends Fragment{
     }
 
     public void init(){
-        adapter = new PurchaseRequestAdapter(PurchaseRequests.getPurchaseRequest(), getActivity());
+        adapter = new PurchaseRequestAdapter(PurchaseRequests.getPurchaseRequests(), getActivity());
         mLinearLayoutManager = new LinearLayoutManager(ApplicationContext.get());
         listPurchaseRequest.setAdapter(adapter);
         listPurchaseRequest.setLayoutManager(mLinearLayoutManager);
@@ -60,6 +61,7 @@ public class PurchaseRequestsFragment extends Fragment{
 
     @OnClick(R.id.fab)
     void addPurchaseRequest(){
-
+        AddPurchaseRequestFragment addPurchaseRequestFragment = new AddPurchaseRequestFragment();
+        MainActivity.replaceFragment(addPurchaseRequestFragment, TAG);
     }
 }
