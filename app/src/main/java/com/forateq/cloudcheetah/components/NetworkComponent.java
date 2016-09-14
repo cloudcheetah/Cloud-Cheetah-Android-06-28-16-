@@ -35,6 +35,7 @@ import com.forateq.cloudcheetah.fragments.ProjectChatFragment;
 import com.forateq.cloudcheetah.fragments.ProjectUpdateFragment;
 import com.forateq.cloudcheetah.fragments.ProjectsComponentsContainerFragment;
 import com.forateq.cloudcheetah.fragments.SingleChatFragment;
+import com.forateq.cloudcheetah.fragments.TasksComponentsContainerFragment;
 import com.forateq.cloudcheetah.fragments.UpdateDeleteInventoryItemFragment;
 import com.forateq.cloudcheetah.fragments.UpdateEmployeeFragment;
 import com.forateq.cloudcheetah.fragments.UpdateHREmployeeFragment;
@@ -95,4 +96,5 @@ public interface NetworkComponent {
     void inject(ChatFragment chatFragment);
     void inject(MyHandledTasksAdapter myHandledTasksAdapter);
     void inject(MyHandledTaskFragment myHandledTaskFragment);
+    void inject(TasksComponentsContainerFragment tasksComponentsContainerFragment);
 }

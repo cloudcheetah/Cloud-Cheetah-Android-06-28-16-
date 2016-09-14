@@ -1,6 +1,8 @@
 package com.forateq.cloudcheetah.views;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -62,7 +64,13 @@ public class TaskProgressReportsView extends RelativeLayout {
     public void init(){
         inflate(getContext(), R.layout.task_progress_reports_list_view, this);
         ButterKnife.bind(this);
-        taskProgressAdapter = new TaskProgressAdapter(TaskProgressReports.getProgressOfflineReports(task_offline_id), ApplicationContext.get());
+        if(isNetworkAvailable()){
+            taskProgressAdapter = new TaskProgressAdapter(TaskProgressReports.getProgressReports(task_id), ApplicationContext.get());
+        }
+        else{
+            taskProgressAdapter = new TaskProgressAdapter(TaskProgressReports.getProgressOfflineReports(task_offline_id), ApplicationContext.get());
+        }
+
         mLinearLayoutManager = new LinearLayoutManager(ApplicationContext.get());
         listProgressReports.setAdapter(taskProgressAdapter);
         listProgressReports.setLayoutManager(mLinearLayoutManager);
@@ -98,5 +106,17 @@ public class TaskProgressReportsView extends RelativeLayout {
 
             }
         });
+    }
+
+    /**
+     * Checks if there is a network available before login
+     *
+     * @return
+     */
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) ApplicationContext.get().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

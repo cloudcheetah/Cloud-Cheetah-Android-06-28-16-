@@ -118,6 +118,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>{
                     bundle.putString("project_id", projectId.getText().toString());
                     bundle.putString("project_offline_id", projectOfflineId.getText().toString());
                     bundle.putString("task_offline_id", taskOfflineId.getText().toString());
+                    bundle.putInt("position", getAdapterPosition());
+                    bundle.putInt("size", listTasks.size());
                     TasksComponentsContainerFragment tasksComponentsContainerFragment = new TasksComponentsContainerFragment();
                     tasksComponentsContainerFragment.setArguments(bundle);
                     MainActivity.replaceFragment(tasksComponentsContainerFragment, TAG);

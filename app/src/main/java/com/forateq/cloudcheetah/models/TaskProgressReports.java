@@ -193,6 +193,10 @@ public class TaskProgressReports extends Model {
         return new Select().from(TaskProgressReports.class).where("task_offline_id = ?", task_offline_id).execute();
     }
 
+    public static List<TaskProgressReports> getProgressReports(int task_id){
+        return new Select().from(TaskProgressReports.class).where("task_id = ?", task_id).execute();
+    }
+
     /**
      * this method is used to get the details of a specific progress report during offline mode
      * @param task_progress_offline_id

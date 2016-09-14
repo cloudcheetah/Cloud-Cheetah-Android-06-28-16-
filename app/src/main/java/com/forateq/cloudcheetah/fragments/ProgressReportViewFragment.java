@@ -101,6 +101,7 @@ public class ProgressReportViewFragment extends Fragment {
 
     public void init() {
         actionMap = new HashMap();
+        actionMap.put(0, "");
         actionMap.put(4, "On-Hold");
         actionMap.put(5, "Resume");
         actionMap.put(-1, "Cancelled");

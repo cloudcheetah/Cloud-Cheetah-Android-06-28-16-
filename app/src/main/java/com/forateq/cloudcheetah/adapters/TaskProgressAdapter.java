@@ -1,6 +1,5 @@
 package com.forateq.cloudcheetah.adapters;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -25,10 +24,8 @@ import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.authenticate.AccountGeneral;
 import com.forateq.cloudcheetah.fragments.ProgressReportViewFragment;
 import com.forateq.cloudcheetah.models.TaskProgressReports;
-import com.forateq.cloudcheetah.pojo.AddResourceWrapper;
 import com.forateq.cloudcheetah.pojo.SubmitProgressReportResponseWrapper;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
-import com.forateq.cloudcheetah.views.TaskProgressReportsView;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.RequestBody;
@@ -77,6 +74,7 @@ public class TaskProgressAdapter extends RecyclerView.Adapter<TaskProgressAdapte
         viewHolder.taskProgressOfflineId.setText(""+taskProgressReports.getId());
         viewHolder.taskProgressId.setText(""+taskProgressReports.getTask_progress_id());
         viewHolder.progressReportDate.setText(taskProgressReports.getReport_date());
+        viewHolder.percentage.setText(taskProgressReports.getPercent_completion() + "%");
         if(taskProgressReports.is_submitted()){
             viewHolder.taskStatus.setText("Submitted");
             viewHolder.submitReport.setVisibility(View.GONE);
@@ -113,6 +111,7 @@ public class TaskProgressAdapter extends RecyclerView.Adapter<TaskProgressAdapte
         public TextView taskProgressId;
         public TextView taskProgressOfflineId;
         public TextView taskStatus;
+        public TextView percentage;
         public MaterialRippleLayout rippleLayout;
         public ImageView submitReport;
         public ViewHolder(View itemView) {
@@ -121,6 +120,7 @@ public class TaskProgressAdapter extends RecyclerView.Adapter<TaskProgressAdapte
             taskProgressId = (TextView) itemView.findViewById(R.id.task_progress_id);
             taskProgressOfflineId = (TextView) itemView.findViewById(R.id.task_progress_offline_id);
             taskStatus = (TextView) itemView.findViewById(R.id.task_status);
+            percentage = (TextView) itemView.findViewById(R.id.percentage);
             submitReport = (ImageView) itemView.findViewById(R.id.submit_report);
             rippleLayout = (MaterialRippleLayout) itemView.findViewById(R.id.ripple);
             rippleLayout.setOnClickListener(new View.OnClickListener() {

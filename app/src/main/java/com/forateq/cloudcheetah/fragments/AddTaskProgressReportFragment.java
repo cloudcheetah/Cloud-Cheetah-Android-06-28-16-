@@ -140,11 +140,13 @@ public class AddTaskProgressReportFragment extends Fragment {
         ButterKnife.bind(this, v);
         ((CloudCheetahApp) getActivity().getApplication()).getNetworkComponent().inject(this);
         actionMap = new HashMap();
+        actionMap.put("", 0);
         actionMap.put("On-Hold", 4);
         actionMap.put("Resume", 5);
         actionMap.put("Cancelled", -1);
         storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +"/CloudCheetah/Pictures");
         List<String> actionList = new ArrayList<>();
+        actionList.add("");
         actionList.add("On-Hold");
         actionList.add("Resume");
         actionList.add("Cancelled");

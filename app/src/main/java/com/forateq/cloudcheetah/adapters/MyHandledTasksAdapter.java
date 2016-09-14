@@ -26,6 +26,7 @@ import com.forateq.cloudcheetah.fragments.TaskProgressReportsFragment;
 import com.forateq.cloudcheetah.models.MyHandledTasks;
 import com.forateq.cloudcheetah.models.TaskProgressReports;
 import com.forateq.cloudcheetah.pojo.TaskProgressReportsResponseWrapper;
+import com.forateq.cloudcheetah.pojo.TaskProgressResponse;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
 
 import java.util.List;
@@ -161,7 +162,24 @@ public class MyHandledTasksAdapter extends RecyclerView.Adapter<MyHandledTasksAd
                                     @Override
                                     public void onNext(TaskProgressReportsResponseWrapper taskProgressReportsResponseWrapper) {
                                         new Delete().from(TaskProgressReports.class).where("task_id = ?", taskId.getText().toString()).execute();
-                                        for (TaskProgressReports taskProgressReports : taskProgressReportsResponseWrapper.getData()) {
+                                        for (TaskProgressResponse taskProgressResponse : taskProgressReportsResponseWrapper.getData()) {
+                                            TaskProgressReports taskProgressReports = new TaskProgressReports();
+                                            taskProgressReports.setTask_progress_id(taskProgressResponse.getId());
+                                            taskProgressReports.setTask_id(taskProgressResponse.getTask_id());
+                                            taskProgressReports.setTask_name(taskName.getText().toString());
+                                            taskProgressReports.setReport_date(taskProgressResponse.getCreated_at());
+                                            taskProgressReports.setPercent_completion(taskProgressResponse.getPercentage_completion());
+                                            taskProgressReports.setTask_status(taskProgressResponse.getTask_status());
+                                            taskProgressReports.setHours_work(taskProgressResponse.getHours_worked());
+                                            taskProgressReports.setResources_used(taskProgressResponse.getResources_used());
+                                            taskProgressReports.setTask_action(taskProgressResponse.getAction());
+                                            taskProgressReports.setNotes(taskProgressResponse.getNotes());
+                                            taskProgressReports.setConcerns_issues(taskProgressResponse.getConcerns());
+                                            taskProgressReports.setChange_request(taskProgressResponse.getRequests());
+                                            taskProgressReports.setAttachment_1(taskProgressResponse.getImage_1());
+                                            taskProgressReports.setAttachment_2(taskProgressResponse.getImage_2());
+                                            taskProgressReports.setAttachment_3(taskProgressResponse.getImage_3());
+                                            taskProgressReports.setIs_submitted(true);
                                             taskProgressReports.save();
                                         }
                                     }

@@ -86,6 +86,9 @@ public interface CloudCheetahAPIService {
     @GET("api_tasks")
     Observable<TaskListResponseWrapper> getAllTasks(@Query("project_id") int project_id, @Query("user") String user, @Query("deviceid") String deviceid, @Query("key") String key, @Query("timestamp") String timestamp);
 
+    @DELETE("api_tasks/{id}")
+    Observable<ResponseWrapper> deleteTask(@Path("id") int task_id, @Query("user") String user, @Query("deviceid") String deviceid, @Query("key") String key);
+
     @GET("api/create_from_offline")
     Observable<ResponseWrapper> processOfflineProject(@Query("user") String user, @Query("deviceid") String deviceid, @Query("key") String key, @Query("json") String json);
 

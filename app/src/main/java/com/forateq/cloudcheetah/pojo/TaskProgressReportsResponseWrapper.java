@@ -1,7 +1,5 @@
 package com.forateq.cloudcheetah.pojo;
 
-import com.forateq.cloudcheetah.models.TaskProgressReports;
-
 import java.util.List;
 
 /**
@@ -10,7 +8,7 @@ import java.util.List;
 public class TaskProgressReportsResponseWrapper {
 
     Response response;
-    List<TaskProgressReports> data;
+    List<TaskProgressResponse> data;
 
     public Response getResponse() {
         return response;
@@ -20,11 +18,11 @@ public class TaskProgressReportsResponseWrapper {
         this.response = response;
     }
 
-    public List<TaskProgressReports> getData() {
+    public List<TaskProgressResponse> getData() {
         return data;
     }
 
-    public void setData(List<TaskProgressReports> data) {
+    public void setData(List<TaskProgressResponse> data) {
         this.data = data;
     }
 }

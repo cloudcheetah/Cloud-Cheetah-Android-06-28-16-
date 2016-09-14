@@ -26,8 +26,12 @@ import com.forateq.cloudcheetah.fragments.TaskProgressReportsFragment;
 import com.forateq.cloudcheetah.models.MyTasks;
 import com.forateq.cloudcheetah.models.TaskProgressReports;
 import com.forateq.cloudcheetah.pojo.TaskProgressReportsResponseWrapper;
+import com.forateq.cloudcheetah.pojo.TaskProgressResponse;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -122,6 +126,7 @@ public class MyTasksAdapter extends RecyclerView.Adapter<MyTasksAdapter.ViewHold
                 @Override
                 public void onClick(View v) {
                     if(isNetworkAvailable()){
+                        Log.e("Task_id", ""+taskId.getText().toString());
                         final ProgressDialog mProgressDialog = new ProgressDialog(mContext);
                         mProgressDialog.setIndeterminate(true);
                         mProgressDialog.setMessage("Getting progress reports...");
@@ -160,8 +165,30 @@ public class MyTasksAdapter extends RecyclerView.Adapter<MyTasksAdapter.ViewHold
 
                                     @Override
                                     public void onNext(TaskProgressReportsResponseWrapper taskProgressReportsResponseWrapper) {
+                                        Gson gson = new GsonBuilder()
+                                                .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
+                                                .create();
+                                        Log.e("Json", gson.toJson(taskProgressReportsResponseWrapper));
                                         new Delete().from(TaskProgressReports.class).where("task_id = ?", taskId.getText().toString()).execute();
-                                        for(TaskProgressReports taskProgressReports : taskProgressReportsResponseWrapper.getData()){
+                                        Log.e("ReportSize", ""+taskProgressReportsResponseWrapper.getData().size());
+                                        for(TaskProgressResponse taskProgressResponse : taskProgressReportsResponseWrapper.getData()){
+                                            TaskProgressReports taskProgressReports = new TaskProgressReports();
+                                            taskProgressReports.setTask_progress_id(taskProgressResponse.getId());
+                                            taskProgressReports.setTask_name(taskName.getText().toString());
+                                            taskProgressReports.setTask_id(taskProgressResponse.getTask_id());
+                                            taskProgressReports.setReport_date(taskProgressResponse.getCreated_at());
+                                            taskProgressReports.setPercent_completion(taskProgressResponse.getPercentage_completion());
+                                            taskProgressReports.setTask_status(taskProgressResponse.getTask_status());
+                                            taskProgressReports.setHours_work(taskProgressResponse.getHours_worked());
+                                            taskProgressReports.setResources_used(taskProgressResponse.getResources_used());
+                                            taskProgressReports.setTask_action(taskProgressResponse.getAction());
+                                            taskProgressReports.setNotes(taskProgressResponse.getNotes());
+                                            taskProgressReports.setConcerns_issues(taskProgressResponse.getConcerns());
+                                            taskProgressReports.setChange_request(taskProgressResponse.getRequests());
+                                            taskProgressReports.setAttachment_1(taskProgressResponse.getImage_1());
+                                            taskProgressReports.setAttachment_2(taskProgressResponse.getImage_2());
+                                            taskProgressReports.setAttachment_3(taskProgressResponse.getImage_3());
+                                            taskProgressReports.setIs_submitted(true);
                                             taskProgressReports.save();
                                         }
                                     }

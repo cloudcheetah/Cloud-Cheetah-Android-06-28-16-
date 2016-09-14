@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.activeandroid.query.Delete;
 import com.forateq.cloudcheetah.CloudCheetahAPIService;
 import com.forateq.cloudcheetah.CloudCheetahApp;
 import com.forateq.cloudcheetah.R;
@@ -156,9 +157,8 @@ public class MyTasksFragment extends Fragment {
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationContext.get());
             String sessionKey = sharedPreferences.getString(AccountGeneral.SESSION_KEY, "");
             String userName = sharedPreferences.getString(AccountGeneral.ACCOUNT_USERNAME, "");
-            String myTaskTimeStamp = sharedPreferences.getString(AccountGeneral.MY_TASKS_TIMESTAMP, "");
             Observable<MyTasksResponseWrapper> observable = cloudCheetahAPIService.getMyTasks(userName, Settings.Secure.getString(ApplicationContext.get().getContentResolver(),
-                    Settings.Secure.ANDROID_ID), sessionKey, myTaskTimeStamp);
+                    Settings.Secure.ANDROID_ID), sessionKey, "");
             observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .unsubscribeOn(Schedulers.io())
@@ -188,6 +188,7 @@ public class MyTasksFragment extends Fragment {
                                     .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
                                     .create();
                             Log.e("Response", gson.toJson(myTasksResponseWrapper));
+                            new Delete().from(MyTasks.class).execute();
                             for (MyTasks myTasks : myTasksResponseWrapper.getData()) {
                                 if (MyTasks.getMyTask(myTasks.getTaskId()) == null) {
                                     myTasks.save();
