@@ -35,6 +35,8 @@ import com.forateq.cloudcheetah.fragments.ProfileFragment;
 import com.forateq.cloudcheetah.fragments.ProjectChatFragment;
 import com.forateq.cloudcheetah.fragments.ProjectUpdateFragment;
 import com.forateq.cloudcheetah.fragments.ProjectsComponentsContainerFragment;
+import com.forateq.cloudcheetah.fragments.PurchaseRequestViewFragment;
+import com.forateq.cloudcheetah.fragments.PurchaseRequestsFragment;
 import com.forateq.cloudcheetah.fragments.SingleChatFragment;
 import com.forateq.cloudcheetah.fragments.TasksComponentsContainerFragment;
 import com.forateq.cloudcheetah.fragments.UpdateDeleteInventoryItemFragment;
@@ -99,4 +101,6 @@ public interface NetworkComponent {
     void inject(MyHandledTaskFragment myHandledTaskFragment);
     void inject(TasksComponentsContainerFragment tasksComponentsContainerFragment);
     void inject(AddPurchaseRequestFragment addPurchaseRequestFragment);
+    void inject(PurchaseRequestsFragment purchaseRequestsFragment);
+    void inject(PurchaseRequestViewFragment purchaseRequestViewFragment);
 }

@@ -1,6 +1,7 @@
 package com.forateq.cloudcheetah.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
+import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
+import com.forateq.cloudcheetah.fragments.PurchaseRequestViewFragment;
 import com.forateq.cloudcheetah.models.PurchaseRequests;
 
 import java.util.List;
@@ -84,7 +87,11 @@ public class PurchaseRequestAdapter extends RecyclerView.Adapter<PurchaseRequest
             rippleLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("purchase_request_id", Integer.parseInt(purchaseRequestIdTV.getText().toString()));
+                    PurchaseRequestViewFragment purchaseRequestViewFragment = new PurchaseRequestViewFragment();
+                    purchaseRequestViewFragment.setArguments(bundle);
+                    MainActivity.replaceFragment(purchaseRequestViewFragment, TAG);
                 }
             });
         }

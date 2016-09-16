@@ -30,6 +30,7 @@ import com.forateq.cloudcheetah.CloudCheetahApp;
 import com.forateq.cloudcheetah.MainActivity;
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.authenticate.AccountGeneral;
+import com.forateq.cloudcheetah.models.PurchaseRequests;
 import com.forateq.cloudcheetah.models.RequestItems;
 import com.forateq.cloudcheetah.models.Resources;
 import com.forateq.cloudcheetah.models.Vendors;
@@ -39,6 +40,7 @@ import com.forateq.cloudcheetah.pojo.PurchaseRequestItems;
 import com.forateq.cloudcheetah.pojo.PurchaseRequestItemsWrapper;
 import com.forateq.cloudcheetah.pojo.PurchaseRequestsResponseWrapper;
 import com.forateq.cloudcheetah.utils.ApplicationContext;
+import com.forateq.cloudcheetah.views.ActionView;
 import com.forateq.cloudcheetah.views.AddItemView;
 import com.forateq.cloudcheetah.views.PurchaseRowView;
 import com.google.gson.Gson;
@@ -90,11 +92,15 @@ public class AddPurchaseRequestFragment extends Fragment {
     DetailsWrapper detailsWrapper;
     @Inject
     CloudCheetahAPIService cloudCheetahAPIService;
+    boolean is_copy;
+    int purchase_request_id;
+    PurchaseRequests purchaseRequests;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.add_purchase_request_fragment, container, false);
+        is_copy = getArguments().getBoolean("is_copy");
         return v;
     }
 
@@ -103,10 +109,16 @@ public class AddPurchaseRequestFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         ((CloudCheetahApp) getActivity().getApplication()).getNetworkComponent().inject(this);
-        init();
+        if (is_copy) {
+            initFromCopy();
+        } else {
+            init();
+        }
     }
 
-    public void init(){
+    public void initFromCopy() {
+        purchase_request_id = getArguments().getInt("purchase_request_id");
+        purchaseRequests = PurchaseRequests.getPurchaseRequestById(purchase_request_id);
         resourcesMap = getResourceMap();
         purchaseRequestItemsWrapper = new PurchaseRequestItemsWrapper();
         purchaseRequestItemsList = new ArrayList<>();
@@ -114,13 +126,113 @@ public class AddPurchaseRequestFragment extends Fragment {
         detailsWrapper = new DetailsWrapper();
         detailsWrapper.setDetails(detailsList);
         purchaseRequestItemsWrapper.setPurchaseRequestsList(purchaseRequestItemsList);
+        refNoET.setText(purchaseRequests.getRef_no());
+        remarksET.setText(purchaseRequests.getRemarks());
         ArrayAdapter<String> nameAdapter = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, Vendors.getAllVendorName());
+        nameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        vendorSP.setAdapter(nameAdapter);
+        int vendorPosition = nameAdapter.getPosition(Vendors.getVendorName(purchaseRequests.getVendor_id()));
+        vendorSP.setSelection(vendorPosition);
+        for(RequestItems requestItems : RequestItems.getItems(purchase_request_id)){
+            final PurchaseRowView purchaseRowView = new PurchaseRowView(getActivity());
+            purchaseRowView.getResourcePriceET().setText(""+requestItems.getCost_price());
+            purchaseRowView.getResourceNameET().setText(""+requestItems.getItem_name());
+            purchaseRowView.getResourceQuantityET().setText(""+requestItems.getQty());
+            purchaseRowView.getTotalPriceET().setText(""+requestItems.getNet_amount());
+            if(count % 2 == 0){
+                purchaseRowView.getRowLayout().setBackgroundColor(getResources().getColor(R.color.colorAccent));
+            }
+            else{
+                purchaseRowView.getRowLayout().setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            }
+            count++;
+            totalPrice += requestItems.getNet_amount();
+            tableLayout.addView(purchaseRowView);
+            final Details details = new Details();
+            details.setItem_id(requestItems.getItem_id());
+            details.setQty(Integer.parseInt(purchaseRowView.getResourceQuantityET().getText().toString()));
+            detailsWrapper.getDetails().add(details);
+            purchaseRowView.getRippleLayout().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        final ActionView actionView = new ActionView(getActivity());
+                        final MaterialDialog.Builder createNoteDialog = new MaterialDialog.Builder(getActivity())
+                                .titleColorRes(R.color.colorText)
+                                .backgroundColorRes(R.color.colorPrimary)
+                                .widgetColorRes(R.color.colorText)
+                                .customView(actionView, true);
+                        final MaterialDialog addNoteDialog = createNoteDialog.build();
+                        actionView.getRippleDelete().setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                tableLayout.removeView(purchaseRowView);
+                                detailsWrapper.getDetails().remove(details);
+                                totalPrice -= Double.parseDouble(purchaseRowView.getTotalPriceET().getText().toString());
+                                totalPurchaseRequestPriceTV.setText(""+totalPrice);
+                                addNoteDialog.dismiss();
+                            }
+                        });
+                        actionView.getRippleEdit().setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AddItemView addItemView = new AddItemView(getActivity(), details);
+                                final MaterialDialog.Builder createNoteDialog = new MaterialDialog.Builder(getActivity())
+                                        .title("Edit Item")
+                                        .titleColorRes(R.color.colorText)
+                                        .backgroundColorRes(R.color.colorPrimary)
+                                        .widgetColorRes(R.color.colorText)
+                                        .customView(addItemView, true)
+                                        .positiveText("Ok")
+                                        .positiveColorRes(R.color.colorText)
+                                        .negativeText("Cancel")
+                                        .negativeColorRes(R.color.colorText)
+                                        .callback(new MaterialDialog.ButtonCallback() {
+                                            @Override
+                                            public void onPositive(MaterialDialog dialog) {
+                                                super.onPositive(dialog);
+                                                totalPrice -= Double.parseDouble(purchaseRowView.getTotalPriceET().getText().toString());
+                                                Resources resources = resourcesMap.get(addItemView.getItemNameSP().getSelectedItem().toString());
+                                                details.setQty(Integer.parseInt(addItemView.getQuantityET().getText().toString()));
+                                                details.setItem_id(resources.getResource_id());
+                                                purchaseRowView.getResourceNameET().setText(resources.getName());
+                                                purchaseRowView.getResourceQuantityET().setText(addItemView.getQuantityET().getText().toString());
+                                                purchaseRowView.getResourcePriceET().setText(""+resources.getUnit_cost());
+                                                purchaseRowView.getTotalPriceET().setText(""+(Integer.parseInt(addItemView.getQuantityET().getText().toString()) * resources.getUnit_cost()));
+                                                totalPrice += Double.parseDouble(purchaseRowView.getTotalPriceET().getText().toString());
+                                                totalPurchaseRequestPriceTV.setText(""+totalPrice);
+                                            }
+
+                                            @Override
+                                            public void onNegative(MaterialDialog dialog) {
+                                                super.onNegative(dialog);
+                                            }
+                                        });
+                                final MaterialDialog addNoteDialog = createNoteDialog.build();
+                                addNoteDialog.show();
+                            }
+                        });
+                        addNoteDialog.show();
+                }
+            });
+        }
+        totalPurchaseRequestPriceTV.setText(""+totalPrice);
+    }
+
+    public void init() {
+        resourcesMap = getResourceMap();
+        purchaseRequestItemsWrapper = new PurchaseRequestItemsWrapper();
+        purchaseRequestItemsList = new ArrayList<>();
+        List<Details> detailsList = new ArrayList<>();
+        detailsWrapper = new DetailsWrapper();
+        detailsWrapper.setDetails(detailsList);
+        purchaseRequestItemsWrapper.setPurchaseRequestsList(purchaseRequestItemsList);
+        ArrayAdapter<String> nameAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, Vendors.getAllVendorName());
         nameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         vendorSP.setAdapter(nameAdapter);
     }
 
     @OnClick(R.id.ripple_add)
-    public void addItem(){
+    public void addItem() {
         final AddItemView addItemView = new AddItemView(getActivity());
         final MaterialDialog.Builder createNoteDialog = new MaterialDialog.Builder(getActivity())
                 .title("Add Item")
@@ -137,26 +249,19 @@ public class AddPurchaseRequestFragment extends Fragment {
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
                         Resources resources = resourcesMap.get(addItemView.getItemNameSP().getSelectedItem().toString());
-                        PurchaseRowView purchaseRowView = new PurchaseRowView(getActivity());
+                        final PurchaseRowView purchaseRowView = new PurchaseRowView(getActivity());
                         purchaseRowView.getResourceNameET().setText(resources.getName());
                         purchaseRowView.getResourceQuantityET().setText(addItemView.getQuantityET().getText().toString());
-                        purchaseRowView.getResourcePriceET().setText(""+resources.getUnit_cost());
-                        purchaseRowView.getTotalPriceET().setText(""+(Integer.parseInt(addItemView.getQuantityET().getText().toString()) * resources.getUnit_cost()));
-                        if(count % 2 == 0){
+                        purchaseRowView.getResourcePriceET().setText("" + resources.getUnit_cost());
+                        purchaseRowView.getTotalPriceET().setText("" + (Integer.parseInt(addItemView.getQuantityET().getText().toString()) * resources.getUnit_cost()));
+                        if (count % 2 == 0) {
                             purchaseRowView.getRowLayout().setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                        }
-                        else{
+                        } else {
                             purchaseRowView.getRowLayout().setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                         }
-                        purchaseRowView.getRippleLayout().setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                            }
-                        });
                         count++;
                         totalPrice += Double.parseDouble(purchaseRowView.getTotalPriceET().getText().toString());
-                        totalPurchaseRequestPriceTV.setText(""+totalPrice);
+                        totalPurchaseRequestPriceTV.setText("" + totalPrice);
                         PurchaseRequestItems purchaseRequestItems = new PurchaseRequestItems();
                         purchaseRequestItems.setResource_id(resources.getResource_id());
                         purchaseRequestItems.setResource_name(resources.getName());
@@ -164,11 +269,73 @@ public class AddPurchaseRequestFragment extends Fragment {
                         purchaseRequestItems.setResource_quantity(Integer.parseInt(purchaseRowView.getResourceQuantityET().getText().toString()));
                         purchaseRequestItems.setResource_total_price(Double.parseDouble(purchaseRowView.getTotalPriceET().getText().toString()));
                         purchaseRequestItemsWrapper.getPurchaseRequestsList().add(purchaseRequestItems);
-                        Details details = new Details();
+                        final Details details = new Details();
                         details.setItem_id(resources.getResource_id());
                         details.setQty(Integer.parseInt(purchaseRowView.getResourceQuantityET().getText().toString()));
                         detailsWrapper.getDetails().add(details);
                         tableLayout.addView(purchaseRowView);
+                        purchaseRowView.getRippleLayout().setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final ActionView actionView = new ActionView(getActivity());
+                                final MaterialDialog.Builder createNoteDialog = new MaterialDialog.Builder(getActivity())
+                                        .titleColorRes(R.color.colorText)
+                                        .backgroundColorRes(R.color.colorPrimary)
+                                        .widgetColorRes(R.color.colorText)
+                                        .customView(actionView, true);
+                                final MaterialDialog addNoteDialog = createNoteDialog.build();
+                                actionView.getRippleDelete().setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        tableLayout.removeView(purchaseRowView);
+                                        detailsWrapper.getDetails().remove(details);
+                                        totalPrice -= Double.parseDouble(purchaseRowView.getTotalPriceET().getText().toString());
+                                        totalPurchaseRequestPriceTV.setText("" + totalPrice);
+                                        addNoteDialog.dismiss();
+                                    }
+                                });
+                                actionView.getRippleEdit().setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        final AddItemView addItemView = new AddItemView(getActivity(), details);
+                                        final MaterialDialog.Builder createNoteDialog = new MaterialDialog.Builder(getActivity())
+                                                .title("Edit Item")
+                                                .titleColorRes(R.color.colorText)
+                                                .backgroundColorRes(R.color.colorPrimary)
+                                                .widgetColorRes(R.color.colorText)
+                                                .customView(addItemView, true)
+                                                .positiveText("Ok")
+                                                .positiveColorRes(R.color.colorText)
+                                                .negativeText("Cancel")
+                                                .negativeColorRes(R.color.colorText)
+                                                .callback(new MaterialDialog.ButtonCallback() {
+                                                    @Override
+                                                    public void onPositive(MaterialDialog dialog) {
+                                                        super.onPositive(dialog);
+                                                        totalPrice -= Double.parseDouble(purchaseRowView.getTotalPriceET().getText().toString());
+                                                        Resources resources = resourcesMap.get(addItemView.getItemNameSP().getSelectedItem().toString());
+                                                        details.setQty(Integer.parseInt(addItemView.getQuantityET().getText().toString()));
+                                                        details.setItem_id(resources.getResource_id());
+                                                        purchaseRowView.getResourceNameET().setText(resources.getName());
+                                                        purchaseRowView.getResourceQuantityET().setText(addItemView.getQuantityET().getText().toString());
+                                                        purchaseRowView.getResourcePriceET().setText("" + resources.getUnit_cost());
+                                                        purchaseRowView.getTotalPriceET().setText("" + (Integer.parseInt(addItemView.getQuantityET().getText().toString()) * resources.getUnit_cost()));
+                                                        totalPrice += Double.parseDouble(purchaseRowView.getTotalPriceET().getText().toString());
+                                                        totalPurchaseRequestPriceTV.setText("" + totalPrice);
+                                                    }
+
+                                                    @Override
+                                                    public void onNegative(MaterialDialog dialog) {
+                                                        super.onNegative(dialog);
+                                                    }
+                                                });
+                                        final MaterialDialog addNoteDialog = createNoteDialog.build();
+                                        addNoteDialog.show();
+                                    }
+                                });
+                                addNoteDialog.show();
+                            }
+                        });
                     }
 
                     @Override
@@ -180,25 +347,26 @@ public class AddPurchaseRequestFragment extends Fragment {
         addNoteDialog.show();
     }
 
+
     @OnClick(R.id.ripple_back)
-    public void back(){
+    public void back() {
         MainActivity.popFragment();
     }
 
     @OnClick(R.id.purchase_request_date)
-    public void setPurchaseDate(){
+    public void setPurchaseDate() {
         setDate(dateET);
     }
 
     @OnClick(R.id.ripple_submit)
-    public void submit(){
+    public void submit() {
         Gson gson = new Gson();
         purchaseRequestItemsWrapper.setTotalPurchaseRequestPrice(totalPrice);
         String json = gson.toJson(purchaseRequestItemsWrapper);
         String details = gson.toJson(detailsWrapper);
         Log.e("Total", json);
         Log.e("Details", details);
-        if(isNetworkAvailable()){
+        if (isNetworkAvailable()) {
             final ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
             mProgressDialog.setIndeterminate(true);
             mProgressDialog.setMessage("Submitting purchase request...");
@@ -223,51 +391,49 @@ public class AddPurchaseRequestFragment extends Fragment {
                     .subscribe(new Subscriber<PurchaseRequestsResponseWrapper>() {
                         @Override
                         public void onCompleted() {
-                            if(mProgressDialog.isShowing()){
+                            if (mProgressDialog.isShowing()) {
                                 mProgressDialog.dismiss();
                             }
                             MainActivity.popFragment();
-                            Log.e("Size", ""+RequestItems.getCount());
+                            Log.e("Size", "" + RequestItems.getCount());
                         }
 
                         @Override
                         public void onError(Throwable e) {
                             Log.e("AddAccount", e.getMessage(), e);
-                            if(mProgressDialog.isShowing()){
+                            if (mProgressDialog.isShowing()) {
                                 mProgressDialog.dismiss();
                             }
                         }
 
                         @Override
                         public void onNext(PurchaseRequestsResponseWrapper purchaseRequestsResponseWrapper) {
-                            if(purchaseRequestsResponseWrapper.getResponse().getStatus_code() == AccountGeneral.SUCCESS_CODE){
-                                for(RequestItems requestItems :purchaseRequestsResponseWrapper.getData().getDetails()){
+                            if (purchaseRequestsResponseWrapper.getResponse().getStatus_code() == AccountGeneral.SUCCESS_CODE) {
+                                for (RequestItems requestItems : purchaseRequestsResponseWrapper.getData().getDetails()) {
                                     requestItems.save();
                                 }
                                 purchaseRequestsResponseWrapper.getData().save();
-                            }
-                            else{
+                            } else {
                                 Toast.makeText(getActivity(), "There is a problem submitting the purchase request please try again later.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
-        }
-        else{
+        } else {
             Toast.makeText(getActivity(), "Please connect to a network to submit purchase request.", Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    public Map<String, Resources> getResourceMap(){
+    public Map<String, Resources> getResourceMap() {
         List<Resources> listResources = Resources.getAllResources();
         Map<String, Resources> resourcesMap = new HashMap<>();
-        for(Resources resources : listResources){
+        for (Resources resources : listResources) {
             resourcesMap.put(resources.getName(), resources);
         }
-        return  resourcesMap;
+        return resourcesMap;
     }
 
-    public void setDate(final EditText editText){
+    public void setDate(final EditText editText) {
         final Calendar c = Calendar.getInstance();
         int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
@@ -289,6 +455,7 @@ public class AddPurchaseRequestFragment extends Fragment {
 
     /**
      * Checks if there is a network available before login
+     *
      * @return
      */
     private boolean isNetworkAvailable() {
@@ -297,5 +464,4 @@ public class AddPurchaseRequestFragment extends Fragment {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
-
 }

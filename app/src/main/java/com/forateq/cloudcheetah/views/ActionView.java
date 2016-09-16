@@ -1,10 +1,10 @@
 package com.forateq.cloudcheetah.views;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 
+import com.balysv.materialripple.MaterialRippleLayout;
 import com.forateq.cloudcheetah.R;
 
 import butterknife.Bind;
@@ -13,12 +13,12 @@ import butterknife.ButterKnife;
 /**
  * Created by Vallejos Family on 7/7/2016.
  */
-public class ActionView extends CardView {
+public class ActionView extends LinearLayout {
 
-    @Bind(R.id.action_edit)
-    ImageView actionEditIV;
-    @Bind(R.id.action_delete)
-    ImageView actionDeleteIV;
+    @Bind(R.id.ripple_edit)
+    MaterialRippleLayout rippleEdit;
+    @Bind(R.id.ripple_delete)
+    MaterialRippleLayout rippleDelete;
 
     public ActionView(Context context) {
         super(context);
@@ -40,13 +40,19 @@ public class ActionView extends CardView {
         ButterKnife.bind(this);
     }
 
-    public ImageView getActionEditIV() {
-        return actionEditIV;
+    public MaterialRippleLayout getRippleEdit() {
+        return rippleEdit;
     }
 
-
-    public ImageView getActionDeleteIV() {
-        return actionDeleteIV;
+    public void setRippleEdit(MaterialRippleLayout rippleEdit) {
+        this.rippleEdit = rippleEdit;
     }
 
+    public MaterialRippleLayout getRippleDelete() {
+        return rippleDelete;
+    }
+
+    public void setRippleDelete(MaterialRippleLayout rippleDelete) {
+        this.rippleDelete = rippleDelete;
+    }
 }

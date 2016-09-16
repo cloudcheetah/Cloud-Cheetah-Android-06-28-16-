@@ -9,6 +9,7 @@ import android.widget.Spinner;
 
 import com.forateq.cloudcheetah.R;
 import com.forateq.cloudcheetah.models.Resources;
+import com.forateq.cloudcheetah.pojo.Details;
 
 import java.util.List;
 
@@ -25,10 +26,17 @@ public class AddItemView extends ScrollView {
     @Bind(R.id.quantity)
     EditText quantityET;
     List<String> resourceList;
+    Details details;
 
     public AddItemView(Context context) {
         super(context);
         init();
+    }
+
+    public AddItemView(Context context, Details details) {
+        super(context);
+        this.details = details;
+        initFromEdit();
     }
 
     public AddItemView(Context context, AttributeSet attrs) {
@@ -48,6 +56,18 @@ public class AddItemView extends ScrollView {
         ArrayAdapter<String> nameAdapter = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, resourceList);
         nameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         itemNameSP.setAdapter(nameAdapter);
+    }
+
+    public void initFromEdit(){
+        inflate(getContext(), R.layout.add_item_view, this);
+        ButterKnife.bind(this);
+        resourceList = Resources.getAllResourcesList();
+        ArrayAdapter<String> nameAdapter = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, resourceList);
+        nameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        itemNameSP.setAdapter(nameAdapter);
+        int selectionPositionResource= nameAdapter.getPosition(Resources.getResource(details.getItem_id()).getName());
+        itemNameSP.setSelection(selectionPositionResource);
+        quantityET.setText(""+details.getQty());
     }
 
     public Spinner getItemNameSP() {

@@ -118,4 +118,8 @@ public class PurchaseRequests extends Model {
     public static List<PurchaseRequests> getPurchaseRequests(){
         return new Select().from(PurchaseRequests.class).execute();
     }
+
+    public static PurchaseRequests getPurchaseRequestById(int id){
+        return new Select().from(PurchaseRequests.class).where("purchase_request_id = ?", id).executeSingle();
+    }
 }

@@ -98,4 +98,8 @@ public class RequestItems extends Model {
         List<RequestItems> requestItems =  new Select().from(RequestItems.class).execute();
         return requestItems.size();
     }
+
+    public static List<RequestItems> getItems(int purchase_request_id){
+        return new Select().from(RequestItems.class).where("master_id = ?", purchase_request_id).execute();
+    }
 }

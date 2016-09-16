@@ -9,6 +9,7 @@ import com.forateq.cloudcheetah.pojo.ConversationResponseWrapper;
 import com.forateq.cloudcheetah.pojo.CustomerListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.EmployeeListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.EmployeeResponseWrapper;
+import com.forateq.cloudcheetah.pojo.ListPurchaseRequestsResponseWrapper;
 import com.forateq.cloudcheetah.pojo.LoginWrapper;
 import com.forateq.cloudcheetah.pojo.MessageListResponseWrapper;
 import com.forateq.cloudcheetah.pojo.MessageResponseWrapper;
@@ -392,4 +393,27 @@ public interface CloudCheetahAPIService {
                                                                       @Query("purchase_request[vendor_id]") int vendor_id,
                                                                       @Query("purchase_request[remarks]") String remarks,
                                                                       @Query("json_details") String json);
+
+    @GET("purchase_requests")
+    Observable<ListPurchaseRequestsResponseWrapper> getPurchaseRequests(@Query("user") String user,
+                                                                        @Query("deviceid") String deviceid,
+                                                                        @Query("key") String key);
+
+    @PUT("purchase_requests/{id}")
+    Observable<PurchaseRequestsResponseWrapper> updatePurchaseRequest(@Path("id") int purchase_request_id,
+                                                                      @Query("user") String user,
+                                                                      @Query("deviceid") String deviceid,
+                                                                      @Query("key") String key,
+                                                                      @Query("purchase_request[trans_date]") String date,
+                                                                      @Query("purchase_request[ref_no]") String ref_no,
+                                                                      @Query("purchase_request[vendor_id]") int vendor_id,
+                                                                      @Query("purchase_request[remarks]") String remarks,
+                                                                      @Query("json_details") String json,
+                                                                      @Query("_method") String method);
+
+    @POST("purchase_requests/approve")
+    Observable<ResponseWrapper> approvePurchaseRequest(@Query("user") String user,
+                                                       @Query("deviceid") String deviceid,
+                                                       @Query("key") String key,
+                                                       @Query("id") int id);
 }
